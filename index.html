@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GGrush 赛事数据</title>
+  <!-- 引入在线表格渲染库 -->
+  <script src="https://cdn.jsdelivr.net/npm/read-excel-file@5.2.0/dist/read-excel-file.min.js"></script>
+  <style>
+    table {
+      border-collapse: collapse; 
+      width: 80%;
+      margin: 20px auto;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align:center;">🎮 实时比赛数据</h1>
+  <div id="excel-table"></div>
+
+  <script>
+    // 自动加载Excel数据
+    readXlsxFile('/data/data.xlsx').then((rows) => {
+      let html = '<table>';
+      rows.forEach((row, index) => {
+        html += '<tr>';
+        row.forEach(cell => {
+          if(index === 0) {
+            html += `<th>${cell}</th>`;
+          } else {
+            html += `<td>${cell}</td>`;
+          }
+        });
+        html += '</tr>';
+      });
+      html += '</table>';
+      document.getElementById('excel-table').innerHTML = html;
+    });
+  </script>
+</body>
+</html>
