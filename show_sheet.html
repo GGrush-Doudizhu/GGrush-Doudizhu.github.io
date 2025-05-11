@@ -3,332 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数据统计</title> <!-- Will be updated by JS -->
+    <title>数据统计</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
         }
-        .page-title {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .sheet-title { /* Title for each individual sheet's table */
-            text-align: center;
-            color: #555;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            font-size: 1.8em;
-        }
-        table {
-            width: 95%;
-            max-width: 1000px;
+
+        .container {
+            max-width: 1200px;
             margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .back-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .back-nav a:hover {
+            background: #f1f3f5;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        table {
+            width: 100%;
             border-collapse: collapse;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            background-color: white;
+            min-width: 800px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px 12px;
-            text-align: left;
-            white-space: nowrap; 
-        }
+
         th {
-            background-color: #4CAF50;
+            background: var(--primary-color);
             color: white;
-            text-transform: uppercase;
-            font-size: 0.9em;
-            cursor: default; /* Default cursor */
+            padding: 1rem;
+            font-weight: 500;
+            text-align: left;
             position: relative;
-        }
-        th.sortable { /* Style for sortable headers */
             cursor: pointer;
+            transition: background 0.2s;
         }
-        th.sortable::after { /* Sorting indicator arrows */
+
+        th.sortable:hover {
+            background: #34495e;
+        }
+
+        th.sortable::after {
             content: '';
             position: absolute;
-            right: 8px;
+            right: 1rem;
             top: 50%;
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
+            border: 0.4rem solid transparent;
+            opacity: 0.6;
         }
+
         th.sortable.asc::after {
-            border-bottom: 5px solid white;
-            margin-top: -7px; /* Adjust for arrow pointing up */
+            border-bottom-color: white;
+            margin-top: -0.3rem;
         }
+
         th.sortable.desc::after {
-            border-top: 5px solid white;
-            margin-top: -2px; /* Adjust for arrow pointing down */
+            border-top-color: white;
+            margin-top: 0.3rem;
         }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background: #f8f9fa;
         }
-        tr:hover {
-            background-color: #f1f1f1;
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.2rem;
+            z-index: 1000;
         }
-        #loadingMessage {
-            text-align: center;
-            font-size: 1.2em;
-            padding: 20px;
+
+        .spinner {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid #ddd;
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        #statsContainer {
-            margin-top: 20px;
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .back-links {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .back-links a {
-            margin: 0 10px;
-            font-size: 1.1em;
-            color: #337ab7;
-            text-decoration: none;
-        }
-        .back-links a:hover {
-            text-decoration: underline;
+
+        .error-banner {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
         }
     </style>
-    <!-- SheetJS Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <nav class="back-nav">
+                <a href="javascript:history.back()">← 返回</a>
+                <a href="game_stats_index.html">主目录</a>
+                <a href="index.html">主页</a>
+            </nav>
+            <h1 id="pageTitle">数据加载中...</h1>
+        </div>
 
-    <h1 id="pageTitle" class="page-title">数据加载中...</h1>
-    <div class="back-links">
-        <a href="javascript:history.back()">« 返回上一页</a>
-        <a href="game_stats_index.html">« 返回数据统计主目录</a>
-        <a href="index.html">« 返回主页</a>
+        <div class="loading-overlay">
+            <div class="spinner"></div>
+            <span>正在加载数据...</span>
+        </div>
+
+        <div id="tablesContainer"></div>
     </div>
 
-    <div id="loadingMessage">正在加载数据，请稍候...</div>
-    <div id="statsContainer">
-        <!-- Tables will be dynamically inserted here by JavaScript -->
-    </div>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const { searchParams } = new URL(window.location.href);
+    const loader = document.querySelector('.loading-overlay');
+    const container = document.getElementById('tablesContainer');
+    
+    try {
+        // 参数解析
+        const sheetIndices = (searchParams.get('sheets') || '')
+            .split(',')
+            .map(s => parseInt(s.trim()))
+            .filter(n => !isNaN(n));
+        
+        const title = searchParams.get('title') || '游戏数据统计';
+        document.title = title + ' | GGrush';
+        document.getElementById('pageTitle').textContent = title;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const sheetIndicesParam = urlParams.get('sheets'); // e.g., "0" or "3,4"
-            const pageTitleParam = urlParams.get('title') || '数据统计';
+        if (!sheetIndices.length) throw new Error('缺少工作表参数');
 
-            document.getElementById('pageTitle').textContent = pageTitleParam;
-            document.title = pageTitleParam; // Update browser tab title
+        // 加载Excel数据
+        const excelFile = await fetch('data/data.xlsx');
+        if (!excelFile.ok) throw new Error(`文件加载失败 (${excelFile.status})`);
+        const buffer = await excelFile.arrayBuffer();
+        const workbook = XLSX.read(buffer, { type: 'array' });
 
-            if (!sheetIndicesParam) {
-                document.getElementById('loadingMessage').textContent = '错误：缺少工作表参数 (sheets)。';
+        // 验证工作表索引
+        const validSheets = sheetIndices
+            .filter(i => i >= 0 && i < workbook.SheetNames.length)
+            .map(i => ({
+                index: i,
+                name: workbook.SheetNames[i],
+                data: XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[i]], {
+                    header: 1,
+                    defval: '',
+                    range: 0
+                })
+            }));
+        
+        if (!validSheets.length) throw new Error('没有有效的工作表');
+
+        // 渲染表格
+        validSheets.forEach((sheet, tableIndex) => {
+            if (sheet.data.length < 3) {
+                const errorEl = document.createElement('div');
+                errorEl.className = 'error-banner';
+                errorEl.textContent = `工作表 "${sheet.name}" 数据不完整`;
+                container.appendChild(errorEl);
                 return;
             }
 
-            const sheetIndices = sheetIndicesParam.split(',').map(s => parseInt(s.trim(), 10));
-            if (sheetIndices.some(isNaN)) {
-                 document.getElementById('loadingMessage').textContent = '错误：工作表参数 (sheets) 格式无效。';
-                return;
-            }
-
-            const excelFilePath = 'data/data.xlsx'; 
-            const loadingMessageDiv = document.getElementById('loadingMessage');
-            const statsContainer = document.getElementById('statsContainer');
-
-            // Column names from your Excel (2nd row) that are sortable
-            // And their corresponding index in the data row (0-based after slicing)
-            // Excel: 排名, 选手, 胜场数, 负场数, 总场数, 胜率
-            // Index:   0,    1,     2,      3,      4,      5
-            const sortableColumnsConfig = {
-                "胜场数": { index: 2, defaultSortDirection: 'desc' }, // Default: 高到低
-                "负场数": { index: 3, defaultSortDirection: 'asc' },  // Default: 低到高
-                "总场数": { index: 4, defaultSortDirection: 'desc' }, // Default: 高到低
-                "胜率":   { index: 5, defaultSortDirection: 'desc' }  // Default: 高到低
-            };
-            const defaultSortKey = "胜场数"; // Key in sortableColumnsConfig
-
-            fetch(excelFilePath)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`无法加载Excel文件: ${response.statusText} (状态码: ${response.status})`);
-                    }
-                    return response.arrayBuffer();
-                })
-                .then(arrayBuffer => {
-                    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-
-                    if (sheetIndices.some(index => index < 0 || index >= workbook.SheetNames.length)) {
-                        throw new Error('请求的工作表索引超出范围。请检查 "sheets" URL参数。');
-                    }
-
-                    sheetIndices.forEach((sheetIndex, tableId) => { // Use tableId for unique table elements
-                        const sheetName = workbook.SheetNames[sheetIndex];
-                        const worksheet = workbook.Sheets[sheetName];
-                        // header: 1 -> array of arrays; defval: "" -> blank cells as empty strings
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
-
-                        if (jsonData.length < 3) { // Min: Title row, Header row, 1 Data row
-                            console.warn(`工作表 "${sheetName}" (索引 ${sheetIndex}) 的数据不足 (少于3行)，将跳过此表。`);
-                            const p = document.createElement('p');
-                            p.textContent = `工作表 "${sheetName}" 由于数据格式不完整 (少于3行) 未能加载。`;
-                            p.style.textAlign = 'center'; p.style.color = 'red';
-                            statsContainer.appendChild(p);
-                            return; // Skip to next sheet index
-                        }
-
-                        // 1. Sheet Title (from Excel's first row, first cell)
-                        const sheetTitleText = jsonData[0] && jsonData[0][0] ? jsonData[0][0] : `数据表: ${sheetName}`;
-                        const sheetTitleElement = document.createElement('h2');
-                        sheetTitleElement.classList.add('sheet-title');
-                        sheetTitleElement.textContent = sheetTitleText;
-                        statsContainer.appendChild(sheetTitleElement);
-
-                        // 2. Create Table and Thead (from Excel's second row)
-                        const table = document.createElement('table');
-                        table.id = `dataTable-${tableId}`; // Unique ID for each table
-                        const thead = document.createElement('thead');
-                        const headerRow = document.createElement('tr');
-                        
-                        const headersFromExcel = jsonData[1].slice(0, 6); // First 6 columns of 2nd row
-                        headersFromExcel.forEach((headerText, colIndex) => {
-                            const th = document.createElement('th');
-                            th.textContent = headerText;
-                            if (sortableColumnsConfig[headerText]) {
-                                th.classList.add('sortable');
-                                th.dataset.columnIndex = sortableColumnsConfig[headerText].index;
-                                th.dataset.columnKey = headerText; // Store the key for easy lookup
-                                th.addEventListener('click', () => handleSortClick(table, headerText));
-                            }
-                            headerRow.appendChild(th);
-                        });
-                        thead.appendChild(headerRow);
-                        table.appendChild(thead);
-
-                        // 3. Create Tbody and populate data (from Excel's third row onwards)
-                        const tbody = document.createElement('tbody');
-                        // Data starts from jsonData[2]
-                        // Filter out rows that are entirely empty
-                        let dataRows = jsonData.slice(2)
-                                           .map(row => row.slice(0, 6)) // Take first 6 cells
-                                           .filter(row => !row.every(cell => String(cell).trim() === "")); 
-                        
-                        // Initial sort: by "胜场数" descending
-                        const initialSortConfig = sortableColumnsConfig[defaultSortKey];
-                        dataRows = sortData(dataRows, initialSortConfig.index, initialSortConfig.defaultSortDirection === 'asc');
-                        
-                        populateTableBody(tbody, dataRows, sortableColumnsConfig["胜率"].index);
-                        table.appendChild(tbody);
-                        statsContainer.appendChild(table);
-
-                        // Set initial sort arrow
-                        updateSortArrow(table, defaultSortKey, initialSortConfig.defaultSortDirection === 'asc');
-                    });
-
-                    loadingMessageDiv.style.display = 'none';
-
-                })
-                .catch(error => {
-                    console.error('加载或解析Excel数据时出错:', error);
-                    loadingMessageDiv.textContent = `加载数据失败: ${error.message}. 请检查文件路径、内容和URL参数，并查看浏览器控制台获取更多信息。`;
-                });
-
-            function populateTableBody(tbody, dataRows, winRateColumnIndex) {
-                tbody.innerHTML = ''; // Clear existing rows
-                dataRows.forEach(rowData => {
-                    const tr = document.createElement('tr');
-                    rowData.forEach((cellData, cellIndex) => {
-                        const td = document.createElement('td');
-                        if (cellIndex === winRateColumnIndex && typeof cellData === 'number') {
-                            td.textContent = (cellData * 100).toFixed(2) + '%';
-                        } else {
-                            td.textContent = cellData;
-                        }
-                        tr.appendChild(td);
-                    });
-                    tbody.appendChild(tr);
-                });
-            }
+            // 提取表头和数据
+            const [titleRow, headerRow, ...dataRows] = sheet.data;
+            const tableId = `table-${tableIndex}`;
             
-            function parseCellValue(value, columnIndex) {
-                // For "胜率" column, convert "XX.XX%" back to a number 0.XXXX
-                if (columnIndex === sortableColumnsConfig["胜率"].index && typeof value === 'string' && value.endsWith('%')) {
-                    return parseFloat(value) / 100;
-                }
-                // Try to parse as number for other sortable columns
-                if (Object.values(sortableColumnsConfig).some(c => c.index === columnIndex)) {
-                    const num = parseFloat(value);
-                    if (!isNaN(num)) return num;
-                }
-                return String(value).toLowerCase(); // Fallback to string comparison
-            }
+            // 创建表格结构
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+            wrapper.innerHTML = `
+                <h3>${titleRow[0] || sheet.name}</h3>
+                <table id="${tableId}">
+                    <thead>
+                        <tr>${headerRow.slice(0,6).map(h => 
+                            `<th class="${isSortable(h) ? 'sortable' : ''}">${h}</th>`
+                        ).join('')}</tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            `;
+            container.appendChild(wrapper);
 
-            function sortData(dataArray, columnIndex, ascending = true) {
-                return dataArray.sort((rowA, rowB) => {
-                    let valA = parseCellValue(rowA[columnIndex], columnIndex);
-                    let valB = parseCellValue(rowB[columnIndex], columnIndex);
-                    
-                    let comparison = 0;
-                    if (typeof valA === 'number' && typeof valB === 'number') {
-                        comparison = valA - valB;
-                    } else { // String comparison
-                        valA = String(valA); // Ensure they are strings
-                        valB = String(valB);
-                        if (valA < valB) comparison = -1;
-                        if (valA > valB) comparison = 1;
-                    }
-                    return ascending ? comparison : -comparison;
-                });
-            }
+            // 初始化排序
+            const initialSortKey = '胜场数';
+            const sortConfig = {
+                key: initialSortKey,
+                index: headerRow.indexOf(initialSortKey),
+                asc: false
+            };
+            
+            // 绑定排序事件
+            wrapper.querySelectorAll('th.sortable').forEach(th => {
+                th.addEventListener('click', () => handleSort(th, tableId));
+            });
 
-            function handleSortClick(table, columnKey) {
-                const tbody = table.querySelector('tbody');
-                const th = table.querySelector(`th[data-column-key="${columnKey}"]`);
-                const columnIndex = parseInt(th.dataset.columnIndex);
-                
-                let currentDirection = th.dataset.sortDirection; // 'asc' or 'desc'
-                let newAscending;
+            // 渲染数据
+            updateTable(tableId, dataRows, headerRow, sortConfig);
+        });
 
-                if (currentDirection === 'desc') {
-                    newAscending = true; // Toggle to asc
-                } else if (currentDirection === 'asc') {
-                    newAscending = false; // Toggle to desc
-                } else {
-                    // First click on this column, use its default direction
-                    newAscending = sortableColumnsConfig[columnKey].defaultSortDirection === 'asc';
-                }
-                
-                // Extract data from table for sorting (important to get current state)
-                let dataRows = Array.from(tbody.querySelectorAll('tr')).map(tr => 
-                    Array.from(tr.querySelectorAll('td')).map((td, tdIndex) => {
-                        // For "胜率", parse "XX.XX%" back to number if it's displayed like that
-                        if (tdIndex === sortableColumnsConfig["胜率"].index && td.textContent.endsWith('%')) {
-                            return parseFloat(td.textContent) / 100;
-                        }
-                        // For other numeric sortable columns, attempt to get the number value
-                        if (Object.values(sortableColumnsConfig).some(c => c.index === tdIndex)) {
-                           const num = parseFloat(td.textContent);
-                           if (!isNaN(num)) return num;
-                        }
-                        return td.textContent; // Otherwise, original text content
-                    })
-                );
-                
-                const sortedData = sortData(dataRows, columnIndex, newAscending);
-                populateTableBody(tbody, sortedData, sortableColumnsConfig["胜率"].index);
-                updateSortArrow(table, columnKey, newAscending);
-            }
+    } catch (error) {
+        const errorEl = document.createElement('div');
+        errorEl.className = 'error-banner';
+        errorEl.innerHTML = `
+            <strong>加载失败：</strong>${error.message}<br>
+            <small>${error.stack || ''}</small>
+        `;
+        container.prepend(errorEl);
+    } finally {
+        loader.remove();
+    }
 
-            function updateSortArrow(table, activeColumnKey, ascending) {
-                table.querySelectorAll('th.sortable').forEach(th => {
-                    th.classList.remove('asc', 'desc');
-                    th.dataset.sortDirection = ''; // Clear direction
-                    if (th.dataset.columnKey === activeColumnKey) {
-                        th.classList.add(ascending ? 'asc' : 'desc');
-                        th.dataset.sortDirection = ascending ? 'asc' : 'desc';
-                    }
-                });
+    function isSortable(header) {
+        return ['胜场数', '负场数', '总场数', '胜率'].includes(header);
+    }
+
+    function parseValue(value, header) {
+        if (header === '胜率') {
+            const num = typeof value === 'string' 
+                ? parseFloat(value.replace('%', '')) / 100
+                : Number(value);
+            return isNaN(num) ? 0 : num;
+        }
+        return typeof value === 'number' ? value : String(value).trim();
+    }
+
+    function updateTable(tableId, rows, headers, sortConfig) {
+        const table = document.getElementById(tableId);
+        const tbody = table.querySelector('tbody');
+        const sortIndex = headers.indexOf(sortConfig.key);
+        
+        // 排序逻辑
+        const sorted = [...rows].sort((a, b) => {
+            const valA = parseValue(a[sortIndex], sortConfig.key);
+            const valB = parseValue(b[sortIndex], sortConfig.key);
+            return (valA < valB ? -1 : 1) * (sortConfig.asc ? 1 : -1);
+        });
+
+        // 渲染数据
+        tbody.innerHTML = sorted.map(row => `
+            <tr>${row.slice(0,6).map((cell, i) => `
+                <td>${formatCell(cell, headers[i])}</td>
+            `).join('')}</tr>
+        `).join('');
+
+        // 更新排序指示
+        table.querySelectorAll('th').forEach(th => {
+            th.classList.remove('asc', 'desc');
+            if (th.textContent === sortConfig.key) {
+                th.classList.add(sortConfig.asc ? 'asc' : 'desc');
             }
         });
-    </script>
+    }
+
+    function formatCell(value, header) {
+        if (header === '胜率') {
+            const num = parseFloat(value) * 100;
+            return !isNaN(num) ? num.toFixed(2) + '%' : 'N/A';
+        }
+        return value || '';
+    }
+
+    function handleSort(th, tableId) {
+        const table = document.getElementById(tableId);
+        const headers = [...table.querySelectorAll('th')].map(th => th.textContent);
+        const currentKey = th.textContent;
+        const currentSort = th.classList.contains('asc') ? 'asc' : 'desc';
+        
+        updateTable(tableId, 
+            [...table.querySelectorAll('tbody tr')].map(tr => 
+                [...tr.children].map(td => td.textContent)
+            ), 
+            headers,
+            {
+                key: currentKey,
+                index: headers.indexOf(currentKey),
+                asc: currentSort === 'desc'
+            }
+        );
+    }
+});
+</script>
 </body>
 </html>
