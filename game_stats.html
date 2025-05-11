@@ -98,7 +98,7 @@
         // 排序状态对象
         let sortState = {
             column: null,
-            direction: 'asc'
+            direction: 'desc'
         };
 
         // 加载并处理数据
@@ -120,7 +120,7 @@
             const tableBody = document.getElementById('tableBody');
             
             // 移除标题行（根据实际需要调整）
-            const dataRows = rows.slice(1);
+            const dataRows = rows.slice(2);
 
             dataRows.forEach((row, index) => {
                 const cols = row.split(',').map(col => col.trim());
@@ -157,7 +157,7 @@
                 sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
             } else {
                 sortState.column = columnIndex;
-                sortState.direction = 'asc';
+                sortState.direction = 'desc';
             }
 
             rows.sort((a, b) => {
