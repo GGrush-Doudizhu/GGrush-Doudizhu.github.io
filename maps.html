@@ -3,118 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏地图下载 - 斗地主 Doudizhu 4.43</title>
-    <!-- 引入 SimpleLightbox CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css" integrity="sha512-FaAQujRxLMvwO5GZcWsoq3Gx4XJLS/qIgeL5M2JzTsP4fcH9FVOZ61P2O4j8QG9PPOFq2Pq2C/M1L1oM4C4Kg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>地图下载 | 星际斗地主</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css">
     <style>
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            --text-light: #F8F9FA;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: #444;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
+        .main-header {
+            background: var(--gradient-bg);
+            color: var(--text-light);
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.6s ease-out;
         }
-        h1, h2 {
-            text-align: center;
-            color: #333;
+
+        .map-card {
+            padding: 2rem;
+            margin: 2rem 0;
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
         }
-        .map-info {
-            margin-bottom: 30px;
-            text-align: center;
+
+        .map-card:hover {
+            transform: translateY(-5px);
         }
-        .map-info p {
-            font-size: 1.1em;
-            margin: 10px 0;
-        }
+
         .download-button {
-            display: inline-block;
-            padding: 10px 20px; /* Slightly smaller padding */
-            background-color: #4CAF50;
-            color: white;
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: var(--accent-color);
+            color: white !important;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
             text-decoration: none;
-            font-size: 1.1em; /* Slightly smaller font */
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            margin: 5px; /* Add some margin for multiple buttons */
+            margin: 1rem 0.5rem;
         }
+
         .download-button:hover {
-            background-color: #45a049;
+            background: #ff5252;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            transform: translateY(-2px);
         }
+
         .preview-container {
-            text-align: center; /* Center content */
-            margin-bottom: 20px;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 2rem 0;
+            position: relative;
         }
-        .preview-image-wrapper a { /* Wrapper for lightbox functionality */
-            display: inline-block; /* To behave like an image */
-            cursor: zoom-in;
+
+        .zoom-hint {
+            color: #666;
+            font-size: 0.9em;
+            padding: 8px 12px;
+            background: #fff3cd;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 1rem 0;
+            border: 1px solid #ffeeba;
+            font-style: italic;
         }
+
+        .zoom-hint::before {
+            content: "💡 ";
+            margin-right: 5px;
+        }
+
         .preview-image {
             display: block;
-            max-width: 100%;
-            max-height: 400px; /* Adjust as needed for inline display */
-            width: auto;
+            width: 100%;
             height: auto;
-            margin: 0 auto 10px auto; /* Margin bottom for the download button */
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
         }
+
         .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
-            font-size: 1.1em;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
-        /* SimpleLightbox z-index fix if needed, often it's high enough */
-        /* .sl-overlay { z-index: 2000; } */
-        /* .sl-wrapper { z-index: 2010; } */
+
+        .back-link:hover {
+            background: #3a3a3a;
+            transform: translateX(-5px);
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .download-button {
+                width: 100%;
+                justify-content: center;
+                margin: 0.5rem 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>游戏地图文件下载</h1>
-        <a href="index.html" class="back-link" style="margin-bottom: 20px;">« 返回主页</a>
 
-        <div class="map-info">
-            <h2>斗地主 Doudizhu 4.43</h2>
-            <p>版本：4.43</p>
-            <a href="assets/斗地主Doudizhu%204.43.scx" download="斗地主Doudizhu 4.43.scx" class="download-button">下载地图文件 (.scx)</a>
+    <header class="main-header">
+        <h1>📁 地图资源库</h1>
+        <p>Doudizhu Starcraft League 官方地图</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回主页</a>
+
+        <div class="map-card">
+            <h2>🃏 斗地主 Doudizhu 4.43</h2>
+            <div class="map-meta">
+                <p>📅 版本<span class="version">4.43</span> | 更新日期：2025.05.09</p>
+            </div>
+            
+            <a href="assets/斗地主Doudizhu%204.43.scx" 
+               download="斗地主Doudizhu 4.43.scx" 
+               class="download-button">
+               🚀 下载地图文件 (.scx)
+            </a>
+
+            <a href="assets/doudizhu-4.43-preview.bmp" 
+               download="斗地主Doudizhu 4.43 preview.bmp" 
+               class="download-button">
+               🖼️ 下载预览图 (.bmp)
+            </a>
         </div>
 
-        <h2>地图预览</h2>
         <div class="preview-container">
-            <div class="preview-image-wrapper">
-                <a href="assets/斗地主Doudizhu%204.43%20preview.bmp"> {放大图片: 点击图片, 按住ctrl+滚动滚轮}
-                    <img src="assets/斗地主Doudizhu%204.43%20preview.bmp" alt="斗地主 Doudizhu 4.43 地图预览" class="preview-image">
-                </a>
-            </div>
-            <a href="assets/doudizhu-4.43-preview.bmp" download="斗地主Doudizhu 4.43 preview.bmp" class="download-button">下载预览图 (.bmp)</a>
+            <p class="zoom-hint">点击图片后，按住 Ctrl 键，滚动鼠标滚轮放大图片</p>
+            <a href="assets/斗地主Doudizhu%204.43%20preview.bmp">
+                <img src="assets/斗地主Doudizhu%204.43%20preview.bmp" 
+                    alt="地图预览" 
+                    class="preview-image">
+            </a>
         </div>
 
     </div>
 
-    <!-- 引入 SimpleLightbox JavaScript (最好放在 body 结束前) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js" integrity="sha512-UPvOUbeL5iL9rVGDtEGNHjJpkLRE2sM+uDRvP/M+gE2ol1fVdG4qgDM7KnoMClQ0x5sD9xKPAyqg4r/O/K5SgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <footer>
+        <div class="wechat-contact">
+            📱 加入社区：加微信scdoudizhu进群
+        </div>
+        <p>© <span id="currentYear"></span> 斗地主作者GGrush. 保留所有权利</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize SimpleLightbox
-            // It will automatically find <a> tags wrapping <img> or linking to images
-            // if the <a> tag has a child <img>, it uses the <a>'s href for the lightbox image
-            // We target the specific wrapper to avoid affecting other links if any.
-            var lightbox = new SimpleLightbox('.preview-image-wrapper a', {
-                // Options can be found on SimpleLightbox documentation
-                // e.g., captionData: 'alt', captionDelay: 250,
-                // enableKeyboard: true,
-                // loop: false,
-                // scrollZoom: true, // Already default but can be explicit
-                // scrollZoomFactor: 0.2 // Default is 0.1, higher means faster zoom
+            // 初始化图片灯箱
+            new SimpleLightbox('.preview-container a', {
+                captionPosition: 'bottom',
+                captionDelay: 200,
+                disableScroll: false
             });
+
+            // 自动更新年份
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
         });
     </script>
 </body>

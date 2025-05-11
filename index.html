@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -82,11 +82,8 @@
 
     <nav>
         <ul>
-            <li><a href="index.html">主页</a></li>
             <li><a href="game_stats.html">游戏数据统计</a></li>
             <li><a href="maps.html">游戏地图下载</a></li>
-            <!-- <li><a href="articles.html">个人随笔</a></li> -->
-            <!-- <li><a href="about.html">关于我</a></li> -->
         </ul>
     </nav>
 
@@ -99,6 +96,194 @@
     <footer>
         <p>© 2025 GGrush. 保留所有权利.</p>
     </footer>
+
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GGrush | 星际斗地主</title>
+    <style>
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            --text-light: #F8F9FA;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #444;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--gradient-bg);
+            color: var(--text-light);
+            padding: 4rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -10%;
+            right: -10%;
+            height: 100px;
+            background: #fff;
+            transform: rotate(-3deg);
+            z-index: 1;
+        }
+
+        nav {
+            margin: 2rem auto;
+            max-width: 900px;
+            width: 90%;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        nav li {
+            text-align: center;
+        }
+
+        nav a {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: white;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+
+        nav a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            animation: slideDown 0.8s ease;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>星际斗地主DSL联赛</h1>
+        <p>Doudizhu Starcraft League</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="game_stats.html">🎮 数据统计</a></li>
+            <li><a href="maps.html">🗺️ 地图下载</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h2>欢迎来到星际斗地主之家</h2>
+        <p>这里是星际斗地主DSL联赛的专属空间，致力于为玩家提供最专业的赛事数据和资源支持。我们提供：</p>
+        <ul>
+            <li>📊 实时更新的选手对战数据</li>
+            <li>🆕 最新比赛地图下载</li>
+            <li>💬 玩家社区（加微信scdoudizhu进群）</li>
+        </ul>
+        <p>点击上方导航菜单开始探索，如有任何建议欢迎通过微信联系我们！</p>
+    </div>
+
+    <footer>
+        <div class="wechat-contact">
+            📱 加入社区：加微信scdoudizhu进群
+        </div>
+        <p>© <span id="currentYear"></span> 斗地主作者GGrush. 保留所有权利</p>
+    </footer>
+
+    <script>
+        // 自动更新年份
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
 
 </body>
 </html>
