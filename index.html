@@ -65,10 +65,7 @@
     </table>
 
     <script>
-        // 当文档加载完成后执行的函数
         document.addEventListener('DOMContentLoaded', function() {
-            // Excel文件的相对路径
-            // 对于 GitHub Pages，这个路径是相对于 index.html 的
             const excelFilePath = 'data/data.xlsx'; 
             
             const loadingMessageDiv = document.getElementById('loadingMessage');
@@ -76,46 +73,37 @@
             const tableHeader = document.getElementById('tableHeader');
             const tableBody = document.getElementById('tableBody');
 
-            // 使用 fetch API 获取 Excel 文件
             fetch(excelFilePath)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`无法加载Excel文件: ${response.statusText} (状态码: ${response.status})`);
                     }
-                    return response.arrayBuffer(); // 将响应体转换为 ArrayBuffer
+                    return response.arrayBuffer(); 
                 })
                 .then(arrayBuffer => {
-                    // 使用 SheetJS 解析 ArrayBuffer
                     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
-                    // 假设我们只关心第一个工作表
                     const firstSheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[firstSheetName];
 
-                    // 将工作表转换为 JSON 数组 (每行是一个数组)
-                    // header: 1 表示第一行也作为数据数组的一部分，而不是对象的键
-                    // defval: "" 用来处理空单元格，将其视为空字符串
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
 
                     if (jsonData.length === 0) {
                         loadingMessageDiv.textContent = 'Excel 文件为空或无法解析。';
-                        dataTable.style.display = 'none'; // 如果没数据，隐藏表格
+                        dataTable.style.display = 'none';
                         return;
                     }
 
-                    // 处理表头 (Excel的第一行，取前4列)
-                    const headers = jsonData[0].slice(0, 4); // "选手ID", "胜场数", "负场数", "最后比赛时间"
+                    const headers = jsonData[0].slice(0, 4); 
                     headers.forEach(headerText => {
                         const th = document.createElement('th');
                         th.textContent = headerText;
                         tableHeader.appendChild(th);
                     });
 
-                    // 处理数据行 (从Excel的第二行开始，每行取前4列)
                     for (let i = 1; i < jsonData.length; i++) {
-                        const rowData = jsonData[i].slice(0, 4); // 取当前行前4列数据
+                        const rowData = jsonData[i].slice(0, 4); 
                         
-                        // 如果第一列（选手ID）为空，可能是一个空行，跳过
                         if (rowData.length === 0 || (rowData[0] === "" && rowData.every(cell => cell === ""))) {
                             continue;
                         }
@@ -124,15 +112,9 @@
                         rowData.forEach((cellData, cellIndex) => {
                             const td = document.createElement('td');
                             
-                            // Excel 中的日期通常存储为数字（自1900年1月0日以来的天数）
-                            // SheetJS 在转换为JSON时，如果单元格格式是日期，有时会直接转为JS Date对象（如果使用cellDates:true）
-                            // 或者保留为数字。这里我们检查它是否是数字并且可能是一个Excel日期序列号。
-                            // 第4列是 "最后比赛时间"，索引是3
-                            if (cellIndex === 3 && typeof cellData === 'number' && cellData > 25569) { // 25569 是 1970-01-01 的Excel序列号
-                                // XLSX.SSF.parse_date_code 是 SheetJS 提供的日期解析函数
+                            if (cellIndex === 3 && typeof cellData === 'number' && cellData > 25569) { 
                                 const dateObj = XLSX.SSF.parse_date_code(cellData);
                                 if (dateObj) {
-                                    // 格式化日期为 YYYY-MM-DD HH:MM:SS
                                     const year = dateObj.y;
                                     const month = String(dateObj.m).padStart(2, '0');
                                     const day = String(dateObj.d).padStart(2, '0');
@@ -141,7 +123,7 @@
                                     const seconds = String(dateObj.S).padStart(2, '0');
                                     td.textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
                                 } else {
-                                    td.textContent = cellData; // 如果解析失败，显示原始数字
+                                    td.textContent = cellData; 
                                 }
                             } else {
                                 td.textContent = cellData;
@@ -151,8 +133,8 @@
                         tableBody.appendChild(tr);
                     }
 
-                    loadingMessageDiv.style.display = 'none'; // 数据加载完成，隐藏加载消息
-                    dataTable.style.display = 'table'; // 显示表格
+                    loadingMessageDiv.style.display = 'none'; 
+                    dataTable.style.display = 'table'; 
 
                 })
                 .catch(error => {
