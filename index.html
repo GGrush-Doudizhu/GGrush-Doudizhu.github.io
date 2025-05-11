@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人网站</title>
+    <title>GGrush</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,18 +29,25 @@
             margin: 20px 0;
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
         }
         nav ul li {
-            margin: 0 15px;
+            margin: 10px 15px;
         }
         nav ul li a {
             text-decoration: none;
             color: #337ab7;
             font-weight: bold;
             font-size: 1.2em;
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
         }
         nav ul li a:hover {
-            text-decoration: underline;
+            background-color: #337ab7;
+            color: white;
+            text-decoration: none;
         }
         .container {
             max-width: 900px;
@@ -76,7 +83,8 @@
     <nav>
         <ul>
             <li><a href="index.html">主页</a></li>
-            <li><a href="game_stats.html">游戏数据统计</a></li>
+            <li><a href="game_stats_index.html">游戏数据统计</a></li>
+            <li><a href="maps.html">游戏地图下载</a></li>
             <!-- <li><a href="articles.html">个人随笔</a></li> -->
             <!-- <li><a href="about.html">关于我</a></li> -->
         </ul>
@@ -84,12 +92,12 @@
 
     <div class="container">
         <h2>网站简介</h2>
-        <p>这里是我的个人空间，我会在这里分享一些我的游戏统计数据、个人随笔、项目等内容。</p>
+        <p>这里是GGrush的个人网站，我会在这里分享星际斗地主DSL联赛、斗地主地图文件等内容。</p>
         <p>请通过上方的导航栏访问不同板块。</p>
     </div>
 
     <footer>
-        <p>© 2024 你的名字. 保留所有权利.</p>
+        <p>© 2025 GGrush. 保留所有权利.</p>
     </footer>
 
 </body>

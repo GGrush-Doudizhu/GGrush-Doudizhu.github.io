@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏比赛统计</title>
+    <title>游戏数据统计 - 目录</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,166 +11,60 @@
             background-color: #f4f4f4;
             color: #333;
         }
-        .page-title { /* 页面主标题 */
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
         }
-        .sheet-title { /* 每个工作表的标题 */
-            text-align: center;
-            color: #555;
-            margin-top: 40px;
+        .stats-menu {
+            list-style-type: none;
+            padding: 0;
+        }
+        .stats-menu li {
             margin-bottom: 15px;
-            font-size: 1.8em;
         }
-        table {
-            width: 95%; /* 稍微调整宽度以适应多表 */
-            max-width: 1000px; /* 最大宽度 */
-            margin: 20px auto;
-            border-collapse: collapse;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            background-color: white;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px 12px; /* 调整内边距 */
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50;
+        .stats-menu li a {
+            display: block;
+            padding: 15px 20px;
+            background-color: #5cb85c;
             color: white;
-            text-transform: uppercase;
-            font-size: 0.9em; /* 表头字体稍小 */
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        #loadingMessage {
-            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
             font-size: 1.2em;
-            padding: 20px;
+            transition: background-color 0.3s;
+            text-align: center;
         }
-        #statsContainer { /* 用来容纳所有表格的容器 */
-            margin-top: 20px;
+        .stats-menu li a:hover {
+            background-color: #4cae4c;
         }
         .back-link {
             display: block;
             text-align: center;
-            margin-bottom: 20px;
+            margin-top: 30px;
             font-size: 1.1em;
         }
     </style>
-    <!-- 引入 SheetJS 库 (js-xlsx) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+    <div class="container">
+        <h1>游戏数据统计</h1>
+        <a href="index.html" class="back-link" style="margin-bottom: 20px;">« 返回主页</a>
 
-    <h1 class="page-title">游戏比赛统计数据</h1>
-    <a href="index.html" class="back-link">« 返回主页</a>
-
-    <div id="loadingMessage">正在加载数据，请稍候...</div>
-    <div id="statsContainer">
-        <!-- 表格将由JavaScript动态生成并插入此处 -->
+        <ul class="stats-menu">
+            <!-- 工作表索引从0开始: Sheet 1 -> 0, Sheet 2 -> 1, etc. -->
+            <li><a href="show_sheet.html?sheets=0&title=全角色汇总统计">全角色汇总统计</a></li>
+            <li><a href="show_sheet.html?sheets=1&title=地主角色汇总统计">地主角色汇总统计</a></li>
+            <li><a href="show_sheet.html?sheets=2&title=农民角色汇总统计">农民角色汇总统计</a></li>
+            <li><a href="weekly_stats_index.html">第一周数据统计</a></li>
+        </ul>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const excelFilePath = 'data/data.xlsx'; // 确保这个路径正确
-            
-            const loadingMessageDiv = document.getElementById('loadingMessage');
-            const statsContainer = document.getElementById('statsContainer');
-
-            fetch(excelFilePath)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`无法加载Excel文件: ${response.statusText} (状态码: ${response.status})`);
-                    }
-                    return response.arrayBuffer(); 
-                })
-                .then(arrayBuffer => {
-                    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-
-                    if (workbook.SheetNames.length === 0) {
-                        loadingMessageDiv.textContent = 'Excel 文件中没有工作表。';
-                        return;
-                    }
-
-                    workbook.SheetNames.forEach((sheetName, index) => {
-                        const worksheet = workbook.Sheets[sheetName];
-                        // header: 1 -> 生成数组的数组; defval: "" -> 空单元格设为空字符串
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
-
-                        if (jsonData.length < 3) { // 至少需要标题行、表头行和一行数据
-                            console.warn(`工作表 "${sheetName}" 的数据不足，至少需要3行（标题、表头、数据）。将跳过此表。`);
-                            // 也可以选择显示一个消息给用户
-                            const p = document.createElement('p');
-                            p.textContent = `工作表 "${sheetName}" 由于数据格式不完整未能加载。`;
-                            p.style.textAlign = 'center';
-                            p.style.color = 'red';
-                            statsContainer.appendChild(p);
-                            return; // 跳到下一个工作表
-                        }
-
-                        // 1. 创建并添加工作表标题 (Excel第一行)
-                        const sheetTitleText = jsonData[0] && jsonData[0][0] ? jsonData[0][0] : `工作表 ${index + 1}: ${sheetName}`;
-                        const sheetTitleElement = document.createElement('h2');
-                        sheetTitleElement.classList.add('sheet-title');
-                        sheetTitleElement.textContent = sheetTitleText;
-                        statsContainer.appendChild(sheetTitleElement);
-
-                        // 2. 创建表格和表头 (Excel第二行，6列)
-                        const table = document.createElement('table');
-                        const thead = document.createElement('thead');
-                        const headerRow = document.createElement('tr');
-                        
-                        const headersFromExcel = jsonData[1].slice(0, 6); // 取第二行的前6列作为表头
-                        headersFromExcel.forEach(headerText => {
-                            const th = document.createElement('th');
-                            th.textContent = headerText;
-                            headerRow.appendChild(th);
-                        });
-                        thead.appendChild(headerRow);
-                        table.appendChild(thead);
-
-                        // 3. 创建表格主体并填充数据 (从Excel第三行开始)
-                        const tbody = document.createElement('tbody');
-                        for (let i = 2; i < jsonData.length; i++) {
-                            const rowData = jsonData[i].slice(0, 6); // 取当前行的前6列数据
-                            
-                            // 如果行数据全为空，则跳过 (可选，根据实际情况决定)
-                            if (rowData.every(cell => cell === "")) {
-                                continue;
-                            }
-
-                            const tr = document.createElement('tr');
-                            rowData.forEach(cellData => {
-                                const td = document.createElement('td');
-                                // 检查是否为胜率列，并尝试格式化为百分比 (假设胜率在第6列，索引为5)
-                                if (rowData.indexOf(cellData) === 5 && typeof cellData === 'number') {
-                                    td.textContent = (cellData * 100).toFixed(2) + '%';
-                                } else {
-                                    td.textContent = cellData;
-                                }
-                                tr.appendChild(td);
-                            });
-                            tbody.appendChild(tr);
-                        }
-                        table.appendChild(tbody);
-                        statsContainer.appendChild(table);
-                    });
-
-                    loadingMessageDiv.style.display = 'none'; 
-
-                })
-                .catch(error => {
-                    console.error('加载或解析Excel数据时出错:', error);
-                    loadingMessageDiv.textContent = `加载数据失败: ${error.message}. 请检查文件路径和内容，并查看浏览器控制台获取更多信息。`;
-                });
-        });
-    </script>
-
 </body>
 </html>
