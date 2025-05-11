@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>游戏地图下载 - 斗地主 Doudizhu 4.43</title>
+    <!-- 引入 SimpleLightbox CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css" integrity="sha512-FaAQujRxLMvwO5GZcWsoq3Gx4XJLS/qIgeL5M2JzTsP4fcH9FVOZ61P2O4j8QG9PPOFq2Pq2C/M1L1oM4C4Kg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,25 +35,33 @@
         }
         .download-button {
             display: inline-block;
-            padding: 12px 25px;
+            padding: 10px 20px; /* Slightly smaller padding */
             background-color: #4CAF50;
             color: white;
             text-decoration: none;
-            font-size: 1.2em;
+            font-size: 1.1em; /* Slightly smaller font */
             border-radius: 5px;
             transition: background-color 0.3s;
-            margin-top: 10px;
+            margin: 5px; /* Add some margin for multiple buttons */
         }
         .download-button:hover {
             background-color: #45a049;
         }
+        .preview-container {
+            text-align: center; /* Center content */
+            margin-bottom: 20px;
+        }
+        .preview-image-wrapper a { /* Wrapper for lightbox functionality */
+            display: inline-block; /* To behave like an image */
+            cursor: zoom-in;
+        }
         .preview-image {
             display: block;
             max-width: 100%;
-            max-height: 500px; /* 限制预览图最大高度 */
+            max-height: 400px; /* Adjust as needed for inline display */
             width: auto;
             height: auto;
-            margin: 20px auto;
+            margin: 0 auto 10px auto; /* Margin bottom for the download button */
             border: 1px solid #ddd;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
@@ -61,6 +71,9 @@
             margin-top: 30px;
             font-size: 1.1em;
         }
+        /* SimpleLightbox z-index fix if needed, often it's high enough */
+        /* .sl-overlay { z-index: 2000; } */
+        /* .sl-wrapper { z-index: 2010; } */
     </style>
 </head>
 <body>
@@ -71,15 +84,38 @@
         <div class="map-info">
             <h2>斗地主 Doudizhu 4.43</h2>
             <p>版本：4.43</p>
-            <a href="assets/%E6%96%97%E5%9C%B0%E4%B8%BB%20Doudizhu%204.43.scx" download class="download-button">下载地图文件 (.scx)</a>
+            <a href="assets/斗地主Doudizhu%204.43.scx" download="斗地主Doudizhu 4.43.scx" class="download-button">下载地图文件 (.scx)</a>
         </div>
 
         <h2>地图预览</h2>
-        <!-- 
-        <img src="assets/%E6%96%97%E5%9C%B0%E4%B8%BB%20Doudizhu%204.43%20preview.bmp" alt="斗地主 Doudizhu 4.43 地图预览" class="preview-image">
-        -->
-        <img src="assets/preview.bmp" alt="斗地主 Doudizhu 4.43 地图预览" class="preview-image">
+        <div class="preview-container">
+            <div class="preview-image-wrapper">
+                <a href="assets/斗地主Doudizhu%204.43%20preview.bmp"> {放大图片: 点击图片, 按住ctrl+滚动滚轮}
+                    <img src="assets/斗地主Doudizhu%204.43%20preview.bmp" alt="斗地主 Doudizhu 4.43 地图预览" class="preview-image">
+                </a>
+            </div>
+            <a href="assets/doudizhu-4.43-preview.bmp" download="斗地主Doudizhu 4.43 preview.bmp" class="download-button">下载预览图 (.bmp)</a>
+        </div>
 
     </div>
+
+    <!-- 引入 SimpleLightbox JavaScript (最好放在 body 结束前) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js" integrity="sha512-UPvOUbeL5iL9rVGDtEGNHjJpkLRE2sM+uDRvP/M+gE2ol1fVdG4qgDM7KnoMClQ0x5sD9xKPAyqg4r/O/K5SgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize SimpleLightbox
+            // It will automatically find <a> tags wrapping <img> or linking to images
+            // if the <a> tag has a child <img>, it uses the <a>'s href for the lightbox image
+            // We target the specific wrapper to avoid affecting other links if any.
+            var lightbox = new SimpleLightbox('.preview-image-wrapper a', {
+                // Options can be found on SimpleLightbox documentation
+                // e.g., captionData: 'alt', captionDelay: 250,
+                // enableKeyboard: true,
+                // loop: false,
+                // scrollZoom: true, // Already default but can be explicit
+                // scrollZoomFactor: 0.2 // Default is 0.1, higher means faster zoom
+            });
+        });
+    </script>
 </body>
 </html>
