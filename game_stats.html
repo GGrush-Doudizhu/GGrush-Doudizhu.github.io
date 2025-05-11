@@ -5,120 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>游戏数据统计</title>
     <style>
-        :root {
-            --space-blue: #0a1a2f;
-            --neon-cyan: #00f3ff;
-            --cyber-purple: #7d12ff;
-            --hologram-pink: #ff00d4;
-            --future-silver: #e0e7ff;
+        /* 新增序号列样式 */
+        th:first-child, td:first-child {
+            width: 60px;
+            text-align: center;
+            background-color: #f8f9fa;
         }
 
+        /* 原有样式保持不变 */
         body {
-            font-family: 'Orbitron', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             max-width: 1000px;
             margin: 20px auto;
             padding: 0 20px;
-            background: linear-gradient(135deg, var(--space-blue) 0%, #020c1a 100%);
-            color: var(--future-silver);
         }
-
+        
         h1 {
+            color: #2c3e50;
             text-align: center;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            font-size: 2.5rem;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--cyber-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
-            border-bottom: 3px solid var(--neon-cyan);
-            position: relative;
+            margin-bottom: 30px;
         }
 
         .table-container {
             overflow-x: auto;
-            border-radius: 12px;
-            background: rgba(10, 26, 47, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--neon-cyan);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+            border-radius: 8px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: transparent;
+            background: white;
         }
 
         th, td {
-            padding: 16px 20px;
+            padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
+            border-bottom: 1px solid #ddd;
         }
 
         th {
-            background: linear-gradient(180deg, rgba(0, 243, 255, 0.15), transparent);
-            color: var(--neon-cyan);
+            background-color: #f8f9fa;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
+            transition: background 0.3s;
         }
 
         th:hover {
-            background: rgba(0, 243, 255, 0.2);
-            text-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        th.active-sort {
-            background: linear-gradient(180deg, var(--cyber-purple), rgba(125, 18, 255, 0.3));
+            background-color: #f1f1f1;
         }
 
         tr:hover {
-            background: rgba(0, 243, 255, 0.05);
+            background-color: #f5f5f5;
         }
 
         tr:nth-child(even) {
-            background: rgba(255, 0, 212, 0.03);
+            background-color: #f9f9f9;
         }
 
         .sort-indicator {
             display: inline-block;
-            margin-left: 8px;
-            font-size: 0.9em;
-            transition: transform 0.3s;
+            margin-left: 5px;
+            color: #666;
         }
 
-        td:first-child {
-            color: var(--neon-cyan);
-            font-family: 'Courier New', monospace;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 0 15px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-                padding: 1rem;
-            }
-
-            th, td {
-                padding: 12px;
-                font-size: 0.9em;
+        @media (max-width: 600px) {
+            td, th {
+                padding: 8px;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>全角色数据面板</h1>
+    <h1>全角色汇总统计</h1>
     <div class="table-container">
         <table id="statsTable">
             <thead>
                 <tr>
-                    <th>序号</th>
+                    <th>序号</th> <!-- 新增序号列 -->
                     <th>选手 <span class="sort-indicator"></span></th>
                     <th>胜场数 <span class="sort-indicator"></span></th>
                     <th>负场数 <span class="sort-indicator"></span></th>
@@ -131,11 +95,13 @@
     </div>
 
     <script>
+        // 排序状态对象
         let sortState = {
             column: null,
-            direction: 'desc'
+            direction: 'asc'
         };
 
+        // 加载并处理数据
         async function loadData() {
             try {
                 const response = await fetch('data/data.csv');
@@ -147,85 +113,88 @@
             }
         }
 
+        // 处理CSV数据
         function processData(csv) {
             const cleanCSV = csv.replace(/^\uFEFF/, '');
             const rows = cleanCSV.split('\n').filter(row => row.trim() !== '');
             const tableBody = document.getElementById('tableBody');
             
-            // 跳过前两行标题
-            const dataRows = rows.slice(2);
+            // 移除标题行（根据实际需要调整）
+            const dataRows = rows.slice(1);
 
             dataRows.forEach((row, index) => {
                 const cols = row.split(',').map(col => col.trim());
                 if (cols.length === 5) {
                     const tr = document.createElement('tr');
                     
+                    // 添加序号列
                     tr.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${cols[0]}</td>
                         <td>${cols[1]}</td>
                         <td>${cols[2]}</td>
-                        <td>${cols[3]}</td>
-                        <td>${cols[4]}</td>
+                        <td>${parseInt(cols[3])}</td>
+                        <td>${parseFloat(cols[4]).toFixed(2)}%</td>
                     `;
                     tableBody.appendChild(tr);
                 }
             });
 
+            // 初始化排序（跳过序号列）
             document.querySelectorAll('th').forEach((th, index) => {
-                if (index === 0) return;
+                if (index === 0) return; // 跳过序号列
                 th.addEventListener('click', () => sortTable(index - 1));
             });
         }
 
+        // 排序功能
         function sortTable(columnIndex) {
             const tbody = document.getElementById('tableBody');
             const rows = Array.from(tbody.rows);
             
-            document.querySelectorAll('th').forEach(th => th.classList.remove('active-sort'));
-            document.querySelectorAll('.sort-indicator').forEach(span => span.textContent = '');
-
+            // 切换排序方向
             if (sortState.column === columnIndex) {
                 sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
             } else {
                 sortState.column = columnIndex;
-                sortState.direction = 'desc';
+                sortState.direction = 'asc';
             }
 
-            const currentTh = document.querySelectorAll('th')[columnIndex + 1];
-            currentTh.classList.add('active-sort');
-            const indicator = currentTh.querySelector('.sort-indicator');
-
             rows.sort((a, b) => {
+                // 注意：列索引需要+1（跳过序号列）
                 const aVal = a.cells[columnIndex + 1].textContent;
                 const bVal = b.cells[columnIndex + 1].textContent;
                 
-                // 处理胜率列
-                if (columnIndex === 4) {
-                    const numA = parseFloat(aVal.replace('%', ''));
-                    const numB = parseFloat(bVal.replace('%', ''));
+                // 处理数值类型（从第二列开始）
+                if (columnIndex > 0) {
+                    const numA = parseFloat(aVal);
+                    const numB = parseFloat(bVal);
                     return sortState.direction === 'asc' ? numA - numB : numB - numA;
                 }
                 
-                // 处理数值列
-                if (columnIndex > 0) {
-                    const numA = parseInt(aVal);
-                    const numB = parseInt(bVal);
-                    return sortState.direction === 'asc' ? numA - numB : numB - numA;
-                }
-
+                // 处理字符串类型（选手列）
                 return sortState.direction === 'asc' 
                     ? aVal.localeCompare(bVal) 
                     : bVal.localeCompare(aVal);
             });
 
-            indicator.textContent = sortState.direction === 'asc' ? '▽' : '△';
-            
+            // 更新排序指示器
+            document.querySelectorAll('.sort-indicator').forEach(span => {
+                span.textContent = '';
+            });
+            const currentTh = document.querySelectorAll('th')[columnIndex + 1]; // 对应实际排序列
+            currentTh.querySelector('.sort-indicator').textContent = 
+                sortState.direction === 'asc' ? '↑' : '↓';
+
+            // 重新插入排序后的行
             tbody.innerHTML = '';
             rows.forEach(row => tbody.appendChild(row));
+
+            // 更新序号
             updateRowNumbers();
         }
 
+        // 更新行号功能
         function updateRowNumbers() {
             const rows = document.querySelectorAll('#tableBody tr');
             rows.forEach((row, index) => {
@@ -233,6 +202,7 @@
             });
         }
 
+        // 初始化加载数据
         loadData();
     </script>
 </body>
