@@ -6,93 +6,80 @@
     <title>游戏数据统计</title>
     <style>
         :root {
-            --primary-color: #2A2A2A;
-            --accent-color: #FF6B6B;
-            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
-            --text-light: #F8F9FA;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --space-blue: #0a1a2f;
+            --neon-cyan: #00f3ff;
+            --cyber-purple: #7d12ff;
+            --hologram-pink: #ff00d4;
+            --future-silver: #e0e7ff;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Orbitron', 'Segoe UI', sans-serif;
             max-width: 1000px;
             margin: 20px auto;
             padding: 0 20px;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, var(--space-blue) 0%, #020c1a 100%);
+            color: var(--future-silver);
         }
 
         h1 {
-            background: var(--gradient-bg);
-            color: var(--text-light);
-            padding: 2rem;
             text-align: center;
-            border-radius: 15px;
-            box-shadow: var(--shadow-sm);
-            margin: 2rem auto;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--cyber-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            border-bottom: 3px solid var(--neon-cyan);
             position: relative;
-            overflow: hidden;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: -10%;
-            right: -10%;
-            height: 30px;
-            background: #fff;
-            transform: rotate(-3deg);
-            z-index: 1;
         }
 
         .table-container {
             overflow-x: auto;
-            border-radius: 15px;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-            background: white;
-            transition: transform 0.3s ease;
-        }
-
-        .table-container:hover {
-            transform: translateY(-3px);
+            border-radius: 12px;
+            background: rgba(10, 26, 47, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            transition: all 0.3s ease;
+            background: transparent;
         }
 
         th, td {
-            padding: 14px 18px;
+            padding: 16px 20px;
             text-align: left;
-            border-bottom: 1px solid #eee;
-            transition: background 0.3s;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.1);
         }
 
         th {
-            background-color: var(--primary-color);
-            color: white;
+            background: linear-gradient(180deg, rgba(0, 243, 255, 0.15), transparent);
+            color: var(--neon-cyan);
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
             position: relative;
         }
 
         th:hover {
-            background-color: #3A3A3A;
+            background: rgba(0, 243, 255, 0.2);
+            text-shadow: 0 0 10px var(--neon-cyan);
         }
 
         th.active-sort {
-            background-color: var(--accent-color);
+            background: linear-gradient(180deg, var(--cyber-purple), rgba(125, 18, 255, 0.3));
         }
 
         tr:hover {
-            background-color: #fff9f9;
+            background: rgba(0, 243, 255, 0.05);
         }
 
         tr:nth-child(even) {
-            background-color: #fcfcfc;
+            background: rgba(255, 0, 212, 0.03);
         }
 
         .sort-indicator {
@@ -103,9 +90,8 @@
         }
 
         td:first-child {
-            font-weight: 500;
-            color: #666;
-            background-color: #fcfcfc;
+            color: var(--neon-cyan);
+            font-family: 'Courier New', monospace;
         }
 
         @media (max-width: 768px) {
@@ -114,8 +100,8 @@
             }
 
             h1 {
-                font-size: 1.5rem;
-                padding: 1.5rem;
+                font-size: 1.8rem;
+                padding: 1rem;
             }
 
             th, td {
@@ -124,9 +110,10 @@
             }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>全角色汇总统计</h1>
+    <h1>全角色数据面板</h1>
     <div class="table-container">
         <table id="statsTable">
             <thead>
@@ -146,48 +133,107 @@
     <script>
         let sortState = {
             column: null,
-            direction: 'desc' // 默认降序
+            direction: 'desc'
         };
 
-        // 加载数据部分保持不变...
+        async function loadData() {
+            try {
+                const response = await fetch('data/data.csv');
+                const data = await response.text();
+                processData(data);
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                alert('数据加载失败，请检查文件路径');
+            }
+        }
 
-        // 修改后的排序函数
+        function processData(csv) {
+            const cleanCSV = csv.replace(/^\uFEFF/, '');
+            const rows = cleanCSV.split('\n').filter(row => row.trim() !== '');
+            const tableBody = document.getElementById('tableBody');
+            
+            // 跳过前两行标题
+            const dataRows = rows.slice(2);
+
+            dataRows.forEach((row, index) => {
+                const cols = row.split(',').map(col => col.trim());
+                if (cols.length === 5) {
+                    const tr = document.createElement('tr');
+                    
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${cols[0]}</td>
+                        <td>${cols[1]}</td>
+                        <td>${cols[2]}</td>
+                        <td>${cols[3]}</td>
+                        <td>${cols[4]}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                }
+            });
+
+            document.querySelectorAll('th').forEach((th, index) => {
+                if (index === 0) return;
+                th.addEventListener('click', () => sortTable(index - 1));
+            });
+        }
+
         function sortTable(columnIndex) {
             const tbody = document.getElementById('tableBody');
             const rows = Array.from(tbody.rows);
             
-            // 清除之前的排序状态
             document.querySelectorAll('th').forEach(th => th.classList.remove('active-sort'));
+            document.querySelectorAll('.sort-indicator').forEach(span => span.textContent = '');
 
-            // 设置新排序状态
             if (sortState.column === columnIndex) {
                 sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
             } else {
                 sortState.column = columnIndex;
-                sortState.direction = 'desc'; // 新列默认降序
+                sortState.direction = 'desc';
             }
 
-            // 添加当前排序状态
-            document.querySelectorAll('th')[columnIndex + 1].classList.add('active-sort');
+            const currentTh = document.querySelectorAll('th')[columnIndex + 1];
+            currentTh.classList.add('active-sort');
+            const indicator = currentTh.querySelector('.sort-indicator');
 
-            // 排序逻辑保持不变...
+            rows.sort((a, b) => {
+                const aVal = a.cells[columnIndex + 1].textContent;
+                const bVal = b.cells[columnIndex + 1].textContent;
+                
+                // 处理胜率列
+                if (columnIndex === 4) {
+                    const numA = parseFloat(aVal.replace('%', ''));
+                    const numB = parseFloat(bVal.replace('%', ''));
+                    return sortState.direction === 'asc' ? numA - numB : numB - numA;
+                }
+                
+                // 处理数值列
+                if (columnIndex > 0) {
+                    const numA = parseInt(aVal);
+                    const numB = parseInt(bVal);
+                    return sortState.direction === 'asc' ? numA - numB : numB - numA;
+                }
 
-            // 更新指示器
-            const indicator = document.querySelectorAll('.sort-indicator')[columnIndex];
+                return sortState.direction === 'asc' 
+                    ? aVal.localeCompare(bVal) 
+                    : bVal.localeCompare(aVal);
+            });
+
             indicator.textContent = sortState.direction === 'asc' ? '▽' : '△';
-            indicator.style.transform = sortState.direction === 'asc' ? 'rotate(180deg)' : '';
-
-            // 添加排序动画
-            tbody.style.opacity = '0';
-            setTimeout(() => {
-                tbody.style.opacity = '1';
-                tbody.innerHTML = '';
-                rows.forEach(row => tbody.appendChild(row));
-                updateRowNumbers();
-            }, 300);
+            
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+            updateRowNumbers();
         }
 
-        // 其他函数保持不变...
+        function updateRowNumbers() {
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1;
+            });
+        }
+
+        loadData();
     </script>
 </body>
 </html>
