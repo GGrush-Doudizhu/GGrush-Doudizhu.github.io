@@ -3,33 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏数据统计</title>
+    <title>游戏数据统计 | 星际斗地主</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css">
     <style>
-        /* 新增序号列样式 */
-        th:first-child, td:first-child {
-            width: 60px;
-            text-align: center;
-            background-color: #f8f9fa;
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            --text-light: #F8F9FA;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* 原有样式保持不变 */
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 0 20px;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: #444;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        
-        h1 {
-            color: #2c3e50;
+
+        .main-header {
+            background: var(--gradient-bg);
+            color: var(--text-light);
+            padding: 3rem 1rem;
             text-align: center;
-            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .stats-card {
+            padding: 2rem;
+            margin: 2rem 0;
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-3px);
         }
 
         .table-container {
             overflow-x: auto;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
             border-radius: 8px;
+            margin: 1rem 0;
         }
 
         table {
@@ -39,62 +69,135 @@
         }
 
         th, td {
-            padding: 12px 15px;
+            padding: 14px 16px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 2px solid #eee;
         }
 
         th {
-            background-color: #f8f9fa;
+            background-color: var(--primary-color);
+            color: var(--text-light);
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
         }
 
         th:hover {
-            background-color: #f1f1f1;
+            background-color: #3a3a3a;
         }
 
         tr:hover {
-            background-color: #f5f5f5;
+            background-color: #fff9f9;
         }
 
         tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #fcfcfc;
         }
 
         .sort-indicator {
             display: inline-block;
-            margin-left: 5px;
-            color: #666;
+            margin-left: 8px;
+            color: var(--accent-color);
+            transition: transform 0.3s ease;
         }
 
-        @media (max-width: 600px) {
-            td, th {
-                padding: 8px;
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-link:hover {
+            background: #3a3a3a;
+            transform: translateX(-5px);
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
             }
+            
+            th, td {
+                padding: 12px;
+                font-size: 0.9em;
+            }
+        }
+
+        /* 新增数据高亮 */
+        td:nth-child(3) { color: #28a745; } /* 胜场 */
+        td:nth-child(4) { color: #dc3545; } /* 负场 */
+        td:nth-child(6) { 
+            font-weight: 600;
+            color: var(--accent-color);
         }
     </style>
 </head>
 <body>
-    <h1>全角色汇总统计</h1>
-    <div class="table-container">
-        <table id="statsTable">
-            <thead>
-                <tr>
-                    <th>序号</th> <!-- 新增序号列 -->
-                    <th>选手 <span class="sort-indicator"></span></th>
-                    <th>胜场数 <span class="sort-indicator"></span></th>
-                    <th>负场数 <span class="sort-indicator"></span></th>
-                    <th>总场数 <span class="sort-indicator"></span></th>
-                    <th>胜率 <span class="sort-indicator"></span></th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
+
+    <header class="main-header">
+        <h1>📊 选手数据统计</h1>
+        <p>Doudizhu Starcraft League 赛季数据</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link">← 返回主页</a>
+
+        <div class="stats-card">
+            <div class="table-container">
+                <table id="statsTable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>选手 <span class="sort-indicator"></span></th>
+                            <th>胜场 <span class="sort-indicator"></span></th>
+                            <th>负场 <span class="sort-indicator"></span></th>
+                            <th>总场 <span class="sort-indicator"></span></th>
+                            <th>胜率 <span class="sort-indicator"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
+    <footer>
+        <div class="wechat-contact">
+            📱 数据更新：每日凌晨自动同步最新战绩
+        </div>
+        <p>© <span id="currentYear"></span> 斗地主作者GGrush. 统计维度说明</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"></script>
     <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // 自动更新年份
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+
         // 排序状态对象
         let sortState = {
             column: null,
