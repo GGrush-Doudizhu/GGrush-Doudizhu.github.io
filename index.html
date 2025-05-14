@@ -23,12 +23,13 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            font-size: 16px; /* 设定一个基础字体大小，方便rem单位计算 */
         }
 
         header {
             background: var(--gradient-bg);
             color: var(--text-light);
-            padding: 4rem 1rem;
+            padding: 2.5rem 1rem; /* 手机端默认padding */
             text-align: center;
             box-shadow: var(--shadow-sm);
             position: relative;
@@ -38,19 +39,19 @@
         header::after {
             content: '';
             position: absolute;
-            bottom: -50px;
+            bottom: -30px; /* 手机端调整 */
             left: -10%;
             right: -10%;
-            height: 100px;
+            height: 60px;  /* 手机端调整 */
             background: #fff;
             transform: rotate(-3deg);
             z-index: 1;
         }
 
         nav {
-            margin: 2rem auto;
+            margin: 1.5rem auto; /* 手机端默认margin */
             max-width: 900px;
-            width: 90%;
+            width: 95%; /* 手机端更宽一些 */
         }
 
         nav ul {
@@ -58,8 +59,8 @@
             padding: 0;
             margin: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
+            grid-template-columns: 1fr; /* 手机端默认单列 */
+            gap: 0.8rem; /* 手机端间距 */
             justify-content: center;
         }
 
@@ -68,31 +69,32 @@
         }
 
         nav a {
-            display: inline-block;
-            padding: 1rem 2rem;
+            display: block; /* 手机端按钮通常占满一行 */
+            padding: 0.8rem 1rem; /* 手机端按钮padding */
             background: white;
             color: var(--primary-color);
             text-decoration: none;
-            border-radius: 50px;
+            border-radius: 30px; /* 手机端圆角可以小一点 */
             font-weight: 600;
+            font-size: 0.95rem; /* 手机端字体大小 */
             transition: all 0.3s ease;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             border: 2px solid transparent;
         }
 
-        nav a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        nav a:hover, nav a:focus { /* 添加:focus以增强可访问性 */
+            transform: translateY(-2px); /* 手机端悬浮效果可以不那么明显 */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
             background: var(--accent-color);
             color: white;
         }
 
         .container {
             max-width: 900px;
-            margin: 2rem auto;
-            padding: 2.5rem;
+            margin: 1rem; /* 手机端默认margin */
+            padding: 1.5rem; /* 手机端默认padding */
             background: white;
-            border-radius: 15px;
+            border-radius: 10px; /* 手机端圆角 */
             box-shadow: var(--shadow-sm);
             position: relative;
             z-index: 2;
@@ -100,49 +102,128 @@
         }
 
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
+            font-size: 2rem; /* 手机端默认字体大小 */
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.5px;
             animation: slideDown 0.8s ease;
+        }
+        
+        header p { /* 给header里的p也设置一下字体大小 */
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
         h2 {
             color: var(--accent-color);
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-color); /* 手机端边框细一点 */
+            padding-bottom: 0.4rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem; /* 手机端H2大小 */
         }
+
+        .container p, .container ul li { /* 调整正文和列表项字体大小 */
+            font-size: 0.95rem;
+        }
+
+        .container ul {
+            padding-left: 20px; /* 调整列表缩进 */
+        }
+
 
         footer {
             margin-top: auto;
             background: var(--primary-color);
             color: var(--text-light);
-            padding: 2rem;
+            padding: 1.5rem 1rem; /* 手机端padding */
             text-align: center;
+            font-size: 0.85rem; /* 手机端页脚字体 */
+        }
+        
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color); /* 让微信号更突出 */
         }
 
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
+            from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 768px) {
-            nav ul {
-                grid-template-columns: 1fr;
+        /* --- 桌面端样式 (Tablet and Desktop) --- */
+        @media (min-width: 768px) {
+            body {
+                font-size: 17px; /* 桌面端可以稍大一点的基础字体 */
+            }
+
+            header {
+                padding: 4rem 1rem; /* 恢复桌面端padding */
+            }
+
+            header::after {
+                bottom: -50px; /* 恢复桌面端设计 */
+                height: 100px;
+            }
+
+            nav {
+                margin: 2rem auto; /* 恢复桌面端margin */
+                width: 90%;
             }
             
+            nav ul {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 桌面端多列 */
+                gap: 1rem; /* 桌面端间距 */
+            }
+
+            nav a {
+                display: inline-block; /* 桌面端按钮不必占满一行 */
+                padding: 1rem 2rem; /* 恢复桌面端按钮padding */
+                border-radius: 50px;
+                font-size: 1rem; /* 恢复桌面端字体大小 */
+                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            }
+            
+            nav a:hover, nav a:focus {
+                 transform: translateY(-3px);
+                 box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            }
+
             .container {
-                padding: 1.5rem;
-                margin: 1rem;
+                margin: 2rem auto; /* 恢复桌面端margin */
+                padding: 2.5rem; /* 恢复桌面端padding */
+                border-radius: 15px;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.8rem; /* 恢复桌面端字体大小 */
+                margin-bottom: 1rem;
+                letter-spacing: -1px;
+            }
+
+            header p {
+                font-size: 1rem; /* 桌面端header p字体大小 */
+            }
+
+            h2 {
+                border-bottom-width: 3px; /* 恢复桌面端边框粗细 */
+                padding-bottom: 0.5rem;
+                margin-bottom: 1.5rem;
+                font-size: 1.8rem; /* 桌面端H2大小 */
+            }
+
+            .container p, .container ul li {
+                font-size: 1rem; /* 恢复桌面端正文和列表项字体大小 */
+            }
+
+            footer {
+                padding: 2rem; /* 恢复桌面端padding */
+                font-size: 0.9rem; /* 恢复桌面端页脚字体 */
             }
         }
     </style>
@@ -175,7 +256,7 @@
 
     <footer>
         <div class="wechat-contact">
-            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span>dizhu</span> 进群
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
         </div>
         <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
@@ -188,7 +269,7 @@
         
         if (yearRangeEl) {
             yearRangeEl.textContent = 
-                startYear === currentYear ? startYear : `${startYear}-${currentYear}`;
+                startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
         }
     </script>
 

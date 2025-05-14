@@ -246,19 +246,21 @@
 
             // --- 初始化 ---
             function initialize() {
-                // updateCurrentYear();
+                updateCopyrightYear();
                 loadAndProcessData();
                 setupEventListeners();
             }
 
-            // 自动更新年份
-            const startYear = 2025;
-            const currentYear = new Date().getFullYear();
-            const yearRangeEl = document.getElementById('yearRange');
-            
-            if (yearRangeEl) {
-                yearRangeEl.textContent = 
-                    startYear === currentYear ? startYear : `${startYear}-${currentYear}`;
+
+            function updateCopyrightYear() {
+                const startYear = 2025;
+                const currentYear = new Date().getFullYear();
+                const yearRangeEl = document.getElementById('yearRange');
+
+                if (yearRangeEl) {
+                    yearRangeEl.textContent =
+                        startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
+                }
             }
 
             // --- 数据加载与处理 ---
