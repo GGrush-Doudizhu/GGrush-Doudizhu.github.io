@@ -12,6 +12,7 @@
             --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
             --text-light: #F8F9FA;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08); /* Added for map-card consistency */
         }
 
         body {
@@ -23,74 +24,135 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            font-size: 16px; /* Mobile-first base font size */
         }
 
         .main-header {
             background: var(--gradient-bg);
             color: var(--text-light);
-            padding: 3rem 1rem;
+            padding: 2rem 1rem; /* Mobile padding */
             text-align: center;
             box-shadow: var(--shadow-sm);
         }
 
+        .main-header h1 {
+            font-size: 1.8rem; /* Mobile h1 */
+            margin-bottom: 0.3rem;
+        }
+
+        .main-header p {
+            font-size: 0.9rem; /* Mobile p */
+            margin-top: 0.2rem;
+        }
+
         .container {
             max-width: 900px;
-            margin: 2rem auto;
-            padding: 2rem;
+            margin: 1rem; /* Mobile margin */
+            padding: 1.5rem; /* Mobile padding */
             background: white;
-            border-radius: 15px;
+            border-radius: 10px; /* Mobile border-radius */
             box-shadow: var(--shadow-sm);
             animation: fadeIn 0.6s ease-out;
         }
 
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.7rem 1.2rem; /* Mobile padding */
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem; /* Mobile font size */
+            margin-bottom: 1.5rem; /* Space below the link */
+        }
+
+        .back-link:hover, .back-link:focus {
+            background: #3a3a3a;
+            transform: scale(1.03); /* Mobile-friendly hover/focus */
+        }
+
         .map-card {
-            padding: 2rem;
-            margin: 2rem 0;
+            padding: 1.5rem; /* Mobile padding */
+            margin: 1.5rem 0; /* Mobile margin */
             background: rgba(255,255,255,0.95);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-radius: 10px; /* Mobile border-radius */
+            box-shadow: var(--shadow-md);
             transition: transform 0.3s ease;
         }
 
         .map-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px); /* Subtle hover for mobile if touch allows */
+        }
+        
+        .map-card h2 {
+            font-size: 1.5rem; /* Mobile h2 */
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .map-meta p {
+            font-size: 0.85rem; /* Mobile meta text */
+            color: #555;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        .map-meta .version {
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
         .download-button {
-            display: inline-flex;
+            display: flex; /* Use flex for alignment */
             align-items: center;
-            padding: 1rem 2rem;
+            justify-content: center; /* Center text within button */
+            width: 100%; /* Mobile: full width */
+            padding: 0.8rem 1rem; /* Mobile padding */
             background: var(--accent-color);
-            color: white !important;
+            color: white !important; /* Important retained if necessary */
             font-weight: 600;
+            font-size: 0.95rem; /* Mobile font size */
             border-radius: 8px;
             transition: all 0.3s ease;
             text-decoration: none;
-            margin: 1rem 0.5rem;
+            margin: 0.5rem 0; /* Mobile margin */
+            box-sizing: border-box; /* Ensure padding doesn't make it overflow */
         }
 
-        .download-button:hover {
+        .download-button:hover, .download-button:focus {
             background: #ff5252;
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+            box-shadow: 0 3px 10px rgba(255,107,107,0.25);
             transform: translateY(-2px);
         }
+        
+        .download-button-secondary { /* For the preview download, slightly different */
+            background: #6c757d; /* A more muted color */
+        }
+        .download-button-secondary:hover, .download-button-secondary:focus {
+            background: #5a6268;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
 
         .preview-container {
             border: none;
-            border-radius: 12px;
+            border-radius: 10px; /* Mobile border-radius */
             overflow: hidden;
-            margin: 2rem 0;
+            margin: 1.5rem 0; /* Mobile margin */
             position: relative;
         }
 
         .zoom-hint {
             color: #666;
-            font-size: 0.9em;
-            padding: 8px 12px;
+            font-size: 0.85rem; /* Mobile font size */
+            padding: 0.5rem 0.75rem;
             background: #fff3cd;
             border-radius: 6px;
             display: inline-block;
-            margin: 1rem 0;
+            margin: 0 0 1rem 0; /* Margin below hint */
             border: 1px solid #ffeeba;
             font-style: italic;
         }
@@ -106,49 +168,110 @@
             height: auto;
             transition: transform 0.3s ease;
             cursor: zoom-in;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.8rem 1.5rem;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .back-link:hover {
-            background: #3a3a3a;
-            transform: translateX(-5px);
+            border-radius: 8px; /* Add a slight radius to the image itself if it's directly in preview-container */
         }
 
         footer {
             margin-top: auto;
             background: var(--primary-color);
             color: var(--text-light);
-            padding: 2rem;
+            padding: 1.5rem 1rem; /* Mobile padding */
             text-align: center;
             line-height: 1.8;
+            font-size: 0.85rem; /* Mobile font size */
+        }
+        
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
-        /* 动画效果 */
+
+        /* Animation effects */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); } /* Mobile adjusted */
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 768px) {
+        /* --- Desktop Styles (Tablet and Desktop) --- */
+        @media (min-width: 768px) {
+            body {
+                font-size: 17px; /* Desktop base font size */
+            }
+
+            .main-header {
+                padding: 3rem 1rem; /* Desktop padding */
+            }
+            .main-header h1 {
+                font-size: 2.5rem; /* Desktop h1 */
+            }
+            .main-header p {
+                font-size: 1rem; /* Desktop p */
+            }
+
             .container {
-                padding: 1.5rem;
-                margin: 1rem;
+                margin: 2rem auto; /* Desktop margin */
+                padding: 2rem; /* Desktop padding */
+                border-radius: 15px;
+            }
+
+            .back-link {
+                padding: 0.8rem 1.5rem; /* Desktop padding */
+                font-size: 1rem; /* Desktop font size */
+            }
+            .back-link:hover, .back-link:focus {
+                transform: translateX(-5px); /* Desktop hover */
+            }
+
+            .map-card {
+                padding: 2rem; /* Desktop padding */
+                margin: 2rem 0; /* Desktop margin */
+                border-radius: 12px;
+            }
+            .map-card:hover {
+                transform: translateY(-5px); /* Desktop hover */
+            }
+            .map-card h2 {
+                font-size: 1.8rem; /* Desktop h2 */
+            }
+            .map-meta p {
+                font-size: 0.95rem; /* Desktop meta text */
+            }
+
+            .download-button-container { /* Optional: for layout if needed */
+                display: flex;
+                gap: 1rem; /* Space between buttons on desktop */
+            }
+
+            .download-button {
+                display: inline-flex; /* Desktop: inline for side-by-side */
+                width: auto; /* Desktop: auto width */
+                padding: 1rem 2rem; /* Desktop padding */
+                margin: 1rem 0.5rem 1rem 0; /* Desktop margin (remove left for first, right for last if in container) */
+                font-size: 1rem; /* Desktop font size */
+            }
+             .download-button:first-of-type {
+                margin-left: 0;
+            }
+            .download-button:last-of-type {
+                margin-right: 0;
+            }
+
+
+            .preview-container {
+                margin: 2rem 0; /* Desktop margin */
+                border-radius: 12px;
+            }
+
+            .zoom-hint {
+                font-size: 0.9em; /* Relative, will scale with body font */
+                padding: 8px 12px;
+                margin: 1rem 0;
             }
             
-            .download-button {
-                width: 100%;
-                justify-content: center;
-                margin: 0.5rem 0;
+            footer {
+                padding: 2rem; /* Desktop padding */
+                font-size: 0.9rem; /* Desktop font size */
             }
         }
     </style>
@@ -169,21 +292,24 @@
                 <p>📅 版本<span class="version">4.43</span> | 更新日期：2025.05.09</p>
             </div>
             
-            <a href="assets/斗地主Doudizhu%204.43.scx" 
-               download="斗地主Doudizhu 4.43.scx" 
-               class="download-button">
-               🚀 下载地图文件 (.scx)
-            </a>
+            <!-- For desktop, you might want these side-by-side. Added a container -->
+            <div class="download-button-container">
+                <a href="assets/斗地主Doudizhu%204.43.scx" 
+                   download="斗地主Doudizhu 4.43.scx" 
+                   class="download-button">
+                   🚀 下载地图文件 (.scx)
+                </a>
 
-            <a href="assets/doudizhu-4.43-preview.bmp" 
-               download="斗地主Doudizhu 4.43 preview.bmp" 
-               class="download-button">
-               🖼️ 下载预览图 (.bmp)
-            </a>
+                <a href="assets/doudizhu-4.43-preview.bmp" 
+                   download="斗地主Doudizhu 4.43 preview.bmp" 
+                   class="download-button download-button-secondary"> <!-- Added secondary class for different styling -->
+                   🖼️ 下载预览图 (.bmp)
+                </a>
+            </div>
         </div>
 
         <div class="preview-container">
-            <p class="zoom-hint">点击图片后，按住 Ctrl 键，滚动鼠标滚轮放大图片</p>
+            <p class="zoom-hint">点击图片后，按住 Ctrl 键，滚动鼠标滚轮放大图片，或在手机上双指缩放。</p> <!-- Updated hint -->
             <a href="assets/斗地主Doudizhu%204.43%20preview.bmp">
                 <img src="assets/斗地主Doudizhu%204.43%20preview.bmp" 
                     alt="地图预览" 
@@ -195,7 +321,7 @@
 
     <footer>
         <div class="wechat-contact">
-            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span>dizhu</span> 进群
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
         </div>
         <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
@@ -203,21 +329,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // 初始化图片灯箱
+            // Initialize image lightbox
             new SimpleLightbox('.preview-container a', {
                 captionPosition: 'bottom',
                 captionDelay: 200,
-                disableScroll: false
+                disableScroll: false, // Allow page scroll when lightbox is open
+                alertError: false, // Don't show alert if image fails to load
+                // You can add more options as needed
             });
 
-            // 自动更新年份
+            // Auto-update year
             const startYear = 2025;
             const currentYear = new Date().getFullYear();
             const yearRangeEl = document.getElementById('yearRange');
             
             if (yearRangeEl) {
                 yearRangeEl.textContent = 
-                    startYear === currentYear ? startYear : `${startYear}-${currentYear}`;
+                    startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
             }
         });
     </script>
