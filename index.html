@@ -1,104 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GGrush</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1em 0;
-            width: 100%;
-            text-align: center;
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        nav ul li {
-            margin: 10px 15px;
-        }
-        nav ul li a {
-            text-decoration: none;
-            color: #337ab7;
-            font-weight: bold;
-            font-size: 1.2em;
-            padding: 8px 12px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        nav ul li a:hover {
-            background-color: #337ab7;
-            color: white;
-            text-decoration: none;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        p {
-            line-height: 1.6;
-        }
-        footer {
-            text-align: center;
-            margin-top: auto;
-            padding: 1em 0;
-            background-color: #333;
-            color: white;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>欢迎来到我的个人网站</h1>
-    </header>
-
-    <nav>
-        <ul>
-            <li><a href="game_stats.html">游戏数据统计</a></li>
-            <li><a href="maps.html">游戏地图下载</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <h2>网站简介</h2>
-        <p>这里是GGrush的个人网站，我会在这里分享星际斗地主DSL联赛、斗地主地图文件等内容。</p>
-        <p>请通过上方的导航栏访问不同板块。</p>
-    </div>
-
-    <footer>
-        <p>© 2025 GGrush. 保留所有权利.</p>
-    </footer>
-
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -188,6 +87,14 @@
             color: white;
         }
 
+        /* Style for the dynamically added sub-buttons, make them slightly smaller */
+        nav ul .sub-button a {
+            padding: 0.8rem 1.5rem; /* Smaller padding */
+            font-size: 0.9em;      /* Smaller font */
+            /* You might want to adjust minmax if too many buttons make it too crowded */
+        }
+
+
         .container {
             max-width: 900px;
             margin: 2rem auto;
@@ -234,7 +141,10 @@
 
         @media (max-width: 768px) {
             nav ul {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Keep this for responsiveness */
+            }
+            nav ul .sub-button a {
+                 /* Adjust for mobile if needed */
             }
             
             .container {
@@ -256,8 +166,9 @@
     </header>
 
     <nav>
-        <ul>
-            <li><a href="game_stats_all.html">🎮 数据统计</a></li>
+        <ul id="mainNavUl">
+            <!-- 给“数据统计”的链接和其父级li一个ID，方便JS操作 -->
+            <li id="dataStatsLi"><a href="game_stats.html" id="dataStatsLink">🎮 数据统计</a></li>
             <li><a href="maps.html">🗺️ 地图下载</a></li>
         </ul>
     </nav>
@@ -283,6 +194,135 @@
     <script>
         // 自动更新年份
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // 处理“数据统计”按钮点击事件
+        const dataStatsLink = document.getElementById('dataStatsLink');
+        const dataStatsLi = document.getElementById('dataStatsLi');
+        const mainNavUl = document.getElementById('mainNavUl');
+
+        if (dataStatsLink && dataStatsLi && mainNavUl) {
+            dataStatsLink.addEventListener('click', function(event) {
+                event.preventDefault(); // 阻止默认的链接跳转行为
+
+                // 定义新的按钮数据
+                const subButtonsData = [
+                    { text: '总览', href: 'summary_all_roles.html', icon: '📊' },
+                    { text: '地主', href: 'summary_landlord.html', icon: '👑' },
+                    { text: '农民', href: 'summary_farmer.html', icon: '🧑‍🌾' },
+                    { text: '富农', href: 'summary_rich_farmer.html', icon: '💰' },
+                    { text: '贫农', href: 'summary_poor_farmer.html', icon: '😥' }
+                ];
+
+                // 创建新的按钮元素
+                const newButtonsFragment = document.createDocumentFragment();
+                subButtonsData.forEach(buttonInfo => {
+                    const newLi = document.createElement('li');
+                    newLi.classList.add('sub-button'); // Add class for potential specific styling
+                    const newA = document.createElement('a');
+                    newA.href = buttonInfo.href;
+                    newA.textContent = `${buttonInfo.icon} ${buttonInfo.text}`;
+                    newLi.appendChild(newA);
+                    newButtonsFragment.appendChild(newLi);
+                });
+
+                // 将新的按钮插入到原按钮的位置，并移除原按钮
+                // We insert before the original li's "next sibling" (if it exists)
+                // or just append if it's the last item.
+                // A simpler way is to replace the original li with the fragment.
+                // However, replaceWith expects a single Node or a string, not a DocumentFragment directly for multiple items.
+                // So we insert then remove.
+                
+                // Insert new buttons before the "地图下载" button or at the end if "数据统计" was last
+                // Or, more robustly, find the original li and replace it with the new set
+                
+                const otherNavItems = Array.from(mainNavUl.children).filter(child => child !== dataStatsLi);
+                mainNavUl.innerHTML = ''; // Clear existing items
+
+                // Add new sub-buttons
+                newButtonsFragment.childNodes.forEach(node => {
+                    mainNavUl.appendChild(node.cloneNode(true)); // Use cloneNode if appending from fragment multiple times or if fragment is modified
+                });
+                
+                // Re-add other navigation items
+                otherNavItems.forEach(item => {
+                    mainNavUl.appendChild(item);
+                });
+
+                // If you want the new buttons to appear where the "数据统计" button was, and keep other buttons in their order:
+                // 1. Get all children of ul.
+                // 2. Find index of dataStatsLi.
+                // 3. Create a new array of LIs: items before index + new buttons + items after index.
+                // 4. Clear ul and append new array.
+
+                // Let's try a slightly different replacement logic that's cleaner:
+                // This ensures new buttons are inserted where the old one was.
+                // mainNavUl.replaceChild(newButtonsFragment, dataStatsLi); // This won't work as replaceChild expects a single Node, not a fragment for multiple items.
+                
+                // The current logic re-adds other items, which works.
+                // An alternative for inserting in place:
+                // dataStatsLi.before(newButtonsFragment); // Insert fragment before the original li
+                // dataStatsLi.remove(); // Then remove the original li
+
+                // The logic above (clearing and re-adding) effectively replaces the "数据统计" part and appends others.
+                // If "数据统计" was first, new buttons are first. If it was middle, they'd be first then others.
+                // To maintain order if "数据统计" isn't the first item:
+                // Store the next sibling of dataStatsLi
+                // const nextSibling = dataStatsLi.nextElementSibling;
+                // dataStatsLi.remove(); // Remove original button
+                // if (nextSibling) {
+                //    mainNavUl.insertBefore(newButtonsFragment, nextSibling);
+                // } else {
+                //    mainNavUl.appendChild(newButtonsFragment);
+                // }
+                // This is cleaner. Let's use this refined logic.
+            });
+        }
+
+        // REFINED SCRIPT LOGIC
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-update year (already here)
+            const currentYearEl = document.getElementById('currentYear');
+            if (currentYearEl) {
+                 currentYearEl.textContent = new Date().getFullYear();
+            }
+
+            const dataStatsLinkEl = document.getElementById('dataStatsLink');
+            const dataStatsLiEl = document.getElementById('dataStatsLi');
+            const mainNavUlEl = document.getElementById('mainNavUl');
+
+            if (dataStatsLinkEl && dataStatsLiEl && mainNavUlEl) {
+                dataStatsLinkEl.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+
+                    const subButtonsData = [
+                        { text: '总览', href: 'summary_all_roles.html', icon: '📊' },
+                        { text: '地主', href: 'summary_landlord.html', icon: '👑' },
+                        { text: '农民', href: 'summary_farmer.html', icon: '🧑‍🌾' },
+                        { text: '富农', href: 'summary_rich_farmer.html', icon: '💰' },
+                        { text: '贫农', href: 'summary_poor_farmer.html', icon: '😥' }
+                    ];
+
+                    const newButtonsFragment = document.createDocumentFragment();
+                    subButtonsData.forEach(buttonInfo => {
+                        const newLi = document.createElement('li');
+                        newLi.classList.add('sub-button'); 
+                        const newA = document.createElement('a');
+                        newA.href = buttonInfo.href;
+                        newA.textContent = `${buttonInfo.icon} ${buttonInfo.text}`;
+                        newLi.appendChild(newA);
+                        newButtonsFragment.appendChild(newLi);
+                    });
+
+                    // Insert the new buttons before the original "数据统计" li, then remove the original.
+                    // This effectively replaces the original li with the new set of lis.
+                    dataStatsLiEl.before(newButtonsFragment);
+                    dataStatsLiEl.remove();
+                    
+                    // Since the original link is removed, the event listener is also gone,
+                    // so it won't trigger again on the new buttons.
+                });
+            }
+        });
     </script>
 
 </body>
