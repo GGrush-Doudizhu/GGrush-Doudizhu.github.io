@@ -175,16 +175,20 @@
 
     <footer>
         <div class="wechat-contact">
-            📱 加入社区：加微信scdoudizhu进群
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span>dizhu</span> 进群
         </div>
-        <p>© <span id="currentYear"></span> 斗地主作者GGrush. 保留所有权利</p>
+        <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
 
     <script>
         // 自动更新年份
-        const currentYearEl = document.getElementById('currentYear');
-        if (currentYearEl) {
-            currentYearEl.textContent = new Date().getFullYear();
+        const startYear = 2025;
+        const currentYear = new Date().getFullYear();
+        const yearRangeEl = document.getElementById('yearRange');
+        
+        if (yearRangeEl) {
+            yearRangeEl.textContent = 
+                startYear === currentYear ? startYear : `${startYear}-${currentYear}`;
         }
     </script>
 

@@ -219,9 +219,9 @@
 
     <footer>
         <div class="wechat-contact">
-            📱 加入社区：加微信scdoudizhu进群
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span>dizhu</span> 进群
         </div>
-        <p>© <span id="currentYear"></span> 斗地主作者GGrush. 保留所有权利</p>
+        <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
 
     <!-- 如果不需要SimpleLightbox，可以移除下面的JS -->
@@ -246,16 +246,19 @@
 
             // --- 初始化 ---
             function initialize() {
-                updateCurrentYear();
+                // updateCurrentYear();
                 loadAndProcessData();
                 setupEventListeners();
             }
 
-            function updateCurrentYear() {
-                const yearSpan = document.getElementById('currentYear');
-                if (yearSpan) {
-                    yearSpan.textContent = new Date().getFullYear();
-                }
+            // 自动更新年份
+            const startYear = 2025;
+            const currentYear = new Date().getFullYear();
+            const yearRangeEl = document.getElementById('yearRange');
+            
+            if (yearRangeEl) {
+                yearRangeEl.textContent = 
+                    startYear === currentYear ? startYear : `${startYear}-${currentYear}`;
             }
 
             // --- 数据加载与处理 ---
