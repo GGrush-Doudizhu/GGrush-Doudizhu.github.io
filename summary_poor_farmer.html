@@ -2,10 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=3.0, minimum-scale=0.5">
     <title>贫农总榜 | 星际斗地主</title>
-    <!-- 外部CSS库可以保留，如果不需要SimpleLightbox可以移除 -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.css"> -->
     <style>
         :root {
             --primary-color: #2A2A2A;
@@ -13,6 +11,7 @@
             --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
             --text-light: #F8F9FA;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         body {
@@ -24,72 +23,120 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            font-size: 16px; /* Base for mobile */
         }
 
         .main-header {
             background: var(--gradient-bg);
             color: var(--text-light);
-            padding: 3rem 1rem;
+            padding: 2rem 1rem; /* Mobile padding */
             text-align: center;
             box-shadow: var(--shadow-sm);
         }
+        .main-header h1 {
+            font-size: 1.8rem; /* Mobile h1 */
+            margin-bottom: 0.3rem;
+        }
+        .main-header p {
+            font-size: 0.9rem; /* Mobile p */
+            margin-top: 0.2rem;
+        }
 
         .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 2rem;
+            width: auto;
+            margin: 1rem; /* Mobile margin */
+            padding: 1rem; /* Mobile padding */
             background: white;
-            border-radius: 15px;
+            border-radius: 10px; /* Mobile border-radius */
             box-shadow: var(--shadow-sm);
             animation: fadeIn 0.6s ease-out;
         }
 
-        .stats-card {
-            padding: 1.5rem; /* 稍微减小一点内边距，使内容不那么拥挤 */
-            margin: 2rem 0;
-            background: rgba(255,255,255,0.95);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
+        /* Button container for multiple buttons */
+        .nav-buttons-container {
+            margin-bottom: 1rem; /* Space below buttons */
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically on mobile */
+            gap: 0.5rem; /* Space between buttons */
         }
 
+        .back-link {
+            display: inline-flex; /* Changed to inline-flex for better alignment with icon if any */
+            align-items: center;
+            justify-content: center; /* Center text in button */
+            padding: 0.7rem 1.2rem; /* Mobile padding */
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem; /* Mobile font size */
+            text-align: center;
+            box-sizing: border-box; /* Ensure padding doesn't break layout */
+        }
+        .back-link:hover, .back-link:focus {
+            background: #3a3a3a;
+            transform: scale(1.03);
+        }
+        /* Secondary style for "back to hub" if needed, or use the same */
+        .back-link.secondary {
+             background: #4a5568; /* A slightly different color */
+        }
+        .back-link.secondary:hover, .back-link.secondary:focus {
+            background: #2d3748;
+        }
+
+
+        .stats-card {
+            padding: 1rem;
+            margin: 1.5rem 0;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
         .stats-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
 
         .table-container {
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             border-radius: 8px;
             margin: 1rem 0;
+            width: 100%; /* Ensure table container uses available width */
         }
 
-        table {
+        table#statsTable { /* Target the specific table for scaling */
             width: 100%;
             border-collapse: collapse;
             background: white;
+            /* transform-origin: top left; */ /* Set in JS if scaling is applied */
         }
 
         .sort-hint {
             color: #666;
-            font-size: 0.9em;
-            padding: 8px 12px;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
             background: #fff3cd;
             border-radius: 6px;
             display: inline-block;
-            margin: 0 0 1rem 0; /* 调整了margin */
+            margin: 0 0 0.8rem 0;
             border: 1px solid #ffeeba;
             font-style: italic;
         }
-
         .sort-hint::before {
             content: "💡 ";
             margin-right: 5px;
         }
 
         th, td {
-            padding: 14px 16px;
+            padding: 10px 8px;
             text-align: left;
-            border-bottom: 1px solid #eee; /* 稍微细一点的分割线 */
+            border-bottom: 1px solid #eee;
+            font-size: 0.85em;
+            white-space: nowrap; /* Keep content on one line */
         }
 
         th {
@@ -97,91 +144,112 @@
             color: var(--text-light);
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease; /* 改为只过渡背景色 */
-            position: sticky; /* 表头在滚动时固定 */
+            transition: background-color 0.3s ease;
+            position: sticky;
             top: 0;
             z-index: 10;
         }
-
         th:hover {
             background-color: #3a3a3a;
         }
 
-        /* tr:hover { background-color: #fff9f9; } */ /* 考虑移除，因为有斑马条纹 */
-        tr:nth-child(even) {
-            background-color: #f8f9fa; /* 更淡的斑马条纹 */
-        }
-        tr:nth-child(odd) {
-            background-color: #ffffff;
-        }
-        tr:hover {
-            background-color: #f1f1f1; /* 统一的hover效果 */
-        }
-
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        tr:nth-child(odd) { background-color: #ffffff; }
+        tr:hover { background-color: #f1f1f1; }
 
         .sort-indicator {
             display: inline-block;
-            margin-left: 8px;
+            margin-left: 8px; /* Increased slightly for better spacing with triangles */
             color: var(--accent-color);
             transition: transform 0.3s ease;
-            font-size: 0.8em; /* 稍微小一点的指示器 */
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.8rem 1.5rem;
-            background: var(--primary-color);
-            color: white;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
-        }
-
-        .back-link:hover {
-            background: #3a3a3a;
-            transform: translateX(-5px);
+            font-size: 0.8em; /* You might want to adjust this for triangle size */
+            /* vertical-align: middle; */ /* Optional: helps align triangles with text */
         }
 
         footer {
             margin-top: auto;
             background: var(--primary-color);
             color: var(--text-light);
-            padding: 2rem;
+            padding: 1.5rem 1rem;
             text-align: center;
             line-height: 1.8;
+            font-size: 0.85rem;
+        }
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
-        /* 动画效果 */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem; /* 移动端padding调整 */
-                margin: 1rem;
-            }
-            .main-header {
-                padding: 2rem 1rem;
-            }
-            th, td {
-                padding: 10px 8px; /* 移动端单元格padding调整 */
-                font-size: 0.85em;
-            }
-            .stats-card {
-                padding: 1rem;
-            }
-        }
+        /* Data highlighting */
+        td:nth-child(3) { color: #28a745; font-weight: 500; }
+        td:nth-child(4) { color: #dc3545; font-weight: 500; }
+        td:nth-child(6) { font-weight: 600; color: var(--accent-color); }
 
-        /* 数据高亮 - 列索引从1开始 */
-        td:nth-child(3) { color: #28a745; font-weight: 500; } /* 胜场 (序号, 选手, 胜场) */
-        td:nth-child(4) { color: #dc3545; font-weight: 500; } /* 负场 */
-        td:nth-child(6) { /* 胜率 */
-            font-weight: 600;
-            color: var(--accent-color);
+        @media (min-width: 768px) {
+            body {
+                font-size: 17px;
+            }
+
+            .main-header {
+                padding: 3rem 1rem;
+            }
+            .main-header h1 { font-size: 2.2rem; }
+            .main-header p { font-size: 1rem; }
+
+            .container {
+                max-width: 1000px;
+                margin: 2rem auto;
+                padding: 2rem;
+                border-radius: 15px;
+            }
+
+            .nav-buttons-container {
+                flex-direction: row; /* Buttons side-by-side on desktop */
+                justify-content: flex-start; /* Align to left */
+                align-items: center;
+                gap: 1rem; /* Space between buttons */
+            }
+
+
+            .back-link {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+                /* margin-bottom: 1.5rem; */ /* Removed as nav-buttons-container handles spacing */
+                width: auto; /* Allow button to size to content */
+            }
+            .back-link:hover, .back-link:focus {
+                transform: translateX(-5px);
+            }
+
+            .stats-card {
+                padding: 1.5rem;
+                margin: 2rem 0;
+                border-radius: 12px;
+            }
+            .stats-card:hover {
+                transform: translateY(-3px);
+            }
+
+            .sort-hint {
+                font-size: 0.9em;
+                padding: 8px 12px;
+                margin-bottom: 1rem;
+            }
+
+            th, td {
+                padding: 14px 16px;
+                font-size: 0.9em;
+            }
+
+            footer {
+                padding: 2rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -193,7 +261,10 @@
     </header>
 
     <div class="container">
-        <a href="index.html" class="back-link">← 返回主页</a>
+        <div class="nav-buttons-container">
+            <a href="index.html" class="back-link">返回主页</a>
+            <a href="stats_hub.html" class="back-link secondary">返回上页： 数据导航</a>
+        </div>
 
         <div class="stats-card">
             <div class="table-container">
@@ -202,15 +273,15 @@
                     <thead>
                         <tr>
                             <th>序号</th>
-                            <th>选手 <span class="sort-indicator"></span></th>
-                            <th>胜场数 <span class="sort-indicator"></span></th>
-                            <th>负场数 <span class="sort-indicator"></span></th>
-                            <th>总场数 <span class="sort-indicator"></span></th>
-                            <th>胜率 <span class="sort-indicator"></span></th>
+                            <th>选手<span class="sort-indicator"></span></th>
+                            <th>胜场数<span class="sort-indicator"></span></th>
+                            <th>负场数<span class="sort-indicator"></span></th>
+                            <th>总场数<span class="sort-indicator"></span></th>
+                            <th>胜率<span class="sort-indicator"></span></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- 数据行将由JavaScript动态填充 -->
+                        <!-- Data rows will be dynamically populated by JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -219,36 +290,37 @@
 
     <footer>
         <div class="wechat-contact">
-            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span>dizhu</span> 进群
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
         </div>
         <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
 
-    <!-- 如果不需要SimpleLightbox，可以移除下面的JS -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.14.2/simple-lightbox.min.js"></script> -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // --- 配置 ---
-            const CSV_FILE_PATH = 'data/summary_poor_farmer.csv'; // 确保你的CSV文件在此路径，或者相对于HTML的正确路径
+            // --- Configuration ---
+            const CSV_FILE_PATH = 'data/summary_all_roles.csv';
+            const TABLE_ID = 'statsTable';
             const TABLE_BODY_ID = 'tableBody';
-            const TABLE_HEADERS_SELECTOR = '#statsTable th';
+            const TABLE_HEADERS_SELECTOR = `#${TABLE_ID} th`;
 
             // --- DOM Elements ---
+            const tableElement = document.getElementById(TABLE_ID);
             const tableBody = document.getElementById(TABLE_BODY_ID);
             const tableHeaders = document.querySelectorAll(TABLE_HEADERS_SELECTOR);
 
-            // --- 状态变量 ---
+            // --- State Variables ---
             let currentSort = {
-                columnDataIndex: null, // 指向CSV数据中的列索引 (0:选手, 1:胜场, ...)
-                direction: 'desc' // 'asc' 或 'desc'
+                columnDataIndex: null,
+                direction: 'desc'
             };
-            let rawData = []; // 存储原始解析后的数据，用于排序
+            let rawData = [];
 
-            // --- 初始化 ---
+            // --- Initialization ---
             function initialize() {
                 updateCopyrightYear();
                 loadAndProcessData();
                 setupEventListeners();
+                window.addEventListener('resize', adjustTableScaleForMobile);
             }
 
             function updateCopyrightYear() {
@@ -262,8 +334,33 @@
                 }
             }
 
-            // --- 数据加载与处理 ---
+            function adjustTableScaleForMobile() {
+                if (!tableElement) return;
+                const tableContainer = tableElement.closest('.table-container');
+                if (!tableContainer) return;
+
+                if (window.innerWidth < 768) {
+                    tableElement.style.transform = 'none';
+                    const tableNaturalWidth = tableElement.scrollWidth;
+                    const containerVisibleWidth = tableContainer.clientWidth;
+
+                    if (tableNaturalWidth > containerVisibleWidth) {
+                        const scale = containerVisibleWidth / tableNaturalWidth;
+                        tableElement.style.transform = `scale(${scale})`;
+                        tableElement.style.transformOrigin = 'top left';
+                    } else {
+                        tableElement.style.transform = 'none';
+                    }
+                } else {
+                    tableElement.style.transform = 'none';
+                }
+            }
+
             async function loadAndProcessData() {
+                if (!tableBody) {
+                    console.error(`Table body with ID '${TABLE_BODY_ID}' not found.`);
+                    return;
+                }
                 try {
                     const response = await fetch(CSV_FILE_PATH);
                     if (!response.ok) {
@@ -271,57 +368,54 @@
                     }
                     const csvText = await response.text();
                     parseCSV(csvText);
-                    renderTable(); 
+
+                    // REQUIREMENT 1: Default sort by 'wins' (index 1 in sortKeys), descending
+                    currentSort.columnDataIndex = 1; // 'wins' is at index 1 of sortKeys
+                    currentSort.direction = 'desc';
+
+                    renderTable();
                 } catch (error) {
-                    console.error('加载或处理数据失败:', error);
-                    if (tableBody) {
-                        tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
-                    }
+                    console.error('Failed to load or process data:', error);
+                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
                 }
             }
 
             function parseCSV(csvText) {
-                // 移除BOM (Byte Order Mark)
                 const cleanCSV = csvText.replace(/^\uFEFF/, '');
                 const lines = cleanCSV.split(/\r?\n/).filter(line => line.trim() !== '');
 
-                if (lines.length < 2) { // 至少需要表头和一行数据
-                    console.warn('CSV文件内容不足 (至少需要表头和一行数据).');
+                if (lines.length < 2) {
                     rawData = [];
                     return;
                 }
-
-                const header = lines[0].split(','); // CSV表头，可以用于校验或动态生成表头（但此处HTML已固定）
-                const dataLines = lines.slice(1); // 跳过CSV表头行
+                const dataLines = lines.slice(1);
 
                 rawData = dataLines.map(line => {
                     const values = line.split(',');
-                    if (values.length === 5) { // 选手,胜场数,负场数,总场数,胜率
+                    if (values.length === 5) {
                         return {
                             player: values[0].trim(),
-                            wins: parseInt(values[1], 10),
-                            losses: parseInt(values[2], 10),
-                            totalGames: parseInt(values[3], 10),
-                            winRate: parseFloat(values[4]) // 保留原始精度用于排序
+                            wins: parseInt(values[1], 10) || 0,
+                            losses: parseInt(values[2], 10) || 0,
+                            totalGames: parseInt(values[3], 10) || 0,
+                            winRate: parseFloat(values[4]) || 0.0
                         };
                     }
-                    console.warn('发现格式不正确的行:', line);
                     return null;
-                }).filter(item => item !== null); // 过滤掉解析失败的行
+                }).filter(item => item !== null);
             }
 
-            // --- 渲染 ---
             function renderTable() {
                 if (!tableBody) return;
-                tableBody.innerHTML = ''; // 清空现有内容
+                tableBody.innerHTML = '';
 
                 if (rawData.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length}" style="text-align:center;">暂无数据</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center;">暂无数据</td></tr>`;
+                    adjustTableScaleForMobile();
                     return;
                 }
-                
-                // 根据当前排序状态对rawData进行排序
-                sortData(); 
+
+                sortData();
 
                 rawData.forEach((dataRow, index) => {
                     const tr = document.createElement('tr');
@@ -336,39 +430,34 @@
                     tableBody.appendChild(tr);
                 });
                 updateSortIndicators();
+                setTimeout(adjustTableScaleForMobile, 0);
             }
 
-            // --- 排序逻辑 ---
             function setupEventListeners() {
                 tableHeaders.forEach((th, headerIndex) => {
-                    // 第0列是 "序号"，不可排序。
-                    // headerIndex 对应 <th> 元素的索引 (0:序号, 1:选手, 2:胜场, ...)
-                    // dataColumnIndex 对应 rawData 对象属性的逻辑索引 (0:选手, 1:胜场, ...)
-                    const dataColumnIndex = headerIndex - 1; 
-                    
-                    if (dataColumnIndex >= 0) { // 只有数据列可以排序
+                    const dataColumnIndex = headerIndex - 1;
+                    if (dataColumnIndex >= 0) {
                         th.addEventListener('click', () => handleSort(dataColumnIndex));
                     }
                 });
             }
-            
+
             function handleSort(dataColumnIndex) {
                 if (currentSort.columnDataIndex === dataColumnIndex) {
                     currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSort.columnDataIndex = dataColumnIndex;
-                    currentSort.direction = 'desc'; // 默认降序
+                    currentSort.direction = 'desc';
                 }
-                renderTable(); // 排序后重新渲染整个表格 (包括序号)
+                renderTable();
             }
 
             function sortData() {
-                if (currentSort.columnDataIndex === null) return; // 没有指定排序列
+                if (currentSort.columnDataIndex === null) return;
 
                 const dataIndex = currentSort.columnDataIndex;
                 const direction = currentSort.direction === 'asc' ? 1 : -1;
 
-                // 定义各列的比较键
                 const sortKeys = [
                     'player',     // 0: 选手 (字符串)
                     'wins',       // 1: 胜场数 (数字)
@@ -376,18 +465,20 @@
                     'totalGames', // 3: 总场数 (数字)
                     'winRate'     // 4: 胜率 (数字)
                 ];
-                
+
                 const sortKey = sortKeys[dataIndex];
 
                 rawData.sort((a, b) => {
                     const valA = a[sortKey];
                     const valB = b[sortKey];
 
-                    if (typeof valA === 'string') {
+                    if (typeof valA === 'string' && typeof valB === 'string') {
                         return valA.localeCompare(valB) * direction;
-                    } else if (typeof valA === 'number') {
+                    } else if (typeof valA === 'number' && typeof valB === 'number') {
                         return (valA - valB) * direction;
                     }
+                    if (valA < valB) return -1 * direction;
+                    if (valA > valB) return 1 * direction;
                     return 0;
                 });
             }
@@ -396,9 +487,10 @@
                 tableHeaders.forEach((th, headerIndex) => {
                     const indicator = th.querySelector('.sort-indicator');
                     if (indicator) {
-                        // headerIndex 对应 <th> 的索引, currentSort.columnDataIndex 对应数据的索引
+                        // headerIndex 0 is '序号', dataColumnIndex starts from 0 for 'player'
                         if (headerIndex - 1 === currentSort.columnDataIndex) {
-                            indicator.textContent = currentSort.direction === 'asc' ? '↑' : '↓';
+                            // REQUIREMENT 2: Change indicators to triangles
+                            indicator.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
                         } else {
                             indicator.textContent = '';
                         }
@@ -406,7 +498,6 @@
                 });
             }
 
-            // --- 启动 ---
             initialize();
         });
     </script>
