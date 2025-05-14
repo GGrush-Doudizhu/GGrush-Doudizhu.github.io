@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GGrush | 星际斗地主</title>
+    <title>数据统计中心 | GGrush 星际斗地主</title>
     <style>
         :root {
             --primary-color: #2A2A2A;
@@ -28,7 +28,8 @@
         header {
             background: var(--gradient-bg);
             color: var(--text-light);
-            padding: 4rem 1rem;
+            /* 调整内边距和主页区分开 */
+            padding: 2.5rem 1rem; 
             text-align: center;
             box-shadow: var(--shadow-sm);
             position: relative;
@@ -46,28 +47,31 @@
             transform: rotate(-3deg);
             z-index: 1;
         }
-
-        nav {
+        
+        /* 导航按钮样式 (与index.html一致，用于本页的5个数据按钮) */
+        /* 注意：这里用了一个新的ID #statsNav 来区分可能存在的全局nav */
+        #statsNav {
             margin: 2rem auto;
-            max-width: 900px;
+            max-width: 900px; /* 保持一致 */
             width: 90%;
         }
 
-        nav ul {
+        #statsNav ul {
             list-style: none;
             padding: 0;
             margin: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            /* 调整列数，这里5个按钮，可以一行2-3个，或者让auto-fit处理 */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
             gap: 1rem;
             justify-content: center;
         }
 
-        nav li {
+        #statsNav li {
             text-align: center;
         }
 
-        nav a {
+        #statsNav a {
             display: inline-block;
             padding: 1rem 2rem;
             background: white;
@@ -80,7 +84,7 @@
             border: 2px solid transparent;
         }
 
-        nav a:hover {
+        #statsNav a:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 20px rgba(0,0,0,0.15);
             background: var(--accent-color);
@@ -99,10 +103,11 @@
             animation: fadeIn 0.6s ease-out;
         }
 
+        /* 调整 h1 字体大小，使其不那么像主页标题 */
         h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
+            font-size: 2.2rem; 
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.5px;
             animation: slideDown 0.8s ease;
         }
 
@@ -111,6 +116,7 @@
             border-bottom: 3px solid var(--accent-color);
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
+            text-align: center; /* 让标题居中更美观 */
         }
 
         footer {
@@ -131,9 +137,34 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 返回主页按钮的CSS */
+        .back-link {
+            display: inline-flex; /* 使用inline-flex让箭头和文字在同一行并垂直居中 */
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color); /* 使用CSS变量保持一致 */
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem; /* 和h2的margin-bottom一致，视觉上对齐 */
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            background: #3a3a3a; /* 一个略微变亮的颜色 */
+            transform: translateX(-5px); /* 左移效果 */
+        }
+        
+        .button-container { /* 用于包裹返回按钮，方便布局 */
+            margin-bottom: 1.5rem;
+            text-align: left; /* 或者 center, right 根据需要 */
+        }
+
+
         @media (max-width: 768px) {
-            nav ul {
-                grid-template-columns: 1fr;
+            #statsNav ul {
+                grid-template-columns: 1fr; /* 移动端每行一个按钮 */
             }
             
             .container {
@@ -142,7 +173,15 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem; /* 移动端标题再小一点 */
+            }
+            .back-link {
+                width: calc(100% - 3rem); /* 让返回按钮在移动端也好看些，减去padding */
+                justify-content: center;
+                box-sizing: border-box;
+            }
+            .button-container {
+                text-align: center; /* 移动端返回按钮居中 */
             }
         }
     </style>
@@ -150,27 +189,28 @@
 <body>
 
     <header>
-        <h1>星际斗地主DSL联赛</h1>
-        <p>Doudizhu Starcraft League</p>
+        <h1>数据统计中心</h1>
+        <p>选择您想深入了解的数据报告</p>
     </header>
 
-    <nav>
-        <ul>
-            <!-- 修改这里的链接指向新的统计中心页面 -->
-            <li><a href="stats_hub.html">🎮 数据统计</a></li>
-            <li><a href="maps.html">🗺️ 地图下载</a></li>
-        </ul>
-    </nav>
-
     <div class="container">
-        <h2>欢迎来到星际斗地主之家</h2>
-        <p>这里是星际斗地主DSL联赛的专属空间，致力于为玩家提供最专业的赛事数据和资源支持。我们提供：</p>
-        <ul>
-            <li>📊 实时更新的选手对战数据</li>
-            <li>🆕 最新比赛地图下载</li>
-            <li>💬 玩家社区（加微信scdoudizhu进群）</li>
-        </ul>
-        <p>点击上方导航菜单开始探索，如有任何建议欢迎通过微信联系我们！</p>
+        <div class="button-container">
+            <a href="index.html" class="back-link">← 返回主页</a>
+        </div>
+
+        <h2>选择数据报告</h2>
+        
+        <nav id="statsNav">
+            <ul>
+                <li><a href="summary_all_roles.html">📊 总览数据 (All Roles)</a></li>
+                <li><a href="summary_landlord.html">👑 地主数据 (Landlord)</a></li>
+                <li><a href="summary_farmer.html">🧑‍🌾 农民数据 (Farmer)</a></li>
+                <li><a href="summary_rich_farmer.html">💰 富农数据 (Rich Farmer)</a></li>
+                <li><a href="summary_poor_farmer.html">😥 贫农数据 (Poor Farmer)</a></li>
+            </ul>
+        </nav>
+        
+        <p style="text-align: center; margin-top: 2rem;">请点击上方任一按钮查看详细的统计数据分析。</p>
     </div>
 
     <footer>
