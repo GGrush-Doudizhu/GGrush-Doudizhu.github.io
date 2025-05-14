@@ -43,7 +43,7 @@
         }
 
         .container {
-            width: auto; 
+            width: auto;
             margin: 1rem; /* Mobile margin */
             padding: 1rem; /* Mobile padding */
             background: white;
@@ -77,7 +77,7 @@
         }
         .back-link:hover, .back-link:focus {
             background: #3a3a3a;
-            transform: scale(1.03); 
+            transform: scale(1.03);
         }
         /* Secondary style for "back to hub" if needed, or use the same */
         .back-link.secondary {
@@ -89,27 +89,27 @@
 
 
         .stats-card {
-            padding: 1rem; 
-            margin: 1.5rem 0; 
+            padding: 1rem;
+            margin: 1.5rem 0;
             background: rgba(255,255,255,0.95);
-            border-radius: 10px; 
+            border-radius: 10px;
             box-shadow: var(--shadow-md);
             transition: transform 0.3s ease;
         }
         .stats-card:hover {
-            transform: translateY(-2px); 
+            transform: translateY(-2px);
         }
 
         .table-container {
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; 
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             border-radius: 8px;
             margin: 1rem 0;
             width: 100%; /* Ensure table container uses available width */
         }
 
         table#statsTable { /* Target the specific table for scaling */
-            width: 100%; 
+            width: 100%;
             border-collapse: collapse;
             background: white;
             /* transform-origin: top left; */ /* Set in JS if scaling is applied */
@@ -117,12 +117,12 @@
 
         .sort-hint {
             color: #666;
-            font-size: 0.85rem; 
-            padding: 0.5rem 0.75rem; 
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
             background: #fff3cd;
             border-radius: 6px;
             display: inline-block;
-            margin: 0 0 0.8rem 0; 
+            margin: 0 0 0.8rem 0;
             border: 1px solid #ffeeba;
             font-style: italic;
         }
@@ -132,10 +132,10 @@
         }
 
         th, td {
-            padding: 10px 8px; 
+            padding: 10px 8px;
             text-align: left;
             border-bottom: 1px solid #eee;
-            font-size: 0.85em; 
+            font-size: 0.85em;
             white-space: nowrap; /* Keep content on one line */
         }
 
@@ -145,9 +145,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            position: sticky; 
+            position: sticky;
             top: 0;
-            z-index: 10; 
+            z-index: 10;
         }
         th:hover {
             background-color: #3a3a3a;
@@ -159,20 +159,21 @@
 
         .sort-indicator {
             display: inline-block;
-            margin-left: 8px;
+            margin-left: 8px; /* Increased slightly for better spacing with triangles */
             color: var(--accent-color);
             transition: transform 0.3s ease;
-            font-size: 0.8em;
+            font-size: 0.8em; /* You might want to adjust this for triangle size */
+            /* vertical-align: middle; */ /* Optional: helps align triangles with text */
         }
 
         footer {
             margin-top: auto;
             background: var(--primary-color);
             color: var(--text-light);
-            padding: 1.5rem 1rem; 
+            padding: 1.5rem 1rem;
             text-align: center;
             line-height: 1.8;
-            font-size: 0.85rem; 
+            font-size: 0.85rem;
         }
         .wechat-contact .wechat-id {
             font-weight: bold;
@@ -180,33 +181,33 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); } 
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         /* Data highlighting */
-        td:nth-child(3) { color: #28a745; font-weight: 500; } 
-        td:nth-child(4) { color: #dc3545; font-weight: 500; } 
-        td:nth-child(6) { font-weight: 600; color: var(--accent-color); } 
+        td:nth-child(3) { color: #28a745; font-weight: 500; }
+        td:nth-child(4) { color: #dc3545; font-weight: 500; }
+        td:nth-child(6) { font-weight: 600; color: var(--accent-color); }
 
         @media (min-width: 768px) {
             body {
-                font-size: 17px; 
+                font-size: 17px;
             }
 
             .main-header {
-                padding: 3rem 1rem; 
+                padding: 3rem 1rem;
             }
             .main-header h1 { font-size: 2.2rem; }
             .main-header p { font-size: 1rem; }
 
             .container {
-                max-width: 1000px; 
-                margin: 2rem auto; 
-                padding: 2rem; 
+                max-width: 1000px;
+                margin: 2rem auto;
+                padding: 2rem;
                 border-radius: 15px;
             }
-            
+
             .nav-buttons-container {
                 flex-direction: row; /* Buttons side-by-side on desktop */
                 justify-content: flex-start; /* Align to left */
@@ -216,22 +217,22 @@
 
 
             .back-link {
-                padding: 0.8rem 1.5rem; 
-                font-size: 1rem; 
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
                 /* margin-bottom: 1.5rem; */ /* Removed as nav-buttons-container handles spacing */
                 width: auto; /* Allow button to size to content */
             }
             .back-link:hover, .back-link:focus {
-                transform: translateX(-5px); 
+                transform: translateX(-5px);
             }
 
             .stats-card {
-                padding: 1.5rem; 
-                margin: 2rem 0; 
+                padding: 1.5rem;
+                margin: 2rem 0;
                 border-radius: 12px;
             }
             .stats-card:hover {
-                transform: translateY(-3px); 
+                transform: translateY(-3px);
             }
 
             .sort-hint {
@@ -241,13 +242,13 @@
             }
 
             th, td {
-                padding: 14px 16px; 
-                font-size: 0.9em; 
+                padding: 14px 16px;
+                font-size: 0.9em;
             }
-            
+
             footer {
-                padding: 2rem; 
-                font-size: 0.9rem; 
+                padding: 2rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -272,11 +273,11 @@
                     <thead>
                         <tr>
                             <th>序号</th>
-                            <th>选手 <span class="sort-indicator"></span></th>
-                            <th>胜场数 <span class="sort-indicator"></span></th>
-                            <th>负场数 <span class="sort-indicator"></span></th>
-                            <th>总场数 <span class="sort-indicator"></span></th>
-                            <th>胜率 <span class="sort-indicator"></span></th>
+                            <th>选手<span class="sort-indicator"></span></th>
+                            <th>胜场数<span class="sort-indicator"></span></th>
+                            <th>负场数<span class="sort-indicator"></span></th>
+                            <th>总场数<span class="sort-indicator"></span></th>
+                            <th>胜率<span class="sort-indicator"></span></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -298,7 +299,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- Configuration ---
             const CSV_FILE_PATH = 'data/summary_all_roles.csv';
-            const TABLE_ID = 'statsTable'; // Changed to target table directly
+            const TABLE_ID = 'statsTable';
             const TABLE_BODY_ID = 'tableBody';
             const TABLE_HEADERS_SELECTOR = `#${TABLE_ID} th`;
 
@@ -309,17 +310,17 @@
 
             // --- State Variables ---
             let currentSort = {
-                columnDataIndex: null, 
-                direction: 'desc'    
+                columnDataIndex: null,
+                direction: 'desc'
             };
-            let rawData = []; 
+            let rawData = [];
 
             // --- Initialization ---
             function initialize() {
                 updateCopyrightYear();
                 loadAndProcessData();
                 setupEventListeners();
-                window.addEventListener('resize', adjustTableScaleForMobile); // Adjust scale on resize
+                window.addEventListener('resize', adjustTableScaleForMobile);
             }
 
             function updateCopyrightYear() {
@@ -332,21 +333,14 @@
                         startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
                 }
             }
-            
-            // --- Table Scaling for Mobile ---
+
             function adjustTableScaleForMobile() {
                 if (!tableElement) return;
                 const tableContainer = tableElement.closest('.table-container');
                 if (!tableContainer) return;
 
-                // Only apply scaling on smaller screens (e.g., less than 768px)
                 if (window.innerWidth < 768) {
-                    // Reset transform to get natural width for calculation
                     tableElement.style.transform = 'none';
-                    // Important: Ensure table width is not fixed at 100% of a small container when measuring scrollWidth
-                    // Temporarily set to auto or remove fixed width if it interferes with scrollWidth calculation
-                    // For this setup, tableElement.scrollWidth should give the content width correctly
-                    
                     const tableNaturalWidth = tableElement.scrollWidth;
                     const containerVisibleWidth = tableContainer.clientWidth;
 
@@ -355,16 +349,13 @@
                         tableElement.style.transform = `scale(${scale})`;
                         tableElement.style.transformOrigin = 'top left';
                     } else {
-                        tableElement.style.transform = 'none'; // No scaling needed
+                        tableElement.style.transform = 'none';
                     }
                 } else {
-                    // On larger screens, remove any scaling
                     tableElement.style.transform = 'none';
                 }
             }
 
-
-            // --- Data Loading and Processing ---
             async function loadAndProcessData() {
                 if (!tableBody) {
                     console.error(`Table body with ID '${TABLE_BODY_ID}' not found.`);
@@ -377,9 +368,12 @@
                     }
                     const csvText = await response.text();
                     parseCSV(csvText);
-                    currentSort.columnDataIndex = 4; // Default sort: winRate (index 4)
+
+                    // REQUIREMENT 1: Default sort by 'wins' (index 1 in sortKeys), descending
+                    currentSort.columnDataIndex = 1; // 'wins' is at index 1 of sortKeys
                     currentSort.direction = 'desc';
-                    renderTable(); 
+
+                    renderTable();
                 } catch (error) {
                     console.error('Failed to load or process data:', error);
                     tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
@@ -387,18 +381,18 @@
             }
 
             function parseCSV(csvText) {
-                const cleanCSV = csvText.replace(/^\uFEFF/, ''); 
+                const cleanCSV = csvText.replace(/^\uFEFF/, '');
                 const lines = cleanCSV.split(/\r?\n/).filter(line => line.trim() !== '');
 
                 if (lines.length < 2) {
                     rawData = [];
                     return;
                 }
-                const dataLines = lines.slice(1); 
+                const dataLines = lines.slice(1);
 
                 rawData = dataLines.map(line => {
                     const values = line.split(',');
-                    if (values.length === 5) { 
+                    if (values.length === 5) {
                         return {
                             player: values[0].trim(),
                             wins: parseInt(values[1], 10) || 0,
@@ -408,21 +402,20 @@
                         };
                     }
                     return null;
-                }).filter(item => item !== null); 
+                }).filter(item => item !== null);
             }
 
-            // --- Rendering ---
             function renderTable() {
                 if (!tableBody) return;
-                tableBody.innerHTML = ''; 
+                tableBody.innerHTML = '';
 
                 if (rawData.length === 0) {
                     tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center;">暂无数据</td></tr>`;
-                    adjustTableScaleForMobile(); // Adjust even if no data, to reset scale if needed
+                    adjustTableScaleForMobile();
                     return;
                 }
-                
-                sortData(); 
+
+                sortData();
 
                 rawData.forEach((dataRow, index) => {
                     const tr = document.createElement('tr');
@@ -437,32 +430,29 @@
                     tableBody.appendChild(tr);
                 });
                 updateSortIndicators();
-                // Call scaling *after* table is populated and rendered
-                // Use a minimal timeout to ensure layout is complete before measuring for scaling
-                setTimeout(adjustTableScaleForMobile, 0); 
+                setTimeout(adjustTableScaleForMobile, 0);
             }
 
-            // --- Sorting Logic (Restored to original) ---
             function setupEventListeners() {
                 tableHeaders.forEach((th, headerIndex) => {
-                    const dataColumnIndex = headerIndex - 1; 
-                    if (dataColumnIndex >= 0) { 
+                    const dataColumnIndex = headerIndex - 1;
+                    if (dataColumnIndex >= 0) {
                         th.addEventListener('click', () => handleSort(dataColumnIndex));
                     }
                 });
             }
-            
+
             function handleSort(dataColumnIndex) {
                 if (currentSort.columnDataIndex === dataColumnIndex) {
                     currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSort.columnDataIndex = dataColumnIndex;
-                    currentSort.direction = 'desc'; 
+                    currentSort.direction = 'desc';
                 }
-                renderTable(); 
+                renderTable();
             }
 
-            function sortData() { // RESTORED USER'S ORIGINAL SORT LOGIC
+            function sortData() {
                 if (currentSort.columnDataIndex === null) return;
 
                 const dataIndex = currentSort.columnDataIndex;
@@ -475,40 +465,39 @@
                     'totalGames', // 3: 总场数 (数字)
                     'winRate'     // 4: 胜率 (数字)
                 ];
-                
+
                 const sortKey = sortKeys[dataIndex];
 
                 rawData.sort((a, b) => {
                     const valA = a[sortKey];
                     const valB = b[sortKey];
 
-                    if (typeof valA === 'string' && typeof valB === 'string') { // Ensure both are strings for localeCompare
+                    if (typeof valA === 'string' && typeof valB === 'string') {
                         return valA.localeCompare(valB) * direction;
-                    } else if (typeof valA === 'number' && typeof valB === 'number') { // Ensure both are numbers for subtraction
+                    } else if (typeof valA === 'number' && typeof valB === 'number') {
                         return (valA - valB) * direction;
                     }
-                    // Fallback if types are mixed or not string/number, though CSV parsing aims for consistency
                     if (valA < valB) return -1 * direction;
                     if (valA > valB) return 1 * direction;
                     return 0;
                 });
             }
 
-
             function updateSortIndicators() {
                 tableHeaders.forEach((th, headerIndex) => {
                     const indicator = th.querySelector('.sort-indicator');
                     if (indicator) {
+                        // headerIndex 0 is '序号', dataColumnIndex starts from 0 for 'player'
                         if (headerIndex - 1 === currentSort.columnDataIndex) {
-                            indicator.textContent = currentSort.direction === 'asc' ? '↑' : '↓';
+                            // REQUIREMENT 2: Change indicators to triangles
+                            indicator.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
                         } else {
-                            indicator.textContent = ''; 
+                            indicator.textContent = '';
                         }
                     }
                 });
             }
 
-            // --- Start ---
             initialize();
         });
     </script>
