@@ -152,6 +152,11 @@
             text-align: center;
             line-height: 1.8;
         }
+        .wechat-contact .wechat-id { /* Added from previous example for consistency */
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
 
         /* 动画效果 */
         @keyframes fadeIn {
@@ -202,11 +207,11 @@
                     <thead>
                         <tr>
                             <th>序号</th>
-                            <th>选手 <span class="sort-indicator"></span></th>
-                            <th>胜场数 <span class="sort-indicator"></span></th>
-                            <th>负场数 <span class="sort-indicator"></span></th>
-                            <th>总场数 <span class="sort-indicator"></span></th>
-                            <th>胜率 <span class="sort-indicator"></span></th>
+                            <th>选手<span class="sort-indicator"></span></th>
+                            <th>胜场数<span class="sort-indicator"></span></th>
+                            <th>负场数<span class="sort-indicator"></span></th>
+                            <th>总场数<span class="sort-indicator"></span></th>
+                            <th>胜率<span class="sort-indicator"></span></th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -219,7 +224,7 @@
 
     <footer>
         <div class="wechat-contact">
-            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span>dizhu</span> 进群
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
         </div>
         <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
@@ -229,26 +234,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // --- 配置 ---
-            const CSV_FILE_PATH = 'data/summary_landlord.csv'; // 确保你的CSV文件在此路径，或者相对于HTML的正确路径
+            const CSV_FILE_PATH = 'data/summary_landlord.csv'; // 确保你的CSV文件在此路径
+            const TABLE_ID = 'statsTable'; // Added for consistency with previous example, though not strictly used for adjustTableScale
             const TABLE_BODY_ID = 'tableBody';
-            const TABLE_HEADERS_SELECTOR = '#statsTable th';
+            const TABLE_HEADERS_SELECTOR = `#${TABLE_ID} th`;
 
             // --- DOM Elements ---
+            const tableElement = document.getElementById(TABLE_ID); // Added for adjustTableScale
             const tableBody = document.getElementById(TABLE_BODY_ID);
             const tableHeaders = document.querySelectorAll(TABLE_HEADERS_SELECTOR);
 
             // --- 状态变量 ---
             let currentSort = {
-                columnDataIndex: null, // 指向CSV数据中的列索引 (0:选手, 1:胜场, ...)
-                direction: 'desc' // 'asc' 或 'desc'
+                columnDataIndex: null,
+                direction: 'desc'
             };
-            let rawData = []; // 存储原始解析后的数据，用于排序
+            let rawData = [];
 
             // --- 初始化 ---
             function initialize() {
                 updateCopyrightYear();
                 loadAndProcessData();
                 setupEventListeners();
+                // Add resize listener if table scaling is desired on this page too
+                // window.addEventListener('resize', adjustTableScaleForMobile);
             }
 
             function updateCopyrightYear() {
@@ -262,8 +271,36 @@
                 }
             }
 
+            // --- Optional: Table Scaling for Mobile (if you want it on this page too) ---
+            // function adjustTableScaleForMobile() {
+            //     if (!tableElement) return;
+            //     const tableContainer = tableElement.closest('.table-container');
+            //     if (!tableContainer) return;
+
+            //     if (window.innerWidth < 768) {
+            //         tableElement.style.transform = 'none';
+            //         const tableNaturalWidth = tableElement.scrollWidth;
+            //         const containerVisibleWidth = tableContainer.clientWidth;
+
+            //         if (tableNaturalWidth > containerVisibleWidth) {
+            //             const scale = containerVisibleWidth / tableNaturalWidth;
+            //             tableElement.style.transform = `scale(${scale})`;
+            //             tableElement.style.transformOrigin = 'top left';
+            //         } else {
+            //             tableElement.style.transform = 'none';
+            //         }
+            //     } else {
+            //         tableElement.style.transform = 'none';
+            //     }
+            // }
+
+
             // --- 数据加载与处理 ---
             async function loadAndProcessData() {
+                if (!tableBody) {
+                    console.error(`Table body with ID '${TABLE_BODY_ID}' not found.`);
+                    return;
+                }
                 try {
                     const response = await fetch(CSV_FILE_PATH);
                     if (!response.ok) {
@@ -271,57 +308,60 @@
                     }
                     const csvText = await response.text();
                     parseCSV(csvText);
-                    renderTable(); 
+
+                    // REQUIREMENT 1: Default sort by 'wins' (index 1 in sortKeys), descending
+                    currentSort.columnDataIndex = 1; // 'wins' is at index 1 of sortKeys
+                    currentSort.direction = 'desc';
+
+                    renderTable();
                 } catch (error) {
                     console.error('加载或处理数据失败:', error);
                     if (tableBody) {
-                        tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
+                        tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
                     }
                 }
             }
 
             function parseCSV(csvText) {
-                // 移除BOM (Byte Order Mark)
                 const cleanCSV = csvText.replace(/^\uFEFF/, '');
                 const lines = cleanCSV.split(/\r?\n/).filter(line => line.trim() !== '');
 
-                if (lines.length < 2) { // 至少需要表头和一行数据
+                if (lines.length < 2) {
                     console.warn('CSV文件内容不足 (至少需要表头和一行数据).');
                     rawData = [];
                     return;
                 }
 
-                const header = lines[0].split(','); // CSV表头，可以用于校验或动态生成表头（但此处HTML已固定）
-                const dataLines = lines.slice(1); // 跳过CSV表头行
+                const dataLines = lines.slice(1);
 
                 rawData = dataLines.map(line => {
                     const values = line.split(',');
-                    if (values.length === 5) { // 选手,胜场数,负场数,总场数,胜率
+                    if (values.length === 5) {
                         return {
                             player: values[0].trim(),
-                            wins: parseInt(values[1], 10),
-                            losses: parseInt(values[2], 10),
-                            totalGames: parseInt(values[3], 10),
-                            winRate: parseFloat(values[4]) // 保留原始精度用于排序
+                            wins: parseInt(values[1], 10) || 0, // Add fallback for NaN
+                            losses: parseInt(values[2], 10) || 0,
+                            totalGames: parseInt(values[3], 10) || 0,
+                            winRate: parseFloat(values[4]) || 0.0
                         };
                     }
                     console.warn('发现格式不正确的行:', line);
                     return null;
-                }).filter(item => item !== null); // 过滤掉解析失败的行
+                }).filter(item => item !== null);
             }
 
             // --- 渲染 ---
             function renderTable() {
                 if (!tableBody) return;
-                tableBody.innerHTML = ''; // 清空现有内容
+                tableBody.innerHTML = '';
 
                 if (rawData.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length}" style="text-align:center;">暂无数据</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center;">暂无数据</td></tr>`;
+                    // if (typeof adjustTableScaleForMobile === 'function') adjustTableScaleForMobile();
                     return;
                 }
-                
-                // 根据当前排序状态对rawData进行排序
-                sortData(); 
+
+                sortData();
 
                 rawData.forEach((dataRow, index) => {
                     const tr = document.createElement('tr');
@@ -336,58 +376,56 @@
                     tableBody.appendChild(tr);
                 });
                 updateSortIndicators();
+                // if (typeof adjustTableScaleForMobile === 'function') setTimeout(adjustTableScaleForMobile, 0);
             }
 
             // --- 排序逻辑 ---
             function setupEventListeners() {
                 tableHeaders.forEach((th, headerIndex) => {
-                    // 第0列是 "序号"，不可排序。
-                    // headerIndex 对应 <th> 元素的索引 (0:序号, 1:选手, 2:胜场, ...)
-                    // dataColumnIndex 对应 rawData 对象属性的逻辑索引 (0:选手, 1:胜场, ...)
-                    const dataColumnIndex = headerIndex - 1; 
-                    
-                    if (dataColumnIndex >= 0) { // 只有数据列可以排序
+                    const dataColumnIndex = headerIndex - 1;
+                    if (dataColumnIndex >= 0) {
                         th.addEventListener('click', () => handleSort(dataColumnIndex));
                     }
                 });
             }
-            
+
             function handleSort(dataColumnIndex) {
                 if (currentSort.columnDataIndex === dataColumnIndex) {
                     currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSort.columnDataIndex = dataColumnIndex;
-                    currentSort.direction = 'desc'; // 默认降序
+                    currentSort.direction = 'desc';
                 }
-                renderTable(); // 排序后重新渲染整个表格 (包括序号)
+                renderTable();
             }
 
             function sortData() {
-                if (currentSort.columnDataIndex === null) return; // 没有指定排序列
+                if (currentSort.columnDataIndex === null) return;
 
                 const dataIndex = currentSort.columnDataIndex;
                 const direction = currentSort.direction === 'asc' ? 1 : -1;
 
-                // 定义各列的比较键
                 const sortKeys = [
-                    'player',     // 0: 选手 (字符串)
-                    'wins',       // 1: 胜场数 (数字)
-                    'losses',     // 2: 负场数 (数字)
-                    'totalGames', // 3: 总场数 (数字)
-                    'winRate'     // 4: 胜率 (数字)
+                    'player',
+                    'wins',
+                    'losses',
+                    'totalGames',
+                    'winRate'
                 ];
-                
+
                 const sortKey = sortKeys[dataIndex];
 
                 rawData.sort((a, b) => {
                     const valA = a[sortKey];
                     const valB = b[sortKey];
 
-                    if (typeof valA === 'string') {
+                    if (typeof valA === 'string' && typeof valB === 'string') { // Ensure both are strings for localeCompare
                         return valA.localeCompare(valB) * direction;
-                    } else if (typeof valA === 'number') {
+                    } else if (typeof valA === 'number' && typeof valB === 'number') { // Ensure both are numbers for subtraction
                         return (valA - valB) * direction;
                     }
+                    if (valA < valB) return -1 * direction;
+                    if (valA > valB) return 1 * direction;
                     return 0;
                 });
             }
@@ -396,9 +434,9 @@
                 tableHeaders.forEach((th, headerIndex) => {
                     const indicator = th.querySelector('.sort-indicator');
                     if (indicator) {
-                        // headerIndex 对应 <th> 的索引, currentSort.columnDataIndex 对应数据的索引
                         if (headerIndex - 1 === currentSort.columnDataIndex) {
-                            indicator.textContent = currentSort.direction === 'asc' ? '↑' : '↓';
+                            // REQUIREMENT 2: Change indicators to triangles
+                            indicator.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
                         } else {
                             indicator.textContent = '';
                         }
