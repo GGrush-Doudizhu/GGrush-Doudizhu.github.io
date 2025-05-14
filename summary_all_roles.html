@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=3.0, minimum-scale=0.5">
     <title>全角色统计 | 星际斗地主</title>
     <style>
         :root {
@@ -43,69 +43,86 @@
         }
 
         .container {
-            /* max-width: 1000px; -- Set in desktop query */
-            width: auto; /* Allow it to shrink wrap content or fill based on margin */
+            width: auto; 
             margin: 1rem; /* Mobile margin */
             padding: 1rem; /* Mobile padding */
             background: white;
             border-radius: 10px; /* Mobile border-radius */
             box-shadow: var(--shadow-sm);
             animation: fadeIn 0.6s ease-out;
-            /* overflow: hidden; /* If container itself should clip, but table-container handles table overflow */
+        }
+
+        /* Button container for multiple buttons */
+        .nav-buttons-container {
+            margin-bottom: 1rem; /* Space below buttons */
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically on mobile */
+            gap: 0.5rem; /* Space between buttons */
         }
 
         .back-link {
-            display: inline-flex;
+            display: inline-flex; /* Changed to inline-flex for better alignment with icon if any */
             align-items: center;
+            justify-content: center; /* Center text in button */
             padding: 0.7rem 1.2rem; /* Mobile padding */
             background: var(--primary-color);
             color: white;
             border-radius: 30px;
             text-decoration: none;
             transition: all 0.3s ease;
-            margin-bottom: 1rem; /* Mobile margin */
             font-weight: 600;
             font-size: 0.9rem; /* Mobile font size */
+            text-align: center;
+            box-sizing: border-box; /* Ensure padding doesn't break layout */
         }
         .back-link:hover, .back-link:focus {
             background: #3a3a3a;
-            transform: scale(1.03); /* Mobile-friendly hover/focus */
+            transform: scale(1.03); 
+        }
+        /* Secondary style for "back to hub" if needed, or use the same */
+        .back-link.secondary {
+             background: #4a5568; /* A slightly different color */
+        }
+        .back-link.secondary:hover, .back-link.secondary:focus {
+            background: #2d3748;
         }
 
+
         .stats-card {
-            padding: 1rem; /* Mobile padding */
-            margin: 1.5rem 0; /* Mobile margin */
+            padding: 1rem; 
+            margin: 1.5rem 0; 
             background: rgba(255,255,255,0.95);
-            border-radius: 10px; /* Mobile border-radius */
+            border-radius: 10px; 
             box-shadow: var(--shadow-md);
             transition: transform 0.3s ease;
         }
         .stats-card:hover {
-            transform: translateY(-2px); /* Subtle hover */
+            transform: translateY(-2px); 
         }
 
         .table-container {
-            overflow-x: auto; /* ESSENTIAL for wide tables on mobile */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
             border-radius: 8px;
             margin: 1rem 0;
+            width: 100%; /* Ensure table container uses available width */
         }
 
-        table {
-            width: 100%; /* Table will try to fit container, but can exceed if content is wider due to nowrap */
+        table#statsTable { /* Target the specific table for scaling */
+            width: 100%; 
             border-collapse: collapse;
             background: white;
-            /* min-width: 600px; */ /* Optional: if you want a minimum table width regardless of content */
+            /* transform-origin: top left; */ /* Set in JS if scaling is applied */
         }
 
         .sort-hint {
             color: #666;
-            font-size: 0.85rem; /* Mobile font size */
-            padding: 0.5rem 0.75rem; /* Mobile padding */
+            font-size: 0.85rem; 
+            padding: 0.5rem 0.75rem; 
             background: #fff3cd;
             border-radius: 6px;
             display: inline-block;
-            margin: 0 0 0.8rem 0; /* Mobile margin */
+            margin: 0 0 0.8rem 0; 
             border: 1px solid #ffeeba;
             font-style: italic;
         }
@@ -115,11 +132,11 @@
         }
 
         th, td {
-            padding: 10px 8px; /* Mobile cell padding */
+            padding: 10px 8px; 
             text-align: left;
             border-bottom: 1px solid #eee;
-            font-size: 0.85em; /* Mobile font size in cells */
-            white-space: nowrap; /* CRUCIAL: Prevents text wrapping, forces horizontal scroll for wide content */
+            font-size: 0.85em; 
+            white-space: nowrap; /* Keep content on one line */
         }
 
         th {
@@ -128,9 +145,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            position: sticky; /* Header sticks to top of .table-container during scroll */
+            position: sticky; 
             top: 0;
-            z-index: 10; /* Ensure header is above table content */
+            z-index: 10; 
         }
         th:hover {
             background-color: #3a3a3a;
@@ -152,10 +169,10 @@
             margin-top: auto;
             background: var(--primary-color);
             color: var(--text-light);
-            padding: 1.5rem 1rem; /* Mobile padding */
+            padding: 1.5rem 1rem; 
             text-align: center;
             line-height: 1.8;
-            font-size: 0.85rem; /* Mobile font size */
+            font-size: 0.85rem; 
         }
         .wechat-contact .wechat-id {
             font-weight: bold;
@@ -163,50 +180,58 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); } /* Mobile adjusted */
+            from { opacity: 0; transform: translateY(15px); } 
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Data highlighting - column indices are 1-based */
-        td:nth-child(3) { color: #28a745; font-weight: 500; } /* 胜场 (序号, 选手, 胜场) */
-        td:nth-child(4) { color: #dc3545; font-weight: 500; } /* 负场 */
-        td:nth-child(6) { font-weight: 600; color: var(--accent-color); } /* 胜率 */
+        /* Data highlighting */
+        td:nth-child(3) { color: #28a745; font-weight: 500; } 
+        td:nth-child(4) { color: #dc3545; font-weight: 500; } 
+        td:nth-child(6) { font-weight: 600; color: var(--accent-color); } 
 
-        /* --- Desktop Styles (Tablet and Desktop) --- */
         @media (min-width: 768px) {
             body {
-                font-size: 17px; /* Desktop base font size */
+                font-size: 17px; 
             }
 
             .main-header {
-                padding: 3rem 1rem; /* Desktop padding */
+                padding: 3rem 1rem; 
             }
             .main-header h1 { font-size: 2.2rem; }
             .main-header p { font-size: 1rem; }
 
             .container {
-                max-width: 1000px; /* Max width for desktop */
-                margin: 2rem auto; /* Center on desktop */
-                padding: 2rem; /* Desktop padding */
+                max-width: 1000px; 
+                margin: 2rem auto; 
+                padding: 2rem; 
                 border-radius: 15px;
             }
+            
+            .nav-buttons-container {
+                flex-direction: row; /* Buttons side-by-side on desktop */
+                justify-content: flex-start; /* Align to left */
+                align-items: center;
+                gap: 1rem; /* Space between buttons */
+            }
+
 
             .back-link {
-                padding: 0.8rem 1.5rem; /* Desktop padding */
-                font-size: 1rem; /* Desktop font size */
-                margin-bottom: 1.5rem;
+                padding: 0.8rem 1.5rem; 
+                font-size: 1rem; 
+                /* margin-bottom: 1.5rem; */ /* Removed as nav-buttons-container handles spacing */
+                width: auto; /* Allow button to size to content */
             }
             .back-link:hover, .back-link:focus {
-                transform: translateX(-5px); /* Desktop hover */
+                transform: translateX(-5px); 
             }
 
             .stats-card {
-                padding: 1.5rem; /* Desktop padding */
-                margin: 2rem 0; /* Desktop margin */
+                padding: 1.5rem; 
+                margin: 2rem 0; 
                 border-radius: 12px;
             }
             .stats-card:hover {
-                transform: translateY(-3px); /* Desktop hover */
+                transform: translateY(-3px); 
             }
 
             .sort-hint {
@@ -216,21 +241,13 @@
             }
 
             th, td {
-                padding: 14px 16px; /* Desktop cell padding */
-                font-size: 0.9em; /* Relative to body font, or use 1rem */
-                /* white-space: nowrap; */ /* Kept from mobile, table might still be wide */
+                padding: 14px 16px; 
+                font-size: 0.9em; 
             }
             
-            /* If you want to allow text wrapping on desktop and the table is not excessively wide: */
-            /*
-            th, td {
-                white-space: normal;
-            }
-            */
-
             footer {
-                padding: 2rem; /* Desktop padding */
-                font-size: 0.9rem; /* Desktop font size */
+                padding: 2rem; 
+                font-size: 0.9rem; 
             }
         }
     </style>
@@ -243,7 +260,10 @@
     </header>
 
     <div class="container">
-        <a href="stats_hub.html" class="back-link">← 返回数据中心</a> <!-- Changed link to stats_hub.html -->
+        <div class="nav-buttons-container">
+            <a href="index.html" class="back-link">返回主页</a>
+            <a href="stats_hub.html" class="back-link secondary">返回上页： 数据导航</a>
+        </div>
 
         <div class="stats-card">
             <div class="table-container">
@@ -278,25 +298,28 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- Configuration ---
             const CSV_FILE_PATH = 'data/summary_all_roles.csv';
+            const TABLE_ID = 'statsTable'; // Changed to target table directly
             const TABLE_BODY_ID = 'tableBody';
-            const TABLE_HEADERS_SELECTOR = '#statsTable th';
+            const TABLE_HEADERS_SELECTOR = `#${TABLE_ID} th`;
 
             // --- DOM Elements ---
+            const tableElement = document.getElementById(TABLE_ID);
             const tableBody = document.getElementById(TABLE_BODY_ID);
             const tableHeaders = document.querySelectorAll(TABLE_HEADERS_SELECTOR);
 
             // --- State Variables ---
             let currentSort = {
-                columnDataIndex: null, // Index for data properties (0: player, 1: wins, ...)
-                direction: 'desc'    // 'asc' or 'desc'
+                columnDataIndex: null, 
+                direction: 'desc'    
             };
-            let rawData = []; // Stores original parsed data
+            let rawData = []; 
 
             // --- Initialization ---
             function initialize() {
                 updateCopyrightYear();
                 loadAndProcessData();
                 setupEventListeners();
+                window.addEventListener('resize', adjustTableScaleForMobile); // Adjust scale on resize
             }
 
             function updateCopyrightYear() {
@@ -309,6 +332,37 @@
                         startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
                 }
             }
+            
+            // --- Table Scaling for Mobile ---
+            function adjustTableScaleForMobile() {
+                if (!tableElement) return;
+                const tableContainer = tableElement.closest('.table-container');
+                if (!tableContainer) return;
+
+                // Only apply scaling on smaller screens (e.g., less than 768px)
+                if (window.innerWidth < 768) {
+                    // Reset transform to get natural width for calculation
+                    tableElement.style.transform = 'none';
+                    // Important: Ensure table width is not fixed at 100% of a small container when measuring scrollWidth
+                    // Temporarily set to auto or remove fixed width if it interferes with scrollWidth calculation
+                    // For this setup, tableElement.scrollWidth should give the content width correctly
+                    
+                    const tableNaturalWidth = tableElement.scrollWidth;
+                    const containerVisibleWidth = tableContainer.clientWidth;
+
+                    if (tableNaturalWidth > containerVisibleWidth) {
+                        const scale = containerVisibleWidth / tableNaturalWidth;
+                        tableElement.style.transform = `scale(${scale})`;
+                        tableElement.style.transformOrigin = 'top left';
+                    } else {
+                        tableElement.style.transform = 'none'; // No scaling needed
+                    }
+                } else {
+                    // On larger screens, remove any scaling
+                    tableElement.style.transform = 'none';
+                }
+            }
+
 
             // --- Data Loading and Processing ---
             async function loadAndProcessData() {
@@ -323,9 +377,7 @@
                     }
                     const csvText = await response.text();
                     parseCSV(csvText);
-                    // Initial render (default sort or first column sort if desired)
-                    // For now, let's sort by '胜率' (winRate) descending by default
-                    currentSort.columnDataIndex = 4; // winRate is the 5th data property (index 4)
+                    currentSort.columnDataIndex = 4; // Default sort: winRate (index 4)
                     currentSort.direction = 'desc';
                     renderTable(); 
                 } catch (error) {
@@ -335,21 +387,17 @@
             }
 
             function parseCSV(csvText) {
-                const cleanCSV = csvText.replace(/^\uFEFF/, ''); // Remove BOM
+                const cleanCSV = csvText.replace(/^\uFEFF/, ''); 
                 const lines = cleanCSV.split(/\r?\n/).filter(line => line.trim() !== '');
 
                 if (lines.length < 2) {
-                    console.warn('CSV file has insufficient content (needs header and at least one data row).');
                     rawData = [];
                     return;
                 }
-
-                // const headerFromCSV = lines[0].split(','); // CSV header, useful for validation
-                const dataLines = lines.slice(1); // Skip CSV header row
+                const dataLines = lines.slice(1); 
 
                 rawData = dataLines.map(line => {
                     const values = line.split(',');
-                    // Expecting: Player, Wins, Losses, TotalGames, WinRate
                     if (values.length === 5) { 
                         return {
                             player: values[0].trim(),
@@ -359,22 +407,22 @@
                             winRate: parseFloat(values[4]) || 0.0
                         };
                     }
-                    console.warn('Skipping malformed CSV line:', line);
                     return null;
-                }).filter(item => item !== null); // Filter out nulls from malformed lines
+                }).filter(item => item !== null); 
             }
 
             // --- Rendering ---
             function renderTable() {
                 if (!tableBody) return;
-                tableBody.innerHTML = ''; // Clear existing content
+                tableBody.innerHTML = ''; 
 
                 if (rawData.length === 0) {
                     tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center;">暂无数据</td></tr>`;
+                    adjustTableScaleForMobile(); // Adjust even if no data, to reset scale if needed
                     return;
                 }
                 
-                sortData(); // Apply current sorting to rawData
+                sortData(); 
 
                 rawData.forEach((dataRow, index) => {
                     const tr = document.createElement('tr');
@@ -389,16 +437,16 @@
                     tableBody.appendChild(tr);
                 });
                 updateSortIndicators();
+                // Call scaling *after* table is populated and rendered
+                // Use a minimal timeout to ensure layout is complete before measuring for scaling
+                setTimeout(adjustTableScaleForMobile, 0); 
             }
 
-            // --- Sorting Logic ---
+            // --- Sorting Logic (Restored to original) ---
             function setupEventListeners() {
                 tableHeaders.forEach((th, headerIndex) => {
-                    // headerIndex from <th>: 0 (序号), 1 (选手), 2 (胜场), ...
-                    // dataColumnIndex for actual data: 0 (选手), 1 (胜场), ...
                     const dataColumnIndex = headerIndex - 1; 
-                    
-                    if (dataColumnIndex >= 0) { // Only actual data columns are sortable
+                    if (dataColumnIndex >= 0) { 
                         th.addEventListener('click', () => handleSort(dataColumnIndex));
                     }
                 });
@@ -409,23 +457,23 @@
                     currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSort.columnDataIndex = dataColumnIndex;
-                    currentSort.direction = 'desc'; // Default to descending for a new column
+                    currentSort.direction = 'desc'; 
                 }
-                renderTable(); // Re-sort and re-render
+                renderTable(); 
             }
 
-            function sortData() {
-                if (currentSort.columnDataIndex === null) return; 
+            function sortData() { // RESTORED USER'S ORIGINAL SORT LOGIC
+                if (currentSort.columnDataIndex === null) return;
 
                 const dataIndex = currentSort.columnDataIndex;
-                const directionMultiplier = currentSort.direction === 'asc' ? 1 : -1;
+                const direction = currentSort.direction === 'asc' ? 1 : -1;
 
                 const sortKeys = [
-                    'player',     // 0: 选手
-                    'wins',       // 1: 胜场数
-                    'losses',     // 2: 负场数
-                    'totalGames', // 3: 总场数
-                    'winRate'     // 4: 胜率
+                    'player',     // 0: 选手 (字符串)
+                    'wins',       // 1: 胜场数 (数字)
+                    'losses',     // 2: 负场数 (数字)
+                    'totalGames', // 3: 总场数 (数字)
+                    'winRate'     // 4: 胜率 (数字)
                 ];
                 
                 const sortKey = sortKeys[dataIndex];
@@ -434,39 +482,27 @@
                     const valA = a[sortKey];
                     const valB = b[sortKey];
 
-                    if (typeof valA === 'string' && typeof valB === 'string') {
-                        return valA.localeCompare(valB) * directionMultiplier;
-                    } else if (typeof valA === 'number' && typeof valB === 'number') {
-                         // For numbers, primary sort by value, secondary sort by totalGames (desc) for ties, then by player name (asc)
-                        if (valA !== valB) {
-                            return (valA - valB) * directionMultiplier;
-                        } else {
-                            // Tie-breaking: more games is better for wins/winRate, fewer for losses
-                            if (sortKey === 'wins' || sortKey === 'winRate' || sortKey === 'totalGames') {
-                                if (b.totalGames !== a.totalGames) {
-                                    return (b.totalGames - a.totalGames); // Higher totalGames first
-                                }
-                            } else if (sortKey === 'losses') {
-                                 if (a.totalGames !== b.totalGames) {
-                                    return (a.totalGames - b.totalGames); // Lower totalGames first for losses
-                                 }
-                            }
-                            return a.player.localeCompare(b.player); // Final tie-breaker by player name
-                        }
+                    if (typeof valA === 'string' && typeof valB === 'string') { // Ensure both are strings for localeCompare
+                        return valA.localeCompare(valB) * direction;
+                    } else if (typeof valA === 'number' && typeof valB === 'number') { // Ensure both are numbers for subtraction
+                        return (valA - valB) * direction;
                     }
+                    // Fallback if types are mixed or not string/number, though CSV parsing aims for consistency
+                    if (valA < valB) return -1 * direction;
+                    if (valA > valB) return 1 * direction;
                     return 0;
                 });
             }
+
 
             function updateSortIndicators() {
                 tableHeaders.forEach((th, headerIndex) => {
                     const indicator = th.querySelector('.sort-indicator');
                     if (indicator) {
-                        // headerIndex refers to <th>, currentSort.columnDataIndex to data property index
                         if (headerIndex - 1 === currentSort.columnDataIndex) {
                             indicator.textContent = currentSort.direction === 'asc' ? '↑' : '↓';
                         } else {
-                            indicator.textContent = ''; // Clear for non-sorted columns
+                            indicator.textContent = ''; 
                         }
                     }
                 });
