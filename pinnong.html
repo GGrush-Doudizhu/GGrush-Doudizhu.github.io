@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=3.0, minimum-scale=0.5">
-    <title>农民总榜 | 星际斗地主</title>
+    <title>贫农总榜 | 星际斗地主</title>
     <style>
         :root {
             --primary-color: #2A2A2A;
@@ -256,14 +256,14 @@
 <body>
 
     <header class="main-header">
-        <h1>📊 农民排行榜</h1>
+        <h1>📊 贫农排行榜</h1>
         <p>DSL 第一赛季数据</p>
     </header>
 
     <div class="container">
         <div class="nav-buttons-container">
             <a href="index.html" class="back-link">返回主页</a>
-            <a href="stats_hub.html" class="back-link secondary">返回上页： 数据导航</a>
+            <a href="stats.html" class="back-link secondary">返回上页： 数据导航</a>
         </div>
 
         <div class="stats-card">
@@ -298,7 +298,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // --- Configuration ---
-            const CSV_FILE_PATH = 'data/summary_farmer.csv';
+            const CSV_FILE_PATH = 'data/pinnong.csv';
             const TABLE_ID = 'statsTable';
             const TABLE_BODY_ID = 'tableBody';
             const TABLE_HEADERS_SELECTOR = `#${TABLE_ID} th`;
