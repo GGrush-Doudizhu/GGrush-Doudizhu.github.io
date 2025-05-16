@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=3.0, minimum-scale=0.5">
+    <title>最近比赛日战报 | 星际斗地主</title>
+    <style>
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            --text-light: #F8F9FA;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: #444;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 16px; /* Base for mobile */
+        }
+
+        .main-header {
+            background: var(--gradient-bg);
+            color: var(--text-light);
+            padding: 2rem 1rem; /* Mobile padding */
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .main-header h1 {
+            font-size: 1.8rem; /* Mobile h1 */
+            margin-bottom: 0.3rem;
+        }
+        .main-header p {
+            font-size: 0.9rem; /* Mobile p */
+            margin-top: 0.2rem;
+        }
+
+        .container {
+            width: auto;
+            margin: 1rem; /* Mobile margin */
+            padding: 1rem; /* Mobile padding */
+            background: white;
+            border-radius: 10px; /* Mobile border-radius */
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .nav-buttons-container {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column; 
+            gap: 0.5rem; 
+        }
+
+        .back-link {
+            display: inline-flex; 
+            align-items: center;
+            justify-content: center; 
+            padding: 0.7rem 1.2rem; 
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem; 
+            text-align: center;
+            box-sizing: border-box; 
+        }
+        .back-link:hover, .back-link:focus {
+            background: #3a3a3a;
+            transform: scale(1.03);
+        }
+        .back-link.secondary {
+             background: #4a5568; 
+        }
+        .back-link.secondary:hover, .back-link.secondary:focus {
+            background: #2d3748;
+        }
+
+        .stats-card { /* Renamed from data-card for consistency, but can be specific */
+            padding: 1rem;
+            margin: 1.5rem 0;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .data-display-container { /* Container for the raw data blocks */
+            overflow-x: auto; /* Allows horizontal scrolling if content is too wide */
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            margin: 1rem 0;
+            width: 100%;
+        }
+
+        .game-block {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .game-block h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            font-size: 1.2em;
+        }
+        
+        .game-block pre {
+            white-space: pre-wrap;       /* CSS3 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            font-family: 'Consolas', 'Monaco', 'Menlo', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            overflow-x: auto; /* Add horizontal scroll within pre if needed */
+        }
+
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            line-height: 1.8;
+            font-size: 0.85rem;
+        }
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                font-size: 17px;
+            }
+
+            .main-header {
+                padding: 3rem 1rem;
+            }
+            .main-header h1 { font-size: 2.2rem; }
+            .main-header p { font-size: 1rem; }
+
+            .container {
+                max-width: 1000px;
+                margin: 2rem auto;
+                padding: 2rem;
+                border-radius: 15px;
+            }
+
+            .nav-buttons-container {
+                flex-direction: row; 
+                justify-content: flex-start; 
+                align-items: center;
+                gap: 1rem; 
+            }
+
+            .back-link {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+                width: auto; 
+            }
+            .back-link:hover, .back-link:focus {
+                transform: translateX(-5px); /* Adjusted hover effect for horizontal buttons */
+            }
+
+            .stats-card {
+                padding: 1.5rem;
+                margin: 2rem 0;
+                border-radius: 12px;
+            }
+            .stats-card:hover {
+                transform: translateY(-3px);
+            }
+            
+            .game-block h3 {
+                font-size: 1.3em;
+            }
+
+            .game-block pre {
+                font-size: 0.9em;
+            }
+
+            footer {
+                padding: 2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>📜 最近比赛日战报</h1>
+        <p>来自 last-matchday.csv 的原始数据</p>
+    </header>
+
+    <div class="container">
+        <div class="nav-buttons-container">
+            <a href="index" class="back-link">返回主页</a>
+            <a href="stats" class="back-link secondary">返回上页： 数据导航</a>
+        </div>
+
+        <div class="stats-card">
+            <div class="data-display-container" id="rawDataContainer">
+                <!-- Raw data will be dynamically populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wechat-contact">
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
+        </div>
+        <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Configuration ---
+            const CSV_FILE_PATH = 'data/last-matchday.csv';
+            const RAW_DATA_CONTAINER_ID = 'rawDataContainer';
+
+            // --- DOM Elements ---
+            const rawDataContainer = document.getElementById(RAW_DATA_CONTAINER_ID);
+
+            // --- Initialization ---
+            function initialize() {
+                updateCopyrightYear();
+                loadAndDisplayRawData();
+            }
+
+            function updateCopyrightYear() {
+                const startYear = 2025; // Assuming this is the start year you want
+                const currentYear = new Date().getFullYear();
+                const yearRangeEl = document.getElementById('yearRange');
+
+                if (yearRangeEl) {
+                    yearRangeEl.textContent =
+                        startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
+                }
+            }
+
+            async function loadAndDisplayRawData() {
+                if (!rawDataContainer) {
+                    console.error(`Data container with ID '${RAW_DATA_CONTAINER_ID}' not found.`);
+                    return;
+                }
+                try {
+                    const response = await fetch(CSV_FILE_PATH);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status} while fetching ${CSV_FILE_PATH}`);
+                    }
+                    const csvText = await response.text();
+                    
+                    // Split the CSV text into game blocks. Each block starts with "Game ID,".
+                    // We use a positive lookahead `(?=^Game ID,)` to keep "Game ID," in the split parts.
+                    // The `m` flag makes `^` match the start of a line.
+                    const gameBlocks = csvText.trim().split(/\n?(?=^Game ID,)/m);
+
+                    if (gameBlocks.length === 0 || (gameBlocks.length === 1 && gameBlocks[0].trim() === '')) {
+                        rawDataContainer.innerHTML = '<p>没有找到比赛数据或文件为空。</p>';
+                        return;
+                    }
+                    
+                    gameBlocks.forEach((block, index) => {
+                        const trimmedBlock = block.trim();
+                        if (trimmedBlock === '') return;
+
+                        const gameDiv = document.createElement('div');
+                        gameDiv.className = 'game-block';
+
+                        // Try to extract Game ID for a title
+                        const gameIdMatch = trimmedBlock.match(/^Game ID,(\s*\d+)/);
+                        if (gameIdMatch && gameIdMatch[1]) {
+                            const h3 = document.createElement('h3');
+                            h3.textContent = `比赛记录 (ID: ${gameIdMatch[1].trim()})`;
+                            gameDiv.appendChild(h3);
+                        } else {
+                            // Fallback title if Game ID cannot be parsed for some reason
+                            const h3 = document.createElement('h3');
+                            h3.textContent = `比赛记录 ${index + 1}`;
+                            gameDiv.appendChild(h3);
+                        }
+                        
+                        const pre = document.createElement('pre');
+                        pre.textContent = trimmedBlock;
+                        gameDiv.appendChild(pre);
+                        
+                        rawDataContainer.appendChild(gameDiv);
+                    });
+
+                } catch (error) {
+                    console.error('Failed to load or process data:', error);
+                    rawDataContainer.innerHTML = `<p style="text-align:center; color:red;">数据加载失败: ${error.message}</p>`;
+                }
+            }
+
+            initialize();
+        });
+    </script>
+</body>
+</html>
