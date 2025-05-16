@@ -85,7 +85,7 @@
             background: #2d3748;
         }
 
-        .stats-card { /* Renamed from data-card for consistency, but can be specific */
+        .report-card { /* Changed from stats-card */
             padding: 1rem;
             margin: 1.5rem 0;
             background: rgba(255,255,255,0.95);
@@ -93,21 +93,13 @@
             box-shadow: var(--shadow-md);
             transition: transform 0.3s ease;
         }
-        .stats-card:hover {
+        .report-card:hover {
             transform: translateY(-2px);
         }
-
-        .data-display-container { /* Container for the raw data blocks */
-            overflow-x: auto; /* Allows horizontal scrolling if content is too wide */
-            -webkit-overflow-scrolling: touch;
-            border-radius: 8px;
-            margin: 1rem 0;
-            width: 100%;
-        }
-
+        
         .game-block {
-            background-color: #f9f9f9;
-            border: 1px solid #eee;
+            background-color: #f9f9f9; /* Lighter background for game block itself */
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
@@ -120,14 +112,12 @@
             border-bottom: 2px solid var(--accent-color);
             padding-bottom: 8px;
             font-size: 1.2em;
+            margin-bottom: 10px;
         }
         
-        .game-block pre {
-            white-space: pre-wrap;       /* CSS3 */
-            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-            white-space: -pre-wrap;      /* Opera 4-6 */
-            white-space: -o-pre-wrap;    /* Opera 7 */
-            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        .game-block pre { /* For general game info */
+            white-space: pre-wrap;      
+            word-wrap: break-word;      
             font-family: 'Consolas', 'Monaco', 'Menlo', monospace;
             font-size: 0.85em;
             line-height: 1.5;
@@ -135,8 +125,50 @@
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
-            overflow-x: auto; /* Add horizontal scroll within pre if needed */
+            margin-bottom: 15px; /* Space before player table */
         }
+
+        .player-info-heading {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .table-container { /* Reusing this from original for consistency */
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            margin: 1rem 0; /* Applied to player table container */
+            width: 100%;
+        }
+
+        .player-data-table { /* Specific to player info table */
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        /* Generic table styles from the reference, applied to .player-data-table */
+        .player-data-table th, .player-data-table td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85em;
+            white-space: nowrap; /* Keeps content on one line, relies on .table-container scroll */
+        }
+
+        .player-data-table th {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            font-weight: 600;
+            /* position: sticky; top: 0; z-index: 5; */ /* Sticky might be too much for small tables */
+        }
+
+        .player-data-table tr:nth-child(even) { background-color: #f8f9fa; }
+        .player-data-table tr:nth-child(odd) { background-color: #ffffff; }
+        /* .player-data-table tr:hover { background-color: #f1f1f1; } */
 
 
         footer {
@@ -162,10 +194,7 @@
             body {
                 font-size: 17px;
             }
-
-            .main-header {
-                padding: 3rem 1rem;
-            }
+            .main-header { padding: 3rem 1rem; }
             .main-header h1 { font-size: 2.2rem; }
             .main-header p { font-size: 1rem; }
 
@@ -175,44 +204,34 @@
                 padding: 2rem;
                 border-radius: 15px;
             }
-
             .nav-buttons-container {
                 flex-direction: row; 
                 justify-content: flex-start; 
                 align-items: center;
                 gap: 1rem; 
             }
-
             .back-link {
                 padding: 0.8rem 1.5rem;
                 font-size: 1rem;
                 width: auto; 
             }
-            .back-link:hover, .back-link:focus {
-                transform: translateX(-5px); /* Adjusted hover effect for horizontal buttons */
-            }
+            .back-link:hover, .back-link:focus { transform: translateX(-5px); }
 
-            .stats-card {
+            .report-card {
                 padding: 1.5rem;
                 margin: 2rem 0;
                 border-radius: 12px;
             }
-            .stats-card:hover {
-                transform: translateY(-3px);
-            }
+            .report-card:hover { transform: translateY(-3px); }
             
-            .game-block h3 {
-                font-size: 1.3em;
-            }
-
-            .game-block pre {
+            .game-block h3 { font-size: 1.3em; }
+            .game-block pre { font-size: 0.9em; }
+            .player-info-heading { font-size: 1em; }
+            .player-data-table th, .player-data-table td {
+                padding: 14px 16px;
                 font-size: 0.9em;
             }
-
-            footer {
-                padding: 2rem;
-                font-size: 0.9rem;
-            }
+            footer { padding: 2rem; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -220,7 +239,7 @@
 
     <header class="main-header">
         <h1>📜 最近比赛日战报</h1>
-        <p>来自 last-matchday.csv 的原始数据</p>
+        <p>20250515，open, mosuo, 嘴哥恩怨局，暨随机角色和队友地图首测</p>
     </header>
 
     <div class="container">
@@ -229,10 +248,8 @@
             <a href="stats" class="back-link secondary">返回上页： 数据导航</a>
         </div>
 
-        <div class="stats-card">
-            <div class="data-display-container" id="rawDataContainer">
-                <!-- Raw data will be dynamically populated by JavaScript -->
-            </div>
+        <div class="report-card" id="reportDataContainer">
+            <!-- Game data will be dynamically populated by JavaScript -->
         </div>
     </div>
 
@@ -245,83 +262,145 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // --- Configuration ---
             const CSV_FILE_PATH = 'data/last-matchday.csv';
-            const RAW_DATA_CONTAINER_ID = 'rawDataContainer';
-
-            // --- DOM Elements ---
-            const rawDataContainer = document.getElementById(RAW_DATA_CONTAINER_ID);
-
-            // --- Initialization ---
-            function initialize() {
-                updateCopyrightYear();
-                loadAndDisplayRawData();
-            }
+            const REPORT_DATA_CONTAINER_ID = 'reportDataContainer';
+            const reportDataContainer = document.getElementById(REPORT_DATA_CONTAINER_ID);
 
             function updateCopyrightYear() {
-                const startYear = 2025; // Assuming this is the start year you want
+                const startYear = 2025;
                 const currentYear = new Date().getFullYear();
                 const yearRangeEl = document.getElementById('yearRange');
-
                 if (yearRangeEl) {
-                    yearRangeEl.textContent =
-                        startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
+                    yearRangeEl.textContent = startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
                 }
             }
 
-            async function loadAndDisplayRawData() {
-                if (!rawDataContainer) {
-                    console.error(`Data container with ID '${RAW_DATA_CONTAINER_ID}' not found.`);
+            // Helper function to parse a simple CSV line (no quotes with commas)
+            function simpleCsvSplit(line) {
+                return line.split(',').map(s => s.trim());
+            }
+
+            async function loadAndDisplayReportData() {
+                if (!reportDataContainer) {
+                    console.error(`Data container with ID '${REPORT_DATA_CONTAINER_ID}' not found.`);
                     return;
                 }
                 try {
                     const response = await fetch(CSV_FILE_PATH);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status} while fetching ${CSV_FILE_PATH}`);
-                    }
-                    const csvText = await response.text();
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status} fetching ${CSV_FILE_PATH}`);
                     
-                    // Split the CSV text into game blocks. Each block starts with "Game ID,".
-                    // We use a positive lookahead `(?=^Game ID,)` to keep "Game ID," in the split parts.
-                    // The `m` flag makes `^` match the start of a line.
-                    const gameBlocks = csvText.trim().split(/\n?(?=^Game ID,)/m);
+                    const csvText = await response.text();
+                    const gameBlocksText = csvText.trim().split(/\n?(?=^Game ID,)/m);
 
-                    if (gameBlocks.length === 0 || (gameBlocks.length === 1 && gameBlocks[0].trim() === '')) {
-                        rawDataContainer.innerHTML = '<p>没有找到比赛数据或文件为空。</p>';
+                    if (gameBlocksText.length === 0 || (gameBlocksText.length === 1 && gameBlocksText[0].trim() === '')) {
+                        reportDataContainer.innerHTML = '<p style="text-align:center;">没有找到比赛数据或文件为空。</p>';
                         return;
                     }
                     
-                    gameBlocks.forEach((block, index) => {
-                        const trimmedBlock = block.trim();
-                        if (trimmedBlock === '') return;
+                    reportDataContainer.innerHTML = ''; // Clear previous content
+
+                    gameBlocksText.forEach((blockText, index) => {
+                        const trimmedBlockText = blockText.trim();
+                        if (trimmedBlockText === '') return;
 
                         const gameDiv = document.createElement('div');
                         gameDiv.className = 'game-block';
 
-                        // Try to extract Game ID for a title
-                        const gameIdMatch = trimmedBlock.match(/^Game ID,(\s*\d+)/);
-                        if (gameIdMatch && gameIdMatch[1]) {
-                            const h3 = document.createElement('h3');
-                            h3.textContent = `比赛记录 (ID: ${gameIdMatch[1].trim()})`;
-                            gameDiv.appendChild(h3);
+                        const lines = trimmedBlockText.split('\n');
+                        let generalInfoContent = [];
+                        let playerInfoLines = [];
+                        let isPlayerInfoSection = false;
+
+                        // Extract Game ID for H3 title
+                        const gameIdLine = lines.find(line => line.startsWith("Game ID,"));
+                        const h3 = document.createElement('h3');
+                        if (gameIdLine) {
+                            const gameIdMatch = gameIdLine.match(/^Game ID,(\s*\d+)/);
+                            h3.textContent = gameIdMatch ? `比赛记录 (ID: ${gameIdMatch[1].trim()})` : `比赛记录 ${index + 1}`;
                         } else {
-                            // Fallback title if Game ID cannot be parsed for some reason
-                            const h3 = document.createElement('h3');
                             h3.textContent = `比赛记录 ${index + 1}`;
-                            gameDiv.appendChild(h3);
                         }
-                        
-                        const pre = document.createElement('pre');
-                        pre.textContent = trimmedBlock;
-                        gameDiv.appendChild(pre);
-                        
-                        rawDataContainer.appendChild(gameDiv);
+                        gameDiv.appendChild(h3);
+
+                        // Separate general info from player info
+                        for (const line of lines) {
+                            const trimmedLine = line.trim();
+                            if (trimmedLine.startsWith("Game ID,")) continue; // Already handled
+
+                            if (trimmedLine.startsWith("Player Info:")) {
+                                isPlayerInfoSection = true;
+                                // Add "Player Info:" heading above the table
+                                const playerInfoTitle = document.createElement('p');
+                                playerInfoTitle.className = 'player-info-heading';
+                                playerInfoTitle.textContent = '选手信息:';
+                                gameDiv.appendChild(playerInfoTitle);
+                                continue; // Don't add this line to playerInfoLines or generalInfoContent
+                            }
+
+                            if (isPlayerInfoSection) {
+                                if (trimmedLine) playerInfoLines.push(trimmedLine);
+                            } else {
+                                if (trimmedLine) generalInfoContent.push(trimmedLine);
+                            }
+                        }
+
+                        // Display general game info using <pre>
+                        if (generalInfoContent.length > 0) {
+                            const preGeneral = document.createElement('pre');
+                            preGeneral.textContent = generalInfoContent.join('\n');
+                            gameDiv.appendChild(preGeneral);
+                        }
+
+                        // Display player info as a table
+                        if (playerInfoLines.length > 0) {
+                            const tableContainerDiv = document.createElement('div');
+                            tableContainerDiv.className = 'table-container';
+
+                            const table = document.createElement('table');
+                            table.className = 'player-data-table';
+
+                            // Table Header
+                            const headerData = simpleCsvSplit(playerInfoLines[0]);
+                            const thead = document.createElement('thead');
+                            const trHead = document.createElement('tr');
+                            headerData.forEach(headerText => {
+                                const th = document.createElement('th');
+                                th.textContent = headerText;
+                                trHead.appendChild(th);
+                            });
+                            thead.appendChild(trHead);
+                            table.appendChild(thead);
+
+                            // Table Body
+                            const tbody = document.createElement('tbody');
+                            for (let i = 1; i < playerInfoLines.length; i++) {
+                                const rowData = simpleCsvSplit(playerInfoLines[i]);
+                                const trBody = document.createElement('tr');
+                                rowData.forEach(cellText => {
+                                    const td = document.createElement('td');
+                                    // Handle potential quotes in File Name (though unlikely in player data lines)
+                                    // For player data, it's usually simpler like 'Name,Result,Role,Race'
+                                    td.textContent = cellText.replace(/^"|"$/g, ''); // Basic quote removal
+                                    trBody.appendChild(td);
+                                });
+                                tbody.appendChild(trBody);
+                            }
+                            table.appendChild(tbody);
+                            tableContainerDiv.appendChild(table);
+                            gameDiv.appendChild(tableContainerDiv);
+                        }
+                        reportDataContainer.appendChild(gameDiv);
                     });
 
                 } catch (error) {
-                    console.error('Failed to load or process data:', error);
-                    rawDataContainer.innerHTML = `<p style="text-align:center; color:red;">数据加载失败: ${error.message}</p>`;
+                    console.error('Failed to load or process report data:', error);
+                    reportDataContainer.innerHTML = `<p style="text-align:center; color:red;">数据加载失败: ${error.message}</p>`;
                 }
+            }
+
+            function initialize() {
+                updateCopyrightYear();
+                loadAndDisplayReportData();
             }
 
             initialize();
