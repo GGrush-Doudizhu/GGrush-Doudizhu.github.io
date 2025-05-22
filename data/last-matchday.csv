@@ -1,128 +1,144 @@
 Game ID,1
-File Name,"200703,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,20:01:32
-Duration,5:21
+File Name,"194113,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,19:35:06
+Duration,5:57
+Winner,农民
+Player Info:
+Name,Result,Role,Race
+Kid,Lose,地主,Z
+LeiLei,Lose,地主,T
+jaystar,Lose,地主,P
+520kill,Win,富农,P
+SupeRocK,Win,贫农,T
+lansoov,Win,贫农,T
+DDR[Pro],Win,贫农,P
+GGrush_Doudizhu,Win,贫农,P
+
+Game ID,2
+File Name,"200031,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,19:42:05
+Duration,18:03
+Winner,农民
+Player Info:
+Name,Result,Role,Race
+Kid,Lose,地主,P
+LeiLei,Lose,地主,T
+jaystar,Lose,地主,P
+520kill,Win,富农,P
+SupeRocK,Win,贫农,T
+lansoov,Win,贫农,T
+GGrush_Doudizhu,Win,贫农,P
+DDR[Pro],Win,贫农,P
+
+Game ID,3
+File Name,"201413,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,20:01:46
+Duration,12:12
 Winner,地主
 Player Info:
 Name,Result,Role,Race
-lansoov,Win,地主,P
-paijipao,Win,地主,T
-wohaopa,Win,地主,Z
-mosuo,Lose,富农,P
-GGrush_Doudizhu,Lose,贫农,T
-feifeiht,Lose,贫农,Z
+LeiLei,Win,地主,T
+Kid,Win,地主,P
+jaystar,Win,地主,P
+520kill,Lose,富农,P
+lansoov,Lose,贫农,T
 SupeRocK,Lose,贫农,T
 DDR[Pro],Lose,贫农,P
-
-Game ID,2
-File Name,"201255,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,20:07:54
-Duration,4:52
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-mosuo,Lose,地主,P
-SupeRocK,Lose,地主,T
-paijipao,Lose,地主,P
-lansoov,Win,富农,T
-GGrush_Doudizhu,Win,贫农,Z
-wohaopa,Win,贫农,Z
-DDR[Pro],Win,贫农,P
-feifeiht,Win,贫农,Z
-
-Game ID,3
-File Name,"202311,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,20:14:16
-Duration,8:39
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-feifeiht,Lose,地主,Z
-mosuo,Lose,地主,P
-wohaopa,Lose,地主,Z
-SupeRocK,Win,富农,T
-DDR[Pro],Win,贫农,P
-paijipao,Win,贫农,T
-GGrush_Doudizhu,Win,贫农,P
-lansoov,Win,贫农,Z
+GGrush_Doudizhu,Lose,贫农,P
 
 Game ID,4
-File Name,"203333,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,20:24:22
-Duration,8:59
+File Name,"203011,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,20:15:39
+Duration,14:15
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-wohaopa,Lose,地主,Z
-feifeiht,Lose,地主,Z
-DDR[Pro],Lose,地主,P
-SupeRocK,Win,富农,T
-paijipao,Win,贫农,Z
-mosuo,Win,贫农,P
-lansoov,Win,贫农,T
+LeiLei,Lose,地主,T
+Kid,Lose,地主,P
+jaystar,Lose,地主,P
+520kill,Win,富农,P
 GGrush_Doudizhu,Win,贫农,T
+lansoov,Win,贫农,T
+SupeRocK,Win,贫农,Z
+DDR[Pro],Win,贫农,P
 
 Game ID,5
-File Name,"205019,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,20:38:34
-Duration,11:24
-Winner,农民
+File Name,"205102,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,20:31:16
+Duration,19:14
+Winner,地主
 Player Info:
 Name,Result,Role,Race
-mosuo,Lose,地主,P
-GGrush_Doudizhu,Lose,地主,T
-paijipao,Lose,地主,Z
-wohaopa,Win,富农,Z
-lansoov,Win,贫农,P
-SupeRocK,Win,贫农,T
-feifeiht,Win,贫农,P
-DDR[Pro],Win,贫农,P
+Kid,Win,地主,P
+LeiLei,Win,地主,T
+jaystar,Win,地主,P
+520kill,Lose,富农,P
+DDR[Pro],Lose,贫农,P
+SupeRocK,Lose,贫农,Z
+lansoov,Lose,贫农,T
+GGrush_Doudizhu,Lose,贫农,T
 
 Game ID,6
-File Name,"210755,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,20:52:03
-Duration,13:11
+File Name,"210044,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,20:54:37
+Duration,5:50
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-feifeiht,Lose,地主,Z
-paijipao,Lose,地主,Z
-DDR[Pro],Lose,地主,P
-lansoov,Win,富农,T
-SupeRocK,Win,贫农,T
-lxllll,Win,贫农,T
-mosuo,Win,贫农,P
-GGrush_Doudizhu,Win,贫农,P
+Kid,Lose,地主,P
+YY_go06,Lose,地主,T
+jaystar,Lose,地主,P
+GGrush_Doudizhu,Win,富农,P
+520kill,Win,贫农,T
+DDR[Pro],Win,贫农,P
+lansoov,Win,贫农,P
+SupeRocK,Win,贫农,Z
 
 Game ID,7
-File Name,"213616,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,21:10:04
-Duration,25:36
+File Name,"211212,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,21:02:06
+Duration,9:48
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-44ikljli,Lose,地主,T
-DDR[Pro],Lose,地主,P
-paijipao,Lose,地主,T
-GGrush_Doudizhu,Win,富农,T
+YY_go06,Lose,地主,P
+Kid,Lose,地主,P
+jaystar,Lose,地主,P
+GGrush_Doudizhu,Win,富农,P
+520kill,Win,贫农,T
+lansoov,Win,贫农,P
+DDR[Pro],Win,贫农,P
 SupeRocK,Win,贫农,T
-feifeiht,Win,贫农,P
-lansoov,Win,贫农,Z
-lxllll,Win,贫农,Z
 
 Game ID,8
-File Name,"215550,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-05-21,21:37:42
-Duration,17:35
+File Name,"214019,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,21:15:06
+Duration,24:52
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-paijipao,Lose,地主,T
-feifeiht,Lose,地主,P
-GGrush_Doudizhu,Lose,地主,Z
-9527mog,Win,富农,P
-DDR[Pro],Win,贫农,P
-mosuo,Win,贫农,P
-lxllll,Win,贫农,Z
+Kid,Lose,地主,T
+YY_go06,Lose,地主,P
+jaystar,Lose,地主,P
+GGrush_Doudizhu,Win,富农,Z
+IKILllIII,Win,贫农,P
+lansoov,Win,贫农,P
+44ikljli,Win,贫农,T
+SupeRocK,Win,贫农,Z
+
+Game ID,9
+File Name,"220114,斗地主Doudizhu 4.43.rep"
+Date,2025-05-22,21:42:41
+Duration,18:15
+Winner,农民
+Player Info:
+Name,Result,Role,Race
+YY_go06,Lose,地主,P
+Kid,Lose,地主,Z
+jaystar,Lose,地主,P
+GGrush_Doudizhu,Win,富农,P
+lansoov,Win,贫农,P
 SupeRocK,Win,贫农,T
+SC==G0D~,Win,贫农,Z
+44ikljli,Win,贫农,T
 
