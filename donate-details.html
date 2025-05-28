@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赞助明细 - GGrush | 星际斗地主</title>
+    <style>
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --text-light: #F8F9FA;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #444;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+        }
+
+        header { /* Simple header for this page */
+            background: var(--gradient-bg);
+            color: var(--text-light);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .container {
+            max-width: 1000px; /* Wider for table */
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .back-link:hover {
+            background-color: #E55353; /* Darker accent */
+        }
+
+        #csv-table-container {
+            overflow-x: auto; /* Allow horizontal scrolling for table on small screens */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 12px; /* Increased padding */
+            text-align: left;
+            vertical-align: middle; /* Align content vertically in cells */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: 600;
+            position: sticky; /* Make header sticky if table scrolls vertically */
+            top: 0; /* Required for sticky */
+            z-index: 1; /* Ensure header is above content */
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            th, td {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+             /* Force table to not be like tables anymore */
+            #csv-table-container.responsive-table table,
+            #csv-table-container.responsive-table thead,
+            #csv-table-container.responsive-table tbody,
+            #csv-table-container.responsive-table th,
+            #csv-table-container.responsive-table td,
+            #csv-table-container.responsive-table tr {
+                display: block;
+            }
+
+            /* Hide table headers (but not display: none;, for accessibility) */
+            #csv-table-container.responsive-table thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            #csv-table-container.responsive-table tr { border: 1px solid #ccc; margin-bottom: 0.5rem;}
+
+            #csv-table-container.responsive-table td {
+                /* Behave  like a "row" */
+                border: none;
+                border-bottom: 1px solid #eee;
+                position: relative;
+                padding-left: 50%;
+                white-space: normal; /* Allow text wrapping */
+                text-align: right; /* Align cell content to the right */
+            }
+
+            #csv-table-container.responsive-table td:before {
+                /* Now like a table header */
+                position: absolute;
+                /* Top/left values mimic padding */
+                top: 6px;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                content: attr(data-label); /* Use data-label attribute for header text */
+                font-weight: bold;
+                text-align: left; /* Align pseudo-header to the left */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>星际斗地主DSL联赛</h2>
+    </header>
+
+    <div class="container">
+        <h1>赞助明细</h1>
+        <a href="index.html" class="back-link">« 返回首页</a>
+        <p>以下是自2025年5月6日DSL联赛系统建立以来的详细赞助记录。感谢每一位支持者！</p>
+        <div id="csv-table-container">
+            <p>正在加载赞助数据...</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Copyright © <span id="yearRangeDetails"></span> 斗地主作者GGrush 保留所有权利</p>
+    </footer>
+
+    <script>
+        // Auto-update copyright year
+        const startYearDetails = 2025;
+        const currentYearDetails = new Date().getFullYear();
+        const yearRangeElDetails = document.getElementById('yearRangeDetails');
+        if (yearRangeElDetails) {
+            yearRangeElDetails.textContent = 
+                startYearDetails === currentYearDetails ? startYearDetails.toString() : `${startYearDetails}-${currentYearDetails}`;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const csvFilePath = 'sponsor/details/donate_list.csv'; // Relative path from root
+            const tableContainer = document.getElementById('csv-table-container');
+
+            fetch(csvFilePath)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status} while fetching ${csvFilePath}`);
+                    }
+                    return response.text();
+                })
+                .then(csvText => {
+                    const { headers, data } = parseCSV(csvText);
+                    renderTable(headers, data, tableContainer);
+                    // Add responsive class if needed after table is rendered
+                    if (window.innerWidth < 768) {
+                        tableContainer.classList.add('responsive-table');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading or parsing CSV:', error);
+                    tableContainer.innerHTML = `<p style="color: red;">抱歉，无法加载赞助明细数据。错误信息: ${error.message}</p>`;
+                });
+        });
+
+        function parseCSV(text) {
+            // Trim whitespace from the text, especially at the end, to avoid empty last line issues
+            const lines = text.trim().split('\\n'); 
+            const headers = lines[0].split(',').map(header => header.trim());
+            const dataRows = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) { // Process only non-empty lines
+                    // A more robust way to split CSV, handling commas within quoted fields
+                    const values = [];
+                    let currentVal = '';
+                    let inQuotes = false;
+                    for (let char of line) {
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            values.push(currentVal.trim());
+                            currentVal = '';
+                        } else {
+                            currentVal += char;
+                        }
+                    }
+                    values.push(currentVal.trim()); // Add the last value
+                    dataRows.push(values);
+                }
+            }
+            return { headers, data: dataRows };
+        }
+
+        function renderTable(headers, data, container) {
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Create table header row
+            const headerRow = document.createElement('tr');
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create table data rows
+            data.forEach(rowDataArray => {
+                const tr = document.createElement('tr');
+                rowDataArray.forEach((cellData, index) => {
+                    const td = document.createElement('td');
+                    td.textContent = cellData;
+                    td.setAttribute('data-label', headers[index]); // For responsive display
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            container.innerHTML = ''; // Clear "Loading..." message
+            container.appendChild(table);
+        }
+
+        // Optional: Re-check responsive class on window resize
+        window.addEventListener('resize', () => {
+            const tableContainer = document.getElementById('csv-table-container');
+            if (tableContainer.querySelector('table')) { // Only if table exists
+                 if (window.innerWidth < 768) {
+                    tableContainer.classList.add('responsive-table');
+                } else {
+                    tableContainer.classList.remove('responsive-table');
+                }
+            }
+        });
+
+    </script>
+
+</body>
+</html>
