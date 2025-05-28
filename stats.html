@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数据中心 | GGrush 星际斗地主</title>
-    <!-- MODIFIED: Added defer attribute -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/papaparse/5.3.2/papaparse.min.js" defer></script>
     <style>
         :root {
             --primary-color: #2A2A2A;
@@ -14,6 +12,7 @@
             --text-light: #F8F9FA;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
@@ -24,83 +23,249 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            font-size: 16px;
+            font-size: 16px; /* Mobile-first base font size */
         }
+
         header {
             background: var(--gradient-bg);
             color: var(--text-light);
-            padding: 2rem 1rem;
+            padding: 2rem 1rem; /* Adjusted padding for mobile */
             text-align: center;
             box-shadow: var(--shadow-sm);
             position: relative;
             overflow: hidden;
         }
+
         header::after {
             content: '';
             position: absolute;
-            bottom: -30px;
+            bottom: -30px; /* Adjusted for mobile */
             left: -10%;
             right: -10%;
-            height: 60px;
+            height: 60px; /* Adjusted for mobile */
             background: #fff;
             transform: rotate(-3deg);
             z-index: 1;
         }
-        #statsNav { margin: 1.5rem auto; max-width: 900px; width: 95%; }
-        #statsNav ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr; gap: 0.8rem; justify-content: center; }
-        #statsNav li { text-align: center; }
-        #statsNav a { display: block; padding: 0.8rem 1rem; background: white; color: var(--primary-color); text-decoration: none; border-radius: 30px; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.08); border: 2px solid transparent; }
-        #statsNav a:hover, #statsNav a:focus { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); background: var(--accent-color); color: white; }
-        .container { max-width: 900px; margin: 1rem; padding: 1.5rem; background: white; border-radius: 10px; box-shadow: var(--shadow-sm); position: relative; z-index: 2; animation: fadeIn 0.6s ease-out; }
-        h1 { font-size: 1.8rem; margin-bottom: 0.5rem; letter-spacing: -0.5px; animation: slideDown 0.8s ease; }
-        header p { font-size: 0.9rem; margin-top: 0.3rem; }
-        h2 { color: var(--accent-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 0.4rem; margin-top: 0; margin-bottom: 1rem; text-align: center; font-size: 1.5rem; }
-        .query-form { margin-top: 2rem; padding: 1.5rem; background-color: #f9f9f9; border-radius: 8px; border: 1px solid #eee; }
-        .query-form .form-group { margin-bottom: 1rem; }
-        .query-form label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        .query-form input[type="text"], .query-form select { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 0.95rem; }
-        .query-form button { padding: 0.8rem 1.5rem; background-color: var(--accent-color); color: white; border: none; border-radius: 30px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background-color 0.3s ease; display: block; width: 100%; margin-top: 1rem; }
-        .query-form button:hover { background-color: #e05252; }
-        #queryResults { margin-top: 2rem; padding: 1rem; border-top: 1px solid #eee; min-height: 50px; /* Ensure it's visible even when empty initially */ }
-        #queryResults h3 { color: var(--primary-color); margin-top: 1.5rem; margin-bottom: 0.8rem; font-size: 1.3rem; }
-        #queryResults table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 0.9rem; }
-        #queryResults th, #queryResults td { border: 1px solid #ddd; padding: 0.6rem; text-align: left; }
-        #queryResults th { background-color: #f2f2f2; font-weight: 600; }
-        #queryResults .highlight { font-weight: bold; color: var(--accent-color); }
-        #queryResults .win-rate-good { color: green; }
-        #queryResults .win-rate-bad { color: red; }
-        .container p.info-text { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; }
-        footer { margin-top: auto; background: var(--primary-color); color: var(--text-light); padding: 1.5rem 1rem; text-align: center; font-size: 0.85rem; }
-        .wechat-contact .wechat-id { font-weight: bold; color: var(--accent-color); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .button-container { margin-bottom: 1rem; text-align: center; }
-        .back-link { display: inline-block; padding: 0.7rem 1.2rem; background: var(--primary-color); color: white; border-radius: 30px; text-decoration: none; transition: all 0.3s ease; font-weight: 600; font-size: 0.9rem; width: auto; max-width: 90%; box-sizing: border-box; }
-        .back-link:hover, .back-link:focus { background: #3a3a3a; transform: scale(1.03); }
+        
+        /* Navigation buttons for stats */
+        #statsNav {
+            margin: 1.5rem auto; /* Mobile margin */
+            max-width: 900px;
+            width: 95%; /* Mobile width */
+        }
+
+        #statsNav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile: single column */
+            gap: 0.8rem; /* Mobile gap */
+            justify-content: center;
+        }
+
+        #statsNav li {
+            text-align: center;
+        }
+
+        #statsNav a {
+            display: block; /* Mobile: buttons take full width of their grid cell */
+            padding: 0.8rem 1rem; /* Mobile padding */
+            background: white;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 30px; /* Mobile border-radius */
+            font-weight: 600;
+            font-size: 0.95rem; /* Mobile font size */
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+
+        #statsNav a:hover, #statsNav a:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 1rem; /* Mobile margin */
+            padding: 1.5rem; /* Mobile padding */
+            background: white;
+            border-radius: 10px; /* Mobile border-radius */
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        h1 { /* Header title "数据统计导航" */
+            font-size: 1.8rem; /* Mobile H1 size */
+            margin-bottom: 0.5rem; /* Mobile margin */
+            letter-spacing: -0.5px;
+            animation: slideDown 0.8s ease;
+        }
+
+        header p { /* Subtitle in header */
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        h2 { /* Section title "选择排行榜" */
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color); /* Mobile border */
+            padding-bottom: 0.4rem;
+            margin-top: 0; /* Adjusted as back-link has margin-bottom */
+            margin-bottom: 1rem; /* Mobile margin */
+            text-align: center;
+            font-size: 1.5rem; /* Mobile H2 size */
+        }
+
+        .container p.info-text { /* Specific class for the instruction text */
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem; /* Mobile font size */
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1.5rem 1rem; /* Mobile padding */
+            text-align: center;
+            font-size: 0.85rem; /* Mobile font size */
+        }
+        
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); } /* Adjusted for mobile */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); } /* Adjusted for mobile */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Back to home button */
+        .button-container {
+            margin-bottom: 1rem; /* Mobile margin */
+            text-align: center; /* Center the button on mobile */
+        }
+        
+        .back-link {
+            display: inline-block; /* Allows centering via text-align on parent */
+            padding: 0.7rem 1.2rem; /* Mobile padding */
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem; /* Mobile font size */
+            width: auto; /* Default, will be centered */
+            max-width: 90%; /* Prevent very long button on small screens if text is long */
+            box-sizing: border-box;
+        }
+
+        .back-link:hover, .back-link:focus {
+            background: #3a3a3a;
+            transform: scale(1.03); /* Slight scale instead of translate for mobile */
+        }
+
+        /* --- Desktop Styles (Tablet and Desktop) --- */
         @media (min-width: 768px) {
-            body { font-size: 17px; }
-            header { padding: 2.5rem 1rem; }
-            header::after { bottom: -50px; height: 100px; }
-            #statsNav { margin: 2rem auto; width: 90%; }
-            #statsNav ul { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-            #statsNav a { display: inline-block; padding: 1rem 2rem; border-radius: 50px; font-size: 1rem; box-shadow: 0 3px 15px rgba(0,0,0,0.1); }
-            #statsNav a:hover, #statsNav a:focus { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.15); }
-            .container { margin: 2rem auto; padding: 2.5rem; border-radius: 15px; }
-            h1 { font-size: 2.2rem; margin-bottom: 0.8rem; }
-            header p { font-size: 1rem; margin-top: 0.5rem; }
-            h2 { border-bottom-width: 3px; padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-size: 1.8rem; }
-            .query-form { padding: 2rem; }
-            .query-form .form-group { display: flex; align-items: center; margin-bottom: 1.2rem; }
-            .query-form .form-group label { width: 100px; margin-bottom: 0; margin-right: 1rem; text-align: right;}
-            .query-form input[type="text"], .query-form select { width: calc(100% - 100px - 1rem); font-size: 1rem; }
-            .query-form button { width: auto; display: inline-block; padding: 0.8rem 2rem; }
-            #queryResults table { font-size: 1rem; }
-            #queryResults th, #queryResults td { padding: 0.8rem; }
-            .container p.info-text { margin-top: 2rem; font-size: 1rem; }
-            footer { padding: 2rem; font-size: 0.9rem; }
-            .button-container { text-align: left; margin-bottom: 1.5rem; }
-            .back-link { display: inline-flex; align-items: center; padding: 0.8rem 1.5rem; font-size: 1rem; max-width: none; }
-            .back-link:hover, .back-link:focus { transform: translateX(-5px); }
+            body {
+                font-size: 17px; /* Desktop base font size */
+            }
+
+            header {
+                padding: 2.5rem 1rem; /* Desktop padding (as originally set for this page) */
+            }
+
+            header::after {
+                bottom: -50px; /* Desktop */
+                height: 100px; /* Desktop */
+            }
+            
+            #statsNav {
+                margin: 2rem auto; /* Desktop margin */
+                width: 90%; /* Desktop width */
+            }
+
+            #statsNav ul {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Desktop: auto-fit columns */
+                gap: 1rem; /* Desktop gap */
+            }
+
+            #statsNav a {
+                display: inline-block; /* Desktop: buttons size to content */
+                padding: 1rem 2rem; /* Desktop padding */
+                border-radius: 50px;
+                font-size: 1rem; /* Desktop font size */
+                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            }
+
+            #statsNav a:hover, #statsNav a:focus {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            }
+
+            .container {
+                margin: 2rem auto; /* Desktop margin */
+                padding: 2.5rem; /* Desktop padding */
+                border-radius: 15px;
+            }
+
+            h1 { /* Header title "数据统计导航" */
+                font-size: 2.2rem; /* Desktop H1 size (as originally set) */
+                margin-bottom: 0.8rem;
+            }
+            
+            header p { /* Subtitle in header */
+                font-size: 1rem;
+                margin-top: 0.5rem;
+            }
+
+            h2 { /* Section title "选择排行榜" */
+                border-bottom-width: 3px; /* Desktop border */
+                padding-bottom: 0.5rem;
+                margin-bottom: 1.5rem; /* Desktop margin */
+                font-size: 1.8rem; /* Desktop H2 size */
+            }
+
+            .container p.info-text {
+                margin-top: 2rem;
+                font-size: 1rem; /* Desktop font size */
+            }
+
+            footer {
+                padding: 2rem; /* Desktop padding */
+                font-size: 0.9rem; /* Desktop font size */
+            }
+
+            .button-container {
+                text-align: left; /* Align button to the left on desktop */
+                margin-bottom: 1.5rem; /* Desktop margin */
+            }
+
+            .back-link {
+                display: inline-flex; /* Align arrow and text nicely */
+                align-items: center;
+                padding: 0.8rem 1.5rem; /* Desktop padding */
+                font-size: 1rem; /* Desktop font size */
+                max-width: none;
+            }
+            .back-link:hover, .back-link:focus {
+                 transform: translateX(-5px); /* Desktop hover effect */
+            }
         }
     </style>
 </head>
@@ -108,7 +273,7 @@
 
     <header>
         <h1>数据统计导航</h1>
-        <p>选择你想了解的排行榜或进行自定义查询</p>
+        <p>选择你想了解的排行榜</p>
     </header>
 
     <div class="container">
@@ -117,8 +282,9 @@
         </div>
 
         <h2>选择排行榜</h2>
+        
         <nav id="statsNav">
-             <ul>
+            <ul>
                 <li><a href="all">📊 全角色总览</a></li>
                 <li><a href="dizhu">👑 地主排行榜</a></li>
                 <li><a href="nongmin">🧑‍🌾 农民排行榜</a></li>
@@ -128,37 +294,7 @@
             </ul>
         </nav>
         
-        <div class="query-form">
-            <h2>自定义查询</h2>
-            <div class="form-group">
-                <label for="playerName">玩家名称:</label>
-                <input type="text" id="playerName" placeholder="输入完整或部分玩家ID (可选)">
-            </div>
-            <div class="form-group">
-                <label for="roleSelect">选择角色:</label>
-                <select id="roleSelect">
-                    <option value="all">所有角色</option>
-                    <option value="地主">地主</option>
-                    <option value="农民">农民 (富农+贫农)</option>
-                    <option value="富农">富农</option>
-                    <option value="贫农">贫农</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="raceSelect">选择种族:</label>
-                <select id="raceSelect">
-                    <option value="all">所有种族</option>
-                    <option value="P">Protoss (P)</option>
-                    <option value="T">Terran (T)</option>
-                    <option value="Z">Zerg (Z)</option>
-                </select>
-            </div>
-            <button id="queryButton">🔍 查询数据</button>
-        </div>
-
-        <div id="queryResults">
-            <p class="info-text">请输入查询条件并点击“查询数据”按钮查看结果。</p>
-        </div>
+        <p class="info-text">请点击上方任一按钮查看详细的统计数据。</p>
     </div>
 
     <footer>
@@ -169,322 +305,16 @@
     </footer>
 
     <script>
-        console.log("Script execution started."); 
-
+        // 自动更新年份
         const startYear = 2025;
         const currentYear = new Date().getFullYear();
         const yearRangeEl = document.getElementById('yearRange');
-        if (yearRangeEl) {
-            yearRangeEl.textContent = startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
-        }
-
-        let allGameData = []; 
-        const csvFilePath = 'data/all_data.csv'; 
-
-        function calculatePlayerStats(records) {
-            let wins = 0;
-            let losses = 0;
-            records.forEach(record => {
-                if (parseInt(record.Won) === 1) {
-                    wins++;
-                } else {
-                    losses++;
-                }
-            });
-            const totalGames = wins + losses;
-            const winRate = totalGames > 0 ? (wins / totalGames * 100).toFixed(2) : 0;
-            return { wins, losses, totalGames, winRate };
-        }
         
-        function formatWinRate(winRate) {
-            const rate = parseFloat(winRate);
-            if (rate > 50) return `<span class="win-rate-good">${winRate}%</span>`;
-            if (rate < 50 && rate > 0) return `<span class="win-rate-bad">${winRate}%</span>`;
-            return `${winRate}%`;
+        if (yearRangeEl) {
+            yearRangeEl.textContent = 
+                startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
         }
-
-        async function loadData() {
-            console.log("loadData called. Current allGameData length:", allGameData.length);
-            if (typeof Papa === 'undefined') { // Explicitly check if Papa is loaded
-                console.error("PapaParse library (Papa object) is not defined. Make sure the script is loaded correctly.");
-                document.getElementById('queryResults').innerHTML = `<p style="color:red;">错误：关键的数据解析库 (PapaParse) 未能加载。请检查网络连接或浏览器扩展设置，然后刷新页面重试。</p>`;
-                return []; // Return empty to prevent further errors
-            }
-
-            if (allGameData.length > 0) {
-                console.log("Using cached data.");
-                return allGameData;
-            }
-            
-            const resultsDiv = document.getElementById('queryResults');
-
-            try {
-                console.log(`Fetching CSV from: ${csvFilePath}`);
-                const response = await fetch(csvFilePath);
-                console.log("Fetch response status:", response.status);
-
-                if (!response.ok) {
-                    const errorMsg = `HTTP error! Status: ${response.status}. Failed to load ${csvFilePath}`;
-                    console.error(errorMsg);
-                    resultsDiv.innerHTML = `<p style="color:red;">错误：无法加载数据文件 (${response.statusText || response.status}). 请检查文件路径和服务器状态。</p>`;
-                    return []; // Return empty
-                }
-
-                const csvText = await response.text();
-                if (!csvText.trim()) {
-                    console.warn("CSV file is empty or contains only whitespace.");
-                    resultsDiv.innerHTML = `<p style="color:orange;">警告：数据文件 (${csvFilePath}) 为空或无效。</p>`;
-                    allGameData = []; 
-                    return allGameData;
-                }
-                console.log("CSV text loaded, length:", csvText.length);
-
-                return new Promise((resolve, reject) => { // Keep reject for Papa.parse errors
-                    Papa.parse(csvText, {
-                        header: true,
-                        skipEmptyLines: true,
-                        dynamicTyping: true, 
-                        complete: (results) => {
-                            console.log("PapaParse complete. Rows parsed:", results.data.length);
-                            if (results.errors.length > 0) {
-                                console.warn("PapaParse encountered errors:", results.errors);
-                            }
-                            allGameData = results.data;
-                            resolve(allGameData);
-                        },
-                        error: (error) => {
-                            console.error("PapaParse Error:", error);
-                            resultsDiv.innerHTML = `<p style="color:red;">错误：解析数据文件时发生错误。文件格式可能不正确。</p>`;
-                            reject(error); 
-                        }
-                    });
-                });
-            } catch (error) {
-                console.error("Error in loadData function (outside Papa.parse):", error);
-                if (!resultsDiv.innerHTML.includes('错误')) {
-                     resultsDiv.innerHTML = `<p style="color:red;">错误：加载或解析数据时发生未知问题。详情请查看控制台。</p>`;
-                }
-                allGameData = []; 
-                return []; 
-            }
-        }
-
-        const queryButton = document.getElementById('queryButton');
-        if (queryButton) {
-            queryButton.addEventListener('click', async () => {
-                console.log("Query button clicked.");
-                const resultsDiv = document.getElementById('queryResults');
-                resultsDiv.innerHTML = '<p>处理中...</p>'; 
-
-                let currentData;
-                try {
-                    currentData = await loadData();
-                } catch (errorFromLoadData) { 
-                    // This catch is mainly for if the Promise from Papa.parse is rejected
-                    console.error("Error returned from loadData promise (likely PapaParse error):", errorFromLoadData);
-                    // Error message should have already been set by loadData/Papa.parse's error callback
-                    if (!resultsDiv.innerHTML.includes('错误')) {
-                         resultsDiv.innerHTML = `<p style="color:red;">数据解析失败，请查看控制台了解详情。</p>`;
-                    }
-                    return; 
-                }
-                
-                console.log("Data received from loadData, length:", currentData ? currentData.length : 'undefined');
-
-                if (!currentData || currentData.length === 0) {
-                    if (resultsDiv.innerHTML.includes('处理中...')) { // Only update if no specific error was set by loadData
-                        resultsDiv.innerHTML = '<p>数据文件已加载，但未找到有效数据记录，或文件为空。</p>';
-                    }
-                    return;
-                }
-
-                const playerNameInput = document.getElementById('playerName').value.trim().toLowerCase();
-                const roleFilter = document.getElementById('roleSelect').value;
-                const raceFilter = document.getElementById('raceSelect').value;
-                console.log("Query params:", { playerNameInput, roleFilter, raceFilter });
-
-                let filteredData = currentData.filter(record => { // Ensure record and its properties exist
-                    let nameMatch = true;
-                    let roleMatch = true;
-                    let raceMatch = true;
-
-                    if (!record || typeof record.PlayerName === 'undefined' || typeof record.Role === 'undefined' || typeof record.Race === 'undefined' || typeof record.Won === 'undefined') {
-                        console.warn("Skipping incomplete record:", record);
-                        return false; // Skip malformed records
-                    }
-
-                    if (playerNameInput) {
-                        nameMatch = record.PlayerName.toLowerCase().includes(playerNameInput);
-                    }
-                    if (roleFilter !== 'all') {
-                        if (roleFilter === '农民') {
-                            roleMatch = record.Role === '富农' || record.Role === '贫农';
-                        } else {
-                            roleMatch = record.Role === roleFilter;
-                        }
-                    }
-                    if (raceFilter !== 'all') {
-                        raceMatch = record.Race === raceFilter;
-                    }
-                    return nameMatch && roleMatch && raceMatch;
-                });
-                console.log("Filtered data length:", filteredData.length);
-
-                if (filteredData.length === 0) {
-                    resultsDiv.innerHTML = '<p>没有找到符合当前查询条件的记录。</p>';
-                    return;
-                }
-
-                let htmlResult = '';
-                // Scenario 1: PlayerName is specified
-                if (playerNameInput) {
-                    // Use currentData to find all records for the player first for accurate total stats
-                    let playerRecordsInitial = currentData.filter(r => r.PlayerName && r.PlayerName.toLowerCase().includes(playerNameInput));
-                    
-                    if (playerRecordsInitial.length === 0) {
-                         resultsDiv.innerHTML = `<p>未找到玩家 <span class="highlight">${document.getElementById('playerName').value.trim()}</span> 的数据。</p>`;
-                         return;
-                    }
-                    
-                    const uniquePlayerNames = [...new Set(playerRecordsInitial.map(r => r.PlayerName))];
-
-                    uniquePlayerNames.forEach(actualPlayerName => {
-                        htmlResult += `<h3>玩家: <span class="highlight">${actualPlayerName}</span> 的统计数据</h3>`;
-                        
-                        // Get all records for this specific actualPlayerName from the original dataset
-                        const specificPlayerRecords = currentData.filter(r => r.PlayerName === actualPlayerName);
-
-                        const totalStats = calculatePlayerStats(specificPlayerRecords);
-                        htmlResult += `<h4>总计</h4>`;
-                        htmlResult += `<p>总场数: ${totalStats.totalGames}, 胜场: ${totalStats.wins}, 负场: ${totalStats.losses}, 胜率: ${formatWinRate(totalStats.winRate)}</p>`;
-
-                        // Apply role/race filters ONLY IF they are selected by the user
-                        if (roleFilter !== 'all' || raceFilter !== 'all') {
-                            let detailedFilteredRecords = specificPlayerRecords; // Start with all records of THIS player
-                            let filterDescription = "";
-
-                            if (roleFilter !== 'all') {
-                                if (roleFilter === '农民') {
-                                    detailedFilteredRecords = detailedFilteredRecords.filter(r => r.Role === '富农' || r.Role === '贫农');
-                                    filterDescription += ` 角色: 农民`;
-                                } else {
-                                    detailedFilteredRecords = detailedFilteredRecords.filter(r => r.Role === roleFilter);
-                                    filterDescription += ` 角色: ${roleFilter}`;
-                                }
-                            }
-                            if (raceFilter !== 'all') {
-                                detailedFilteredRecords = detailedFilteredRecords.filter(r => r.Race === raceFilter);
-                                filterDescription += ` 种族: ${raceFilter}`;
-                            }
-                        
-                            if(detailedFilteredRecords.length > 0) {
-                                const detailedStats = calculatePlayerStats(detailedFilteredRecords);
-                                htmlResult += `<h4>筛选条件: <span class="highlight">${filterDescription.trim()}</span></h4>`;
-                                htmlResult += `<p>场数: ${detailedStats.totalGames}, 胜场: ${detailedStats.wins}, 负场: ${detailedStats.losses}, 胜率: ${formatWinRate(detailedStats.winRate)}</p>`;
-                            } else {
-                                htmlResult += `<h4>筛选条件: <span class="highlight">${filterDescription.trim()}</span></h4>`;
-                                htmlResult += `<p>在此条件下无比赛记录。</p>`;
-                            }
-                        }
-
-
-                        // Show general breakdown by role/race for this player IF NO specific role/race filter was applied by user
-                        if (roleFilter === 'all' && raceFilter === 'all') { 
-                            htmlResult += `<h4>按角色细分:</h4><table><thead><tr><th>角色</th><th>总场数</th><th>胜场</th><th>负场</th><th>胜率</th></tr></thead><tbody>`;
-                            const roles = [...new Set(specificPlayerRecords.map(r => r.Role))].sort();
-                            roles.forEach(role => {
-                                const roleRecords = specificPlayerRecords.filter(r => r.Role === role);
-                                const stats = calculatePlayerStats(roleRecords);
-                                htmlResult += `<tr><td>${role}</td><td>${stats.totalGames}</td><td>${stats.wins}</td><td>${stats.losses}</td><td>${formatWinRate(stats.winRate)}</td></tr>`;
-                            });
-                            htmlResult += `</tbody></table>`;
-
-                            htmlResult += `<h4>按种族细分:</h4><table><thead><tr><th>种族</th><th>总场数</th><th>胜场</th><th>负场</th><th>胜率</th></tr></thead><tbody>`;
-                            const races = [...new Set(specificPlayerRecords.map(r => r.Race))].sort();
-                            races.forEach(race => {
-                                const raceRecords = specificPlayerRecords.filter(r => r.Race === race);
-                                const stats = calculatePlayerStats(raceRecords);
-                                htmlResult += `<tr><td>${race}</td><td>${stats.totalGames}</td><td>${stats.wins}</td><td>${stats.losses}</td><td>${formatWinRate(stats.winRate)}</td></tr>`;
-                            });
-                            htmlResult += `</tbody></table>`;
-                        }
-                    });
-                } 
-                // Scenario 2: No PlayerName, but Role and/or Race specified (uses filteredData which is already filtered by role/race from UI)
-                else if (roleFilter !== 'all' || raceFilter !== 'all') {
-                    let title = "查询结果";
-                    let titleFilters = [];
-                    if (roleFilter !== 'all') titleFilters.push(`角色 <span class="highlight">${document.getElementById('roleSelect').options[document.getElementById('roleSelect').selectedIndex].text}</span>`); // Get text from select
-                    if (raceFilter !== 'all') titleFilters.push(`种族 <span class="highlight">${document.getElementById('raceSelect').options[document.getElementById('raceSelect').selectedIndex].text}</span>`); // Get text from select
-                    
-                    if (titleFilters.length > 0) title = titleFilters.join(", ") + " 的统计";
-
-                    htmlResult += `<h3>${title}</h3>`;
-
-                    const overallSelectionStats = calculatePlayerStats(filteredData); 
-                    htmlResult += `<h4>总览</h4>`;
-                    htmlResult += `<p>总场数: ${overallSelectionStats.totalGames}, 总胜场: ${overallSelectionStats.wins}, 总负场: ${overallSelectionStats.losses}, 平均胜率: ${formatWinRate(overallSelectionStats.winRate)}</p>`;
-                    
-                    const playerSummaries = {};
-                    filteredData.forEach(record => { 
-                        if (!playerSummaries[record.PlayerName]) {
-                            playerSummaries[record.PlayerName] = { wins: 0, losses: 0 };
-                        }
-                        // Ensure Won is a number before comparison
-                        if (parseInt(record.Won) === 1) playerSummaries[record.PlayerName].wins++; 
-                        else playerSummaries[record.PlayerName].losses++;
-                    });
-
-                    const rankedPlayers = Object.entries(playerSummaries).map(([name, playerData]) => {
-                        const totalGames = playerData.wins + playerData.losses;
-                        const winRate = totalGames > 0 ? (playerData.wins / totalGames * 100) : 0;
-                        return { name, wins: playerData.wins, losses: playerData.losses, totalGames, winRate };
-                    });
-
-                    rankedPlayers.sort((a, b) => {
-                        if (b.wins !== a.wins) return b.wins - a.wins;
-                        if (b.winRate !== a.winRate) return b.winRate - a.winRate;
-                        return b.totalGames - a.totalGames;
-                    });
-                    
-                    htmlResult += `<h4>选手排名 (此筛选条件下，按胜场排序)</h4>`;
-                    htmlResult += `<table><thead><tr><th>排名</th><th>玩家名称</th><th>总场数</th><th>胜场</th><th>负场</th><th>胜率</th></tr></thead><tbody>`;
-                    rankedPlayers.slice(0, 30).forEach((player, index) => { 
-                        htmlResult += `<tr><td>${index + 1}</td><td>${player.name}</td><td>${player.totalGames}</td><td>${player.wins}</td><td>${player.losses}</td><td>${formatWinRate(player.winRate.toFixed(2))}</td></tr>`;
-                    });
-                    htmlResult += `</tbody></table>`;
-
-                    if (raceFilter !== 'all' && roleFilter === 'all') {
-                        htmlResult += `<h4>此种族下各角色统计:</h4><table><thead><tr><th>角色</th><th>总场数</th><th>胜场</th><th>负场</th><th>胜率</th></tr></thead><tbody>`;
-                        const rolesInRace = [...new Set(filteredData.map(r => r.Role))].sort();
-                        rolesInRace.forEach(roleName => {
-                            const roleRecordsInRace = filteredData.filter(r => r.Role === roleName);
-                            const stats = calculatePlayerStats(roleRecordsInRace);
-                            htmlResult += `<tr><td>${roleName}</td><td>${stats.totalGames}</td><td>${stats.wins}</td><td>${stats.losses}</td><td>${formatWinRate(stats.winRate)}</td></tr>`;
-                        });
-                        htmlResult += `</tbody></table>`;
-                    }
-                    else if (roleFilter !== 'all' && raceFilter === 'all') {
-                         htmlResult += `<h4>此角色下各种族统计:</h4><table><thead><tr><th>种族</th><th>总场数</th><th>胜场</th><th>负场</th><th>胜率</th></tr></thead><tbody>`;
-                        const racesInRole = [...new Set(filteredData.map(r => r.Race))].sort();
-                        racesInRole.forEach(raceName => {
-                            const raceRecordsInRole = filteredData.filter(r => r.Race === raceName);
-                            const stats = calculatePlayerStats(raceRecordsInRole);
-                            htmlResult += `<tr><td>${raceName}</td><td>${stats.totalGames}</td><td>${stats.wins}</td><td>${stats.losses}</td><td>${formatWinRate(stats.winRate)}</td></tr>`;
-                        });
-                        htmlResult += `</tbody></table>`;
-                    }
-                } 
-                else { // Scenario 3: No specific filters (PlayerName empty, Role='all', Race='all')
-                     htmlResult = '<p>请至少指定一个查询条件 (玩家名称、角色或种族) 以获得更具体的统计信息。</p>';
-                }
-                resultsDiv.innerHTML = htmlResult;
-                console.log("Query processing complete. Results displayed.");
-            });
-        } else {
-            console.error("Query button not found!");
-        }
-        console.log("Script execution finished.");
     </script>
+
 </body>
 </html>
