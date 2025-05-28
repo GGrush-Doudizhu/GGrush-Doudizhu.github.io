@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据中心 | GGrush 星际斗地主</title>
+    <style>
+        :root {
+            --primary-color: #2A2A2A;
+            --accent-color: #FF6B6B;
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            --text-light: #F8F9FA;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #444;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 16px; /* Mobile-first base font size */
+        }
+
+        header {
+            background: var(--gradient-bg);
+            color: var(--text-light);
+            padding: 2rem 1rem; /* Adjusted padding for mobile */
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px; /* Adjusted for mobile */
+            left: -10%;
+            right: -10%;
+            height: 60px; /* Adjusted for mobile */
+            background: #fff;
+            transform: rotate(-3deg);
+            z-index: 1;
+        }
+        
+        /* Navigation buttons for stats */
+        #statsNav {
+            margin: 1.5rem auto; /* Mobile margin */
+            max-width: 900px;
+            width: 95%; /* Mobile width */
+        }
+
+        #statsNav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr; /* Mobile: single column */
+            gap: 0.8rem; /* Mobile gap */
+            justify-content: center;
+        }
+
+        #statsNav li {
+            text-align: center;
+        }
+
+        #statsNav a {
+            display: block; /* Mobile: buttons take full width of their grid cell */
+            padding: 0.8rem 1rem; /* Mobile padding */
+            background: white;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 30px; /* Mobile border-radius */
+            font-weight: 600;
+            font-size: 0.95rem; /* Mobile font size */
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+        }
+
+        #statsNav a:hover, #statsNav a:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 1rem; /* Mobile margin */
+            padding: 1.5rem; /* Mobile padding */
+            background: white;
+            border-radius: 10px; /* Mobile border-radius */
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        h1 { /* Header title "数据统计导航" */
+            font-size: 1.8rem; /* Mobile H1 size */
+            margin-bottom: 0.5rem; /* Mobile margin */
+            letter-spacing: -0.5px;
+            animation: slideDown 0.8s ease;
+        }
+
+        header p { /* Subtitle in header */
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        h2 { /* Section title "选择排行榜" */
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color); /* Mobile border */
+            padding-bottom: 0.4rem;
+            margin-top: 0; /* Adjusted as back-link has margin-bottom */
+            margin-bottom: 1rem; /* Mobile margin */
+            text-align: center;
+            font-size: 1.5rem; /* Mobile H2 size */
+        }
+
+        .container p.info-text { /* Specific class for the instruction text */
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem; /* Mobile font size */
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1.5rem 1rem; /* Mobile padding */
+            text-align: center;
+            font-size: 0.85rem; /* Mobile font size */
+        }
+        
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); } /* Adjusted for mobile */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); } /* Adjusted for mobile */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Back to home button */
+        .button-container {
+            margin-bottom: 1rem; /* Mobile margin */
+            text-align: center; /* Center the button on mobile */
+        }
+        
+        .back-link {
+            display: inline-block; /* Allows centering via text-align on parent */
+            padding: 0.7rem 1.2rem; /* Mobile padding */
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem; /* Mobile font size */
+            width: auto; /* Default, will be centered */
+            max-width: 90%; /* Prevent very long button on small screens if text is long */
+            box-sizing: border-box;
+        }
+
+        .back-link:hover, .back-link:focus {
+            background: #3a3a3a;
+            transform: scale(1.03); /* Slight scale instead of translate for mobile */
+        }
+
+        /* --- Desktop Styles (Tablet and Desktop) --- */
+        @media (min-width: 768px) {
+            body {
+                font-size: 17px; /* Desktop base font size */
+            }
+
+            header {
+                padding: 2.5rem 1rem; /* Desktop padding (as originally set for this page) */
+            }
+
+            header::after {
+                bottom: -50px; /* Desktop */
+                height: 100px; /* Desktop */
+            }
+            
+            #statsNav {
+                margin: 2rem auto; /* Desktop margin */
+                width: 90%; /* Desktop width */
+            }
+
+            #statsNav ul {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Desktop: auto-fit columns */
+                gap: 1rem; /* Desktop gap */
+            }
+
+            #statsNav a {
+                display: inline-block; /* Desktop: buttons size to content */
+                padding: 1rem 2rem; /* Desktop padding */
+                border-radius: 50px;
+                font-size: 1rem; /* Desktop font size */
+                box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            }
+
+            #statsNav a:hover, #statsNav a:focus {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            }
+
+            .container {
+                margin: 2rem auto; /* Desktop margin */
+                padding: 2.5rem; /* Desktop padding */
+                border-radius: 15px;
+            }
+
+            h1 { /* Header title "数据统计导航" */
+                font-size: 2.2rem; /* Desktop H1 size (as originally set) */
+                margin-bottom: 0.8rem;
+            }
+            
+            header p { /* Subtitle in header */
+                font-size: 1rem;
+                margin-top: 0.5rem;
+            }
+
+            h2 { /* Section title "选择排行榜" */
+                border-bottom-width: 3px; /* Desktop border */
+                padding-bottom: 0.5rem;
+                margin-bottom: 1.5rem; /* Desktop margin */
+                font-size: 1.8rem; /* Desktop H2 size */
+            }
+
+            .container p.info-text {
+                margin-top: 2rem;
+                font-size: 1rem; /* Desktop font size */
+            }
+
+            footer {
+                padding: 2rem; /* Desktop padding */
+                font-size: 0.9rem; /* Desktop font size */
+            }
+
+            .button-container {
+                text-align: left; /* Align button to the left on desktop */
+                margin-bottom: 1.5rem; /* Desktop margin */
+            }
+
+            .back-link {
+                display: inline-flex; /* Align arrow and text nicely */
+                align-items: center;
+                padding: 0.8rem 1.5rem; /* Desktop padding */
+                font-size: 1rem; /* Desktop font size */
+                max-width: none;
+            }
+            .back-link:hover, .back-link:focus {
+                 transform: translateX(-5px); /* Desktop hover effect */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>数据统计导航</h1>
+        <p>选择你想了解的排行榜</p>
+    </header>
+
+    <div class="container">
+        <div class="button-container">
+            <a href="index" class="back-link">← 返回主页</a>
+        </div>
+
+        <h2>选择排行榜</h2>
+        
+        <nav id="statsNav">
+            <ul>
+                <li><a href="all">📊 全角色总览</a></li>
+                <li><a href="dizhu">👑 地主排行榜</a></li>
+                <li><a href="nongmin">🧑‍🌾 农民排行榜</a></li>
+                <li><a href="funong">💰 富农排行榜</a></li>
+                <li><a href="pinnong">😥 贫农排行榜</a></li>
+                <li><a href="last-matchday">📜 近一天战报</a></li>
+            </ul>
+        </nav>
+        
+        <p class="info-text">请点击上方任一按钮查看详细的统计数据。</p>
+    </div>
+
+    <footer>
+        <div class="wechat-contact">
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
+        </div>
+        <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
+    </footer>
+
+    <script>
+        // 自动更新年份
+        const startYear = 2025;
+        const currentYear = new Date().getFullYear();
+        const yearRangeEl = document.getElementById('yearRange');
+        
+        if (yearRangeEl) {
+            yearRangeEl.textContent = 
+                startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
+        }
+    </script>
+
+</body>
+</html>
