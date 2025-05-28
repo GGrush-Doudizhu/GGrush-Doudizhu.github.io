@@ -2,21 +2,23 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>赞助明细 - GGrush | 星际斗地主</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=3.0, minimum-scale=0.5">
+    <title>赞助明细 | 星际斗地主</title>
     <style>
         :root {
             --primary-color: #2A2A2A;
             --accent-color: #FF6B6B;
+            --accent-color-rgb: 255, 107, 107;
+            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
             --text-light: #F8F9FA;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --gradient-bg: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --border-light: #e9ecef;
         }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
-            padding: 0;
             background: #f8f9fa;
             color: #444;
             line-height: 1.6;
@@ -26,274 +28,475 @@
             font-size: 16px;
         }
 
-        header { /* Simple header for this page */
+        .main-header {
             background: var(--gradient-bg);
             color: var(--text-light);
-            padding: 1.5rem 1rem;
+            padding: 2rem 1rem;
             text-align: center;
             box-shadow: var(--shadow-sm);
+        }
+        .main-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+        .main-header p {
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
         }
 
         .container {
-            max-width: 1000px; /* Wider for table */
-            margin: 2rem auto;
-            padding: 1.5rem;
+            width: auto;
+            margin: 1rem;
+            padding: 1rem;
             background: white;
             border-radius: 10px;
             box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.6s ease-out;
+            flex-grow: 1; /* Allow container to grow */
         }
 
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 1.5rem;
+        .nav-buttons-container {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .back-link {
-            display: inline-block;
-            margin-bottom: 1.5rem;
-            padding: 0.6rem 1.2rem;
-            background: var(--accent-color);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.2rem;
+            background: var(--primary-color);
             color: white;
+            border-radius: 30px;
             text-decoration: none;
-            border-radius: 20px;
-            font-weight: 500;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-align: center;
+            box-sizing: border-box;
         }
-        .back-link:hover {
-            background-color: #E55353; /* Darker accent */
+        .back-link:hover, .back-link:focus {
+            background: #3a3a3a;
+            transform: scale(1.03);
         }
 
-        #csv-table-container {
-            overflow-x: auto; /* Allow horizontal scrolling for table on small screens */
+        .details-card { /* Renamed from stats-card for clarity */
+            padding: 1rem;
+            margin: 1.5rem 0;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s ease;
+        }
+        .details-card:hover {
+            transform: translateY(-2px);
         }
 
-        table {
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            margin: 1rem 0;
+            width: 100%;
+        }
+
+        table#donateTable {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .sort-hint {
+            color: #666;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+            background: #fff3cd;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 0 0 0.8rem 0;
+            border: 1px solid #ffeeba;
+            font-style: italic;
+        }
+        .sort-hint::before {
+            content: "💡 ";
+            margin-right: 5px;
         }
 
         th, td {
-            border: 1px solid #ddd;
-            padding: 10px 12px; /* Increased padding */
+            padding: 10px 8px;
             text-align: left;
-            vertical-align: middle; /* Align content vertically in cells */
+            border-bottom: 1px solid #eee;
+            font-size: 0.85em;
+            white-space: nowrap;
         }
 
         th {
-            background-color: #f2f2f2;
-            color: #333;
+            background-color: var(--primary-color);
+            color: var(--text-light);
             font-weight: 600;
-            position: sticky; /* Make header sticky if table scrolls vertically */
-            top: 0; /* Required for sticky */
-            z-index: 1; /* Ensure header is above content */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th:hover {
+            background-color: #3a3a3a;
         }
 
-        tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        tr:nth-child(odd) { background-color: #ffffff; }
+        tr:hover { background-color: #f1f1f1; }
 
-        tbody tr:hover {
-            background-color: #f1f1f1;
+        .sort-indicator {
+            display: inline-block;
+            margin-left: 8px;
+            color: var(--accent-color);
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
         }
 
         footer {
-            margin-top: auto;
+            margin-top: auto; /* Pushes footer to bottom */
             background: var(--primary-color);
             color: var(--text-light);
             padding: 1.5rem 1rem;
             text-align: center;
+            line-height: 1.8;
             font-size: 0.85rem;
         }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .container {
-                margin: 1rem;
-                padding: 1rem;
-            }
-            th, td {
-                padding: 8px;
-                font-size: 0.85rem;
-            }
-             /* Force table to not be like tables anymore */
-            #csv-table-container.responsive-table table,
-            #csv-table-container.responsive-table thead,
-            #csv-table-container.responsive-table tbody,
-            #csv-table-container.responsive-table th,
-            #csv-table-container.responsive-table td,
-            #csv-table-container.responsive-table tr {
-                display: block;
-            }
-
-            /* Hide table headers (but not display: none;, for accessibility) */
-            #csv-table-container.responsive-table thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-
-            #csv-table-container.responsive-table tr { border: 1px solid #ccc; margin-bottom: 0.5rem;}
-
-            #csv-table-container.responsive-table td {
-                /* Behave  like a "row" */
-                border: none;
-                border-bottom: 1px solid #eee;
-                position: relative;
-                padding-left: 50%;
-                white-space: normal; /* Allow text wrapping */
-                text-align: right; /* Align cell content to the right */
-            }
-
-            #csv-table-container.responsive-table td:before {
-                /* Now like a table header */
-                position: absolute;
-                /* Top/left values mimic padding */
-                top: 6px;
-                left: 6px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                content: attr(data-label); /* Use data-label attribute for header text */
-                font-weight: bold;
-                text-align: left; /* Align pseudo-header to the left */
-            }
+        .wechat-contact .wechat-id {
+            font-weight: bold;
+            color: var(--accent-color);
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Data highlighting for Amount column */
+        #donateTable td:nth-child(4) { /* Amount is the 4th column (after Seq, Date, Sponsor) */
+            color: #28a745; /* Green for amount, or use var(--accent-color) */
+            font-weight: 500;
+        }
+
+
+        @media (min-width: 768px) {
+            body {
+                font-size: 17px;
+            }
+
+            .main-header {
+                padding: 3rem 1rem;
+            }
+            .main-header h1 { font-size: 2.2rem; }
+            .main-header p { font-size: 1rem; }
+
+            .container {
+                max-width: 1000px;
+                margin: 2rem auto;
+                padding: 2rem;
+                border-radius: 15px;
+            }
+
+            .nav-buttons-container {
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .back-link {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+                width: auto;
+            }
+            .back-link:hover, .back-link:focus {
+                 transform: scale(1.03); /* Removed translateX for consistency */
+            }
+
+            .details-card {
+                padding: 1.5rem;
+                margin: 2rem 0;
+                border-radius: 12px;
+            }
+            .details-card:hover {
+                transform: translateY(-3px);
+            }
+
+            .sort-hint {
+                font-size: 0.9em;
+                padding: 8px 12px;
+                margin-bottom: 1rem;
+            }
+
+            th, td {
+                padding: 14px 16px;
+                font-size: 0.9em;
+            }
+
+            footer {
+                padding: 2rem;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h2>星际斗地主DSL联赛</h2>
+    <header class="main-header">
+        <h1>💰 赞助明细</h1>
+        <p>感谢每一位支持者对DSL联赛的厚爱！</p>
     </header>
 
     <div class="container">
-        <h1>赞助明细</h1>
-        <a href="index.html" class="back-link">« 返回首页</a>
-        <p>以下是自2025年5月6日DSL联赛系统建立以来的详细赞助记录。感谢每一位支持者！</p>
-        <div id="csv-table-container">
-            <p>正在加载赞助数据...</p>
+        <div class="nav-buttons-container">
+            <a href="index.html" class="back-link">返回主页</a>
+        </div>
+
+        <div class="details-card">
+            <div class="table-container">
+                <p class="sort-hint">点击列表头可按该列升序或降序排列。</p>
+                <table id="donateTable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>日期<span class="sort-indicator"></span></th>
+                            <th>赞助者<span class="sort-indicator"></span></th>
+                            <th>金额<span class="sort-indicator"></span></th>
+                            <th>事项<span class="sort-indicator"></span></th>
+                            <th>备注<span class="sort-indicator"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data rows will be dynamically populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>Copyright © <span id="yearRangeDetails"></span> 斗地主作者GGrush 保留所有权利</p>
+        <div class="wechat-contact">
+            📱 加入社区：加微信 <span class="wechat-id">scdou</span><span class="wechat-id">dizhu</span> 进群
+        </div>
+        <p>Copyright © <span id="yearRange"></span> 斗地主作者GGrush 保留所有权利</p>
     </footer>
 
     <script>
-        // Auto-update copyright year
-        const startYearDetails = 2025;
-        const currentYearDetails = new Date().getFullYear();
-        const yearRangeElDetails = document.getElementById('yearRangeDetails');
-        if (yearRangeElDetails) {
-            yearRangeElDetails.textContent = 
-                startYearDetails === currentYearDetails ? startYearDetails.toString() : `${startYearDetails}-${currentYearDetails}`;
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const csvFilePath = 'sponsor/details/donate_list.csv'; // Relative path from root
-            const tableContainer = document.getElementById('csv-table-container');
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Configuration ---
+            const CSV_FILE_PATH = 'sponsor/details/donate_list.csv'; // Relative path to your CSV
+            const TABLE_ID = 'donateTable';
+            const TABLE_BODY_ID = 'tableBody';
+            const TABLE_HEADERS_SELECTOR = `#${TABLE_ID} th`;
 
-            fetch(csvFilePath)
-                .then(response => {
+            // --- DOM Elements ---
+            const tableElement = document.getElementById(TABLE_ID);
+            const tableBody = document.getElementById(TABLE_BODY_ID);
+            const tableHeaders = document.querySelectorAll(TABLE_HEADERS_SELECTOR);
+
+            // --- State Variables ---
+            let currentSort = {
+                columnDataIndex: 0, // Default sort by Date (index 0 of sortKeys)
+                direction: 'desc'   // Default descending (newest first)
+            };
+            let rawData = [];
+
+            // --- Initialization ---
+            function initialize() {
+                updateCopyrightYear();
+                loadAndProcessData();
+                setupEventListeners();
+                window.addEventListener('resize', adjustTableScaleForMobile);
+            }
+
+            function updateCopyrightYear() {
+                const startYear = 2025; // As per your index.html
+                const currentYear = new Date().getFullYear();
+                const yearRangeEl = document.getElementById('yearRange');
+
+                if (yearRangeEl) {
+                    yearRangeEl.textContent =
+                        startYear === currentYear ? startYear.toString() : `${startYear}-${currentYear}`;
+                }
+            }
+
+            function adjustTableScaleForMobile() {
+                if (!tableElement) return;
+                const tableContainer = tableElement.closest('.table-container');
+                if (!tableContainer) return;
+
+                if (window.innerWidth < 768) {
+                    tableElement.style.transform = 'none'; // Reset first
+                    const tableNaturalWidth = tableElement.scrollWidth;
+                    const containerVisibleWidth = tableContainer.clientWidth;
+
+                    if (tableNaturalWidth > containerVisibleWidth) {
+                        const scale = containerVisibleWidth / tableNaturalWidth;
+                        tableElement.style.transform = `scale(${scale})`;
+                        tableElement.style.transformOrigin = 'top left';
+                    } else {
+                        tableElement.style.transform = 'none';
+                    }
+                } else {
+                    tableElement.style.transform = 'none';
+                }
+            }
+
+            async function loadAndProcessData() {
+                if (!tableBody) {
+                    console.error(`Table body with ID '${TABLE_BODY_ID}' not found.`);
+                    return;
+                }
+                try {
+                    const response = await fetch(CSV_FILE_PATH);
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status} while fetching ${csvFilePath}`);
+                        throw new Error(`HTTP error! status: ${response.status} while fetching ${CSV_FILE_PATH}`);
                     }
-                    return response.text();
-                })
-                .then(csvText => {
-                    const { headers, data } = parseCSV(csvText);
-                    renderTable(headers, data, tableContainer);
-                    // Add responsive class if needed after table is rendered
-                    if (window.innerWidth < 768) {
-                        tableContainer.classList.add('responsive-table');
+                    const csvText = await response.text();
+                    parseCSV(csvText);
+                    renderTable(); // Initial render with default sort
+                } catch (error) {
+                    console.error('Failed to load or process data:', error);
+                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
+                }
+            }
+
+            function parseCSV(csvText) {
+                const cleanCSV = csvText.replace(/^\uFEFF/, ''); // Remove BOM if present
+                const lines = cleanCSV.split(/\r?\n/).filter(line => line.trim() !== '');
+
+                if (lines.length < 2) { // Needs header + at least one data line
+                    rawData = [];
+                    return;
+                }
+                const dataLines = lines.slice(1); // Skip header row
+
+                rawData = dataLines.map(line => {
+                    const values = line.split(',');
+                    // Expecting: 日期,赞助者,金额,事项,备注
+                    if (values.length >= 4) { // Minimum required fields: Date, Sponsor, Amount, Item
+                        return {
+                            date: values[0].trim(),
+                            sponsor: values[1].trim(),
+                            amount: parseFloat(values[2]) || 0,
+                            item: values[3].trim(),
+                            notes: values[4] ? values[4].trim() : '' // Notes can be empty
+                        };
                     }
-                })
-                .catch(error => {
-                    console.error('Error loading or parsing CSV:', error);
-                    tableContainer.innerHTML = `<p style="color: red;">抱歉，无法加载赞助明细数据。错误信息: ${error.message}</p>`;
+                    console.warn("Skipping malformed CSV line:", line);
+                    return null;
+                }).filter(item => item !== null);
+            }
+
+            function renderTable() {
+                if (!tableBody) return;
+                tableBody.innerHTML = '';
+
+                if (rawData.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center;">暂无赞助数据</td></tr>`;
+                    adjustTableScaleForMobile();
+                    return;
+                }
+
+                sortData();
+
+                rawData.forEach((dataRow, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${dataRow.date}</td>
+                        <td>${dataRow.sponsor}</td>
+                        <td>${dataRow.amount.toFixed(2)}</td>
+                        <td>${dataRow.item}</td>
+                        <td>${dataRow.notes}</td>
+                    `;
+                    tableBody.appendChild(tr);
                 });
-        });
+                updateSortIndicators();
+                setTimeout(adjustTableScaleForMobile, 0); // Adjust scale after DOM updates
+            }
 
-        function parseCSV(text) {
-            // Trim whitespace from the text, especially at the end, to avoid empty last line issues
-            const lines = text.trim().split('\\n'); 
-            const headers = lines[0].split(',').map(header => header.trim());
-            const dataRows = [];
+            function setupEventListeners() {
+                tableHeaders.forEach((th, headerIndex) => {
+                    // headerIndex 0 is "序号", not sortable by data key.
+                    // Sortable columns start from headerIndex 1 (Date).
+                    // dataColumnIndex maps to sortKeys array (0 for Date, 1 for Sponsor, etc.)
+                    const dataColumnIndex = headerIndex - 1;
+                    if (dataColumnIndex >= 0) { // Make only data columns sortable
+                        th.addEventListener('click', () => handleSort(dataColumnIndex));
+                    }
+                });
+            }
 
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (line) { // Process only non-empty lines
-                    // A more robust way to split CSV, handling commas within quoted fields
-                    const values = [];
-                    let currentVal = '';
-                    let inQuotes = false;
-                    for (let char of line) {
-                        if (char === '"') {
-                            inQuotes = !inQuotes;
-                        } else if (char === ',' && !inQuotes) {
-                            values.push(currentVal.trim());
-                            currentVal = '';
+            function handleSort(dataColumnIndex) {
+                if (currentSort.columnDataIndex === dataColumnIndex) {
+                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort.columnDataIndex = dataColumnIndex;
+                    currentSort.direction = 'desc'; // Default to descending on new column
+                }
+                renderTable();
+            }
+
+            function sortData() {
+                if (currentSort.columnDataIndex === null) return;
+
+                const dataIndex = currentSort.columnDataIndex;
+                const direction = currentSort.direction === 'asc' ? 1 : -1;
+
+                // These keys must match the properties of the objects in rawData
+                const sortKeys = [
+                    'date',     // 0
+                    'sponsor',  // 1
+                    'amount',   // 2
+                    'item',     // 3
+                    'notes'     // 4
+                ];
+
+                const sortKey = sortKeys[dataIndex];
+                if (!sortKey) {
+                    console.warn("Invalid sort key for dataIndex:", dataIndex);
+                    return;
+                }
+
+                rawData.sort((a, b) => {
+                    const valA = a[sortKey];
+                    const valB = b[sortKey];
+
+                    if (typeof valA === 'string' && typeof valB === 'string') {
+                        // For YYYYMMDD date format, string comparison works like numerical
+                        return valA.localeCompare(valB, undefined, {numeric: sortKey === 'date'}) * direction;
+                    } else if (typeof valA === 'number' && typeof valB === 'number') {
+                        return (valA - valB) * direction;
+                    }
+                    // Fallback for mixed types or other types (less ideal)
+                    if (valA < valB) return -1 * direction;
+                    if (valA > valB) return 1 * direction;
+                    return 0;
+                });
+            }
+
+            function updateSortIndicators() {
+                tableHeaders.forEach((th, headerIndex) => {
+                    const indicator = th.querySelector('.sort-indicator');
+                    if (indicator) {
+                        // dataColumnIndex = headerIndex - 1
+                        if (headerIndex -1 === currentSort.columnDataIndex) {
+                            indicator.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
                         } else {
-                            currentVal += char;
+                            indicator.textContent = ''; // Clear for non-active sort columns
                         }
                     }
-                    values.push(currentVal.trim()); // Add the last value
-                    dataRows.push(values);
-                }
-            }
-            return { headers, data: dataRows };
-        }
-
-        function renderTable(headers, data, container) {
-            const table = document.createElement('table');
-            const thead = document.createElement('thead');
-            const tbody = document.createElement('tbody');
-
-            // Create table header row
-            const headerRow = document.createElement('tr');
-            headers.forEach(headerText => {
-                const th = document.createElement('th');
-                th.textContent = headerText;
-                headerRow.appendChild(th);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-
-            // Create table data rows
-            data.forEach(rowDataArray => {
-                const tr = document.createElement('tr');
-                rowDataArray.forEach((cellData, index) => {
-                    const td = document.createElement('td');
-                    td.textContent = cellData;
-                    td.setAttribute('data-label', headers[index]); // For responsive display
-                    tr.appendChild(td);
                 });
-                tbody.appendChild(tr);
-            });
-            table.appendChild(tbody);
-
-            container.innerHTML = ''; // Clear "Loading..." message
-            container.appendChild(table);
-        }
-
-        // Optional: Re-check responsive class on window resize
-        window.addEventListener('resize', () => {
-            const tableContainer = document.getElementById('csv-table-container');
-            if (tableContainer.querySelector('table')) { // Only if table exists
-                 if (window.innerWidth < 768) {
-                    tableContainer.classList.add('responsive-table');
-                } else {
-                    tableContainer.classList.remove('responsive-table');
-                }
             }
+
+            initialize();
         });
-
     </script>
-
 </body>
 </html>
