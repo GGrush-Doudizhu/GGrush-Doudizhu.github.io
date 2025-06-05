@@ -1,224 +1,144 @@
 Game ID,1
-File Name,"194920,斗地主Doudizhu 4.46.rep"
-Date,2025-06-03,19:31:27
-Duration,16:57
-Winner,地主
-Player Info:
-Name,Result,Role,Race
-FoR_TVSPZ,Win,地主,P
-lansoov,Win,地主,T
-FFS-Open-1,Win,地主,P
-ctrl+Q++Q,Lose,富农,P
-FFS-KaKaRu,Lose,贫农,T
-nianqing,Lose,贫农,Z
-Luckyy2023,Lose,贫农,P
-feifeiht,Lose,贫农,P
-
-Game ID,2
-File Name,"195634,斗地主Doudizhu 4.46.rep"
-Date,2025-06-03,19:50:39
-Duration,5:37
+File Name,"195409,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,19:37:16
+Duration,16:21
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-ctrl+Q++Q,Lose,地主,T
-FFS-fly,Lose,地主,P
-nianqing,Lose,地主,P
-feifeiht,Win,富农,P
-FFS-KaKaRu,Win,贫农,Z
-mosuo,Win,贫农,P
-do''do,Win,贫农,T
-lansoov,Win,贫农,Z
-
-Game ID,3
-File Name,"200503,斗地主Doudizhu 4.46.rep"
-Date,2025-06-03,19:57:34
-Duration,6:21
-Winner,地主
-Player Info:
-Name,Result,Role,Race
-FFS-Open-1,Win,地主,P
-feifeiht,Win,地主,Z
-lansoov,Win,地主,T
-nianqing,Lose,富农,P
-FFS-fly,Lose,贫农,P
-FoR_TVSPZ,Lose,贫农,T
-mosuo,Lose,贫农,P
-do''do,Lose,贫农,T
-
-Game ID,4
-File Name,"202529,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-06-03,20:05:51
-Duration,19:22
-Winner,地主
-Player Info:
-Name,Result,Role,Race
-FFS-KaKaRu,Win,地主,Z
-mosuo,Win,地主,P
-dkstarch,Win,地主,Z
-ctrl+Q++Q,Lose,富农,P
-do''do,Lose,贫农,T
-FFS-fly,Lose,贫农,P
-nianqing,Lose,贫农,P
-FoR_TVSPZ,Lose,贫农,P
-
-Game ID,5
-File Name,"203949,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-06-03,20:26:43
-Duration,12:22
-Winner,地主
-Player Info:
-Name,Result,Role,Race
-FoR_TVSPZ,Win,地主,P
-lansoov,Win,地主,Z
-Luckyy2023,Win,地主,P
-mosuo,Lose,富农,P
-Quakextm,Lose,贫农,P
-FFS-fly,Lose,贫农,P
-nianqing,Lose,贫农,T
-do''do,Lose,贫农,T
-
-Game ID,6
-File Name,"204959,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-06-03,20:40:51
-Duration,8:39
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-VGer_Whc,Lose,地主,P
-FFS-KaKaRu,Lose,地主,Z
-nianqing,Lose,地主,Z
-mosuo,Win,富农,P
-FFS-fly,Win,贫农,P
-Luckyy2023,Win,贫农,Z
-do''do,Win,贫农,Z
-ctrl+Q++Q,Win,贫农,P
-
-Game ID,7
-File Name,"210448,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-06-03,20:50:41
-Duration,10:27
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-Luckyy2023,Lose,地主,P
-wuenbin1980,Lose,地主,P
+FoR_TVSPZ,Lose,地主,P
+ReturnToSpring,Lose,地主,T
 FFS-Open-1,Lose,地主,P
-nianqing,Win,富农,P
-VGer_Whc,Win,贫农,P
-lansoov,Win,贫农,Z
-FFS-fly,Win,贫农,P
-do''do,Win,贫农,Z
-
-Game ID,8
-File Name,"212714,斗地主Doudizhu 4.46.rep"
-Date,2025-06-03,21:10:36
-Duration,16:17
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-FFS-fly,Lose,地主,P
-lansoov,Lose,地主,P
-nianqing,Lose,地主,P
-FoR_TVSPZ,Win,富农,P
-mosuo,Win,贫农,P
-spacesys,Win,贫农,T
-wuenbin1980,Win,贫农,P
-digua,Win,贫农,P
-
-Game ID,9
-File Name,"215319,斗地主Doudizhu 4.46.rep"
-Date,2025-06-03,21:28:59
-Duration,21:26
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-FFS-fly,Lose,地主,P
-FF-GBLW,Lose,地主,T
-lansoov,Lose,地主,P
-Luckyy2023,Win,富农,P
-spacesys,Win,贫农,T
-mosuo,Win,贫农,P
-wuenbin1980,Win,贫农,P
-KISS.-_-,Win,贫农,P
-
-Game ID,10
-File Name,"221825,斗地主Doudizhu 8R-0.1.rep"
-Date,2025-06-03,21:59:53
-Duration,17:59
-Winner,农民
-Player Info:
-Name,Result,Role,Race
-haskar,Lose,地主,T
-lxllll,Lose,地主,Z
-dkstarch,Lose,地主,P
-nianqing,Win,富农,T
-mosuo,Win,贫农,P
+GGrush_Doudizhu,Win,富农,Z
+lansoov,Win,贫农,P
 IKILllIII,Win,贫农,P
 FFS-fly,Win,贫农,P
-FFS-9527,Win,贫农,Z
+tuyukoreasex,Win,贫农,P
 
-Game ID,11
-File Name,"223016,斗地主Doudizhu 4.47.rep"
-Date,2025-06-03,22:19:29
-Duration,10:26
+Game ID,2
+File Name,"200944,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,19:56:32
+Duration,12:45
 Winner,地主
 Player Info:
 Name,Result,Role,Race
-lxllll,Win,地主,Z
+FoR_TVSPZ,Win,地主,P
+tuyukoreasex,Win,地主,P
 VGer_Whc,Win,地主,P
-FFS-fly,Win,地主,P
-nianqing,Lose,富农,P
-GOODTIME-NB,Lose,贫农,Z
-FFS-9527,Lose,贫农,Z
-haskar,Lose,贫农,T
-FF-GBLW,Lose,贫农,T
+GGrush_Doudizhu,Lose,富农,T
+FFS-fly,Lose,贫农,P
+IKILllIII,Lose,贫农,P
+ReturnToSpring,Lose,贫农,P
+lansoov,Lose,贫农,Z
 
-Game ID,12
-File Name,"224706,斗地主Doudizhu 4.47.rep"
-Date,2025-06-03,22:31:45
-Duration,15:01
+Game ID,3
+File Name,"202310,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,20:10:28
+Duration,12:15
+Winner,农民
+Player Info:
+Name,Result,Role,Race
+tuyukoreasex,Win,地主,P
+lansoov,Win,地主,P
+IKILllIII,Win,地主,P
+ReturnToSpring,Lose,富农,P
+FoR_TVSPZ,Lose,贫农,P
+VGer_Whc,Lose,贫农,P
+GGrush_Doudizhu,Lose,贫农,T
+FFS-fly,Lose,贫农,P
+
+Game ID,4
+File Name,"205555,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,20:24:13
+Duration,30:49
+Winner,农民
+Player Info:
+Name,Result,Role,Race
+lansoov,Lose,地主,T
+tuyukoreasex,Lose,地主,P
+GGrush_Doudizhu,Lose,地主,P
+FFS-fly,Win,富农,P
+FoR_TVSPZ,Win,贫农,P
+VGer_Whc,Win,贫农,P
+ReturnToSpring,Win,贫农,P
+IKILllIII,Win,贫农,P
+
+Game ID,5
+File Name,"211311,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,20:56:49
+Duration,15:40
 Winner,地主
 Player Info:
 Name,Result,Role,Race
-lxllll,Win,地主,Z
-SC==G0D~,Win,地主,Z
-lansoov,Win,地主,P
-VGer_Whc,Lose,富农,P
-GOODTIME-NB,Lose,贫农,Z
-blackdos,Lose,贫农,T
-dkstarch,Lose,贫农,T
-haskar,Lose,贫农,P
+FoR_TVSPZ,Win,地主,P
+VGer_Whc,Win,地主,P
+ReturnToSpring,Win,地主,P
+lansoov,Lose,富农,P
+GGrush_Doudizhu,Lose,贫农,Z
+FFS-fly,Lose,贫农,P
+IKILllIII,Lose,贫农,P
+tuyukoreasex,Lose,贫农,P
 
-Game ID,13
-File Name,"230550,斗地主Doudizhu 4.47.rep"
-Date,2025-06-03,22:48:01
-Duration,17:31
+Game ID,6
+File Name,"212849,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,21:14:12
+Duration,14:03
+Winner,地主
+Player Info:
+Name,Result,Role,Race
+lansoov,Win,地主,Z
+GGrush_Doudizhu,Win,地主,P
+VGer_Whc,Win,地主,P
+ReturnToSpring,Lose,富农,P
+FFS-fly,Lose,贫农,P
+FoR_TVSPZ,Lose,贫农,P
+tuyukoreasex,Lose,贫农,Z
+IKILllIII,Lose,贫农,P
+
+Game ID,7
+File Name,"214258,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,21:29:50
+Duration,12:44
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-SC==G0D~,Lose,地主,Z
-lansoov,Lose,地主,P
-VGer_Whc,Lose,地主,P
-haskar,Win,富农,P
-nianqing,Win,贫农,P
-blackdos,Win,贫农,T
-dkstarch,Win,贫农,T
-do''do,Win,贫农,Z
+lansoov,Lose,地主,Z
+FFS-fly,Lose,地主,P
+lxllll,Lose,地主,Z
+FoR_TVSPZ,Win,富农,P
+GGrush_Doudizhu,Win,贫农,P
+IKILllIII,Win,贫农,P
+tuyukoreasex,Win,贫农,P
+VGer_Whc,Win,贫农,P
 
-Game ID,14
-File Name,"232733,斗地主Doudizhu 4.47.rep"
-Date,2025-06-03,23:06:56
-Duration,20:18
+Game ID,8
+File Name,"215315,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,21:44:30
+Duration,7:45
 Winner,农民
 Player Info:
 Name,Result,Role,Race
-SC==G0D~,Lose,地主,Z
-lansoov,Lose,地主,P
-Flashback..,Lose,地主,P
+lansoov,Lose,地主,T
+lxllll,Lose,地主,Z
+IKILllIII,Lose,地主,P
+GGrush_Doudizhu,Win,富农,P
+VGer_Whc,Win,贫农,P
+tuyukoreasex,Win,贫农,T
+FFS-fly,Win,贫农,P
+FoR_TVSPZ,Win,贫农,P
+
+Game ID,9
+File Name,"220439,斗地主Doudizhu 8R-0.1.rep"
+Date,2025-06-04,21:53:44
+Duration,10:29
+Winner,农民
+Player Info:
+Name,Result,Role,Race
+lxllll,Lose,地主,Z
+FoR_TVSPZ,Lose,地主,P
+tuyukoreasex,Lose,地主,T
 VGer_Whc,Win,富农,P
-haskar,Win,贫农,T
-do''do,Win,贫农,Z
-dkstarch,Win,贫农,P
-FFS-Open-1,Win,贫农,P
+FFS-fly,Win,贫农,P
+IKILllIII,Win,贫农,P
+lansoov,Win,贫农,P
+GGrush_Doudizhu,Win,贫农,Z
 
