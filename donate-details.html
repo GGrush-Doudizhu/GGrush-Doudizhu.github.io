@@ -376,7 +376,7 @@
                 }
                 const dataLines = lines.slice(1); // Skip header row
 
-                rawData = dataLines.map(line => {
+                rawData = dataLines.map((line, index) => { // Added 'index' for originalIndex
                     const values = line.split(',');
                     // Expecting: 日期,赞助者,金额,事项,备注
                     if (values.length >= 4) { // Minimum required fields: Date, Sponsor, Amount, Item
@@ -385,7 +385,8 @@
                             sponsor: values[1].trim(),
                             amount: parseFloat(values[2]) || 0,
                             item: values[3].trim(),
-                            notes: values[4] ? values[4].trim() : '' // Notes can be empty
+                            notes: values[4] ? values[4].trim() : '', // Notes can be empty
+                            originalIndex: index // Store the original index from dataLines
                         };
                     }
                     console.warn("Skipping malformed CSV line:", line);
@@ -423,9 +424,6 @@
 
             function setupEventListeners() {
                 tableHeaders.forEach((th, headerIndex) => {
-                    // headerIndex 0 is "序号", not sortable by data key.
-                    // Sortable columns start from headerIndex 1 (Date).
-                    // dataColumnIndex maps to sortKeys array (0 for Date, 1 for Sponsor, etc.)
                     const dataColumnIndex = headerIndex - 1;
                     if (dataColumnIndex >= 0) { // Make only data columns sortable
                         th.addEventListener('click', () => handleSort(dataColumnIndex));
@@ -438,16 +436,20 @@
                     currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSort.columnDataIndex = dataColumnIndex;
-                    currentSort.direction = 'desc'; // Default to descending on new column
+                    // When changing column, default to 'desc' for date/amount, 'asc' for text, or just 'desc' always initially.
+                    // For simplicity, let's make it always 'desc' for a new column, or 'asc' if preferred.
+                    // User request: "默认按照日期降序". Other columns could default to 'asc' or 'desc'.
+                    // Current behavior is 'desc' for new column, which is fine.
+                    currentSort.direction = 'desc';
                 }
                 renderTable();
             }
 
             function sortData() {
-                if (currentSort.columnDataIndex === null) return;
-
-                const dataIndex = currentSort.columnDataIndex;
-                const direction = currentSort.direction === 'asc' ? 1 : -1;
+                if (currentSort.columnDataIndex === null || currentSort.columnDataIndex < 0) {
+                    // console.warn("Invalid columnDataIndex for sorting:", currentSort.columnDataIndex);
+                    return; // Should not happen if headerIndex mapping is correct
+                }
 
                 // These keys must match the properties of the objects in rawData
                 const sortKeys = [
@@ -458,26 +460,42 @@
                     'notes'     // 4
                 ];
 
-                const sortKey = sortKeys[dataIndex];
-                if (!sortKey) {
-                    console.warn("Invalid sort key for dataIndex:", dataIndex);
+                const sortKeyProperty = sortKeys[currentSort.columnDataIndex];
+                if (!sortKeyProperty) {
+                    console.warn("Invalid sort key for dataIndex:", currentSort.columnDataIndex);
                     return;
                 }
 
+                const directionMultiplier = currentSort.direction === 'asc' ? 1 : -1;
+
                 rawData.sort((a, b) => {
-                    const valA = a[sortKey];
-                    const valB = b[sortKey];
+                    const valA = a[sortKeyProperty];
+                    const valB = b[sortKeyProperty];
+
+                    let primaryComparison = 0;
 
                     if (typeof valA === 'string' && typeof valB === 'string') {
-                        // For YYYYMMDD date format, string comparison works like numerical
-                        return valA.localeCompare(valB, undefined, {numeric: sortKey === 'date'}) * direction;
+                        primaryComparison = valA.localeCompare(valB, undefined, { numeric: sortKeyProperty === 'date' });
                     } else if (typeof valA === 'number' && typeof valB === 'number') {
-                        return (valA - valB) * direction;
+                        primaryComparison = valA - valB;
+                    } else {
+                        if (valA === null || valA === undefined) primaryComparison = -1; // Treat null/undefined as smaller
+                        else if (valB === null || valB === undefined) primaryComparison = 1;
+                        else if (valA < valB) primaryComparison = -1;
+                        else if (valA > valB) primaryComparison = 1;
                     }
-                    // Fallback for mixed types or other types (less ideal)
-                    if (valA < valB) return -1 * direction;
-                    if (valA > valB) return 1 * direction;
-                    return 0;
+
+                    if (primaryComparison !== 0) {
+                        return primaryComparison * directionMultiplier;
+                    }
+
+                    // --- Secondary Sort (Tie-breaking) ---
+                    if (sortKeyProperty === 'date' && currentSort.direction === 'desc') {
+                        return b.originalIndex - a.originalIndex; // Reverses CSV order for same-day items
+                    }
+                    
+                    // For all other tie cases (e.g., date ascending, or ties on other columns):
+                    return a.originalIndex - b.originalIndex; // Maintains original CSV order for ties
                 });
             }
 
@@ -485,11 +503,11 @@
                 tableHeaders.forEach((th, headerIndex) => {
                     const indicator = th.querySelector('.sort-indicator');
                     if (indicator) {
-                        // dataColumnIndex = headerIndex - 1
-                        if (headerIndex -1 === currentSort.columnDataIndex) {
+                        const dataColumnIndex = headerIndex - 1;
+                        if (dataColumnIndex === currentSort.columnDataIndex && dataColumnIndex >= 0) {
                             indicator.textContent = currentSort.direction === 'asc' ? '▲' : '▼';
                         } else {
-                            indicator.textContent = ''; // Clear for non-active sort columns
+                            indicator.textContent = ''; 
                         }
                     }
                 });
