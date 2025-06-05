@@ -301,7 +301,7 @@
 
             // --- State Variables ---
             let currentSort = {
-                columnDataIndex: 0, // Default sort by Date (index 0 of sortKeys)
+                columnDataIndex: 0, // Default sort by Date (index 0 of sortKeys, which corresponds to '日期')
                 direction: 'desc'   // Default descending (newest first)
             };
             let rawData = [];
@@ -315,7 +315,7 @@
             }
 
             function updateCopyrightYear() {
-                const startYear = 2025; // As per your index.html
+                const startYear = 2025; 
                 const currentYear = new Date().getFullYear();
                 const yearRangeEl = document.getElementById('yearRange');
 
@@ -331,7 +331,7 @@
                 if (!tableContainer) return;
 
                 if (window.innerWidth < 768) {
-                    tableElement.style.transform = 'none'; // Reset first
+                    tableElement.style.transform = 'none'; 
                     const tableNaturalWidth = tableElement.scrollWidth;
                     const containerVisibleWidth = tableContainer.clientWidth;
 
@@ -359,7 +359,7 @@
                     }
                     const csvText = await response.text();
                     parseCSV(csvText);
-                    renderTable(); // Initial render with default sort
+                    renderTable(); 
                 } catch (error) {
                     console.error('Failed to load or process data:', error);
                     tableBody.innerHTML = `<tr><td colspan="${tableHeaders.length || 6}" style="text-align:center; color:red;">数据加载失败: ${error.message}</td></tr>`;
@@ -367,26 +367,42 @@
             }
 
             function parseCSV(csvText) {
-                const cleanCSV = csvText.replace(/^\uFEFF/, ''); // Remove BOM if present
+                const cleanCSV = csvText.replace(/^\uFEFF/, ''); 
                 const lines = cleanCSV.split(/\r?\n/).filter(line => line.trim() !== '');
 
-                if (lines.length < 2) { // Needs header + at least one data line
+                if (lines.length < 2) { 
                     rawData = [];
                     return;
                 }
-                const dataLines = lines.slice(1); // Skip header row
+                const dataLines = lines.slice(1); 
 
-                rawData = dataLines.map((line, index) => { // Added 'index' for originalIndex
+                rawData = dataLines.map((line, index) => {
                     const values = line.split(',');
-                    // Expecting: 日期,赞助者,金额,事项,备注
-                    if (values.length >= 4) { // Minimum required fields: Date, Sponsor, Amount, Item
+                    
+                    if (values.length >= 4) { 
+                        // --- MODIFICATION START: Handle non-numeric amounts ---
+                        const amountStr = values[2] ? values[2].trim() : ''; 
+                        let amountFinalValue;
+                        
+                        if (amountStr === '') { 
+                            amountFinalValue = 0; // Treat empty amount as 0
+                        } else {
+                            const parsedNum = parseFloat(amountStr);
+                            if (!isNaN(parsedNum)) {
+                                amountFinalValue = parsedNum; // It's a number
+                            } else {
+                                amountFinalValue = amountStr; // It's a non-numeric string (e.g., "一箱荔枝")
+                            }
+                        }
+                        // --- MODIFICATION END ---
+                        
                         return {
                             date: values[0].trim(),
                             sponsor: values[1].trim(),
-                            amount: parseFloat(values[2]) || 0,
+                            amount: amountFinalValue, // Store potentially mixed type
                             item: values[3].trim(),
-                            notes: values[4] ? values[4].trim() : '', // Notes can be empty
-                            originalIndex: index // Store the original index from dataLines
+                            notes: values[4] ? values[4].trim() : '', 
+                            originalIndex: index 
                         };
                     }
                     console.warn("Skipping malformed CSV line:", line);
@@ -408,24 +424,26 @@
 
                 rawData.forEach((dataRow, index) => {
                     const tr = document.createElement('tr');
+                    // --- MODIFICATION START: Display amount correctly ---
                     tr.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${dataRow.date}</td>
                         <td>${dataRow.sponsor}</td>
-                        <td>${dataRow.amount.toFixed(2)}</td>
+                        <td>${typeof dataRow.amount === 'number' ? dataRow.amount.toFixed(2) : dataRow.amount}</td>
                         <td>${dataRow.item}</td>
                         <td>${dataRow.notes}</td>
                     `;
+                    // --- MODIFICATION END ---
                     tableBody.appendChild(tr);
                 });
                 updateSortIndicators();
-                setTimeout(adjustTableScaleForMobile, 0); // Adjust scale after DOM updates
+                setTimeout(adjustTableScaleForMobile, 0); 
             }
 
             function setupEventListeners() {
                 tableHeaders.forEach((th, headerIndex) => {
                     const dataColumnIndex = headerIndex - 1;
-                    if (dataColumnIndex >= 0) { // Make only data columns sortable
+                    if (dataColumnIndex >= 0) { 
                         th.addEventListener('click', () => handleSort(dataColumnIndex));
                     }
                 });
@@ -436,30 +454,17 @@
                     currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSort.columnDataIndex = dataColumnIndex;
-                    // When changing column, default to 'desc' for date/amount, 'asc' for text, or just 'desc' always initially.
-                    // For simplicity, let's make it always 'desc' for a new column, or 'asc' if preferred.
-                    // User request: "默认按照日期降序". Other columns could default to 'asc' or 'desc'.
-                    // Current behavior is 'desc' for new column, which is fine.
-                    currentSort.direction = 'desc';
+                    currentSort.direction = 'desc'; // Default to descending for a new column
                 }
                 renderTable();
             }
 
             function sortData() {
                 if (currentSort.columnDataIndex === null || currentSort.columnDataIndex < 0) {
-                    // console.warn("Invalid columnDataIndex for sorting:", currentSort.columnDataIndex);
-                    return; // Should not happen if headerIndex mapping is correct
+                    return; 
                 }
 
-                // These keys must match the properties of the objects in rawData
-                const sortKeys = [
-                    'date',     // 0
-                    'sponsor',  // 1
-                    'amount',   // 2
-                    'item',     // 3
-                    'notes'     // 4
-                ];
-
+                const sortKeys = ['date', 'sponsor', 'amount', 'item', 'notes'];
                 const sortKeyProperty = sortKeys[currentSort.columnDataIndex];
                 if (!sortKeyProperty) {
                     console.warn("Invalid sort key for dataIndex:", currentSort.columnDataIndex);
@@ -471,31 +476,44 @@
                 rawData.sort((a, b) => {
                     const valA = a[sortKeyProperty];
                     const valB = b[sortKeyProperty];
-
                     let primaryComparison = 0;
 
-                    if (typeof valA === 'string' && typeof valB === 'string') {
+                    // --- MODIFICATION START: Sort 'amount' column with mixed types ---
+                    if (sortKeyProperty === 'amount') {
+                        const typeA = typeof valA;
+                        const typeB = typeof valB;
+
+                        if (typeA === 'number' && typeB === 'number') {
+                            primaryComparison = valA - valB;
+                        } else if (typeA === 'number' && typeB === 'string') {
+                            primaryComparison = -1; // Numbers come before strings
+                        } else if (typeA === 'string' && typeB === 'number') {
+                            primaryComparison = 1;  // Strings come after numbers
+                        } else { // Both are strings
+                            primaryComparison = valA.localeCompare(valB);
+                        }
+                    // --- MODIFICATION END ---
+                    } else if (typeof valA === 'string' && typeof valB === 'string') {
                         primaryComparison = valA.localeCompare(valB, undefined, { numeric: sortKeyProperty === 'date' });
                     } else if (typeof valA === 'number' && typeof valB === 'number') {
                         primaryComparison = valA - valB;
                     } else {
-                        if (valA === null || valA === undefined) primaryComparison = -1; // Treat null/undefined as smaller
-                        else if (valB === null || valB === undefined) primaryComparison = 1;
-                        else if (valA < valB) primaryComparison = -1;
-                        else if (valA > valB) primaryComparison = 1;
+                        // General fallback for potentially mixed types in other columns (though less likely with current parsing)
+                        const strA = String(valA);
+                        const strB = String(valB);
+                        if (strA < strB) primaryComparison = -1;
+                        else if (strA > strB) primaryComparison = 1;
                     }
 
                     if (primaryComparison !== 0) {
                         return primaryComparison * directionMultiplier;
                     }
 
-                    // --- Secondary Sort (Tie-breaking) ---
+                    // Tie-breaking
                     if (sortKeyProperty === 'date' && currentSort.direction === 'desc') {
-                        return b.originalIndex - a.originalIndex; // Reverses CSV order for same-day items
+                        return b.originalIndex - a.originalIndex; 
                     }
-                    
-                    // For all other tie cases (e.g., date ascending, or ties on other columns):
-                    return a.originalIndex - b.originalIndex; // Maintains original CSV order for ties
+                    return a.originalIndex - b.originalIndex; 
                 });
             }
 
