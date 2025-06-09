@@ -380,7 +380,6 @@
                     const values = line.split(',');
                     
                     if (values.length >= 4) { 
-                        // --- MODIFICATION START: Handle non-numeric amounts ---
                         const amountStr = values[2] ? values[2].trim() : ''; 
                         let amountFinalValue;
                         
@@ -394,7 +393,6 @@
                                 amountFinalValue = amountStr; // It's a non-numeric string (e.g., "一箱荔枝")
                             }
                         }
-                        // --- MODIFICATION END ---
                         
                         return {
                             date: values[0].trim(),
@@ -424,16 +422,26 @@
 
                 rawData.forEach((dataRow, index) => {
                     const tr = document.createElement('tr');
-                    // --- MODIFICATION: Display sequence number in descending order ---
+                    
+                    // --- MODIFICATION: Dynamic sequence number based on sort order ---
+                    let seqNumber;
+                    // Rule 1: Only when sorting by Date (index 0) DESC, show descending sequence.
+                    if (currentSort.columnDataIndex === 0 && currentSort.direction === 'desc') {
+                        seqNumber = rawData.length - index;
+                    } else {
+                        // Rule 2 & 3: For all other cases (Date ASC, or any other column), show ascending sequence.
+                        seqNumber = index + 1;
+                    }
+                    // --- END MODIFICATION ---
+
                     tr.innerHTML = `
-                        <td>${rawData.length - index}</td>
+                        <td>${seqNumber}</td>
                         <td>${dataRow.date}</td>
                         <td>${dataRow.sponsor}</td>
                         <td>${typeof dataRow.amount === 'number' ? dataRow.amount.toFixed(2) : dataRow.amount}</td>
                         <td>${dataRow.item}</td>
                         <td>${dataRow.notes}</td>
                     `;
-                    // --- MODIFICATION END ---
                     tableBody.appendChild(tr);
                 });
                 updateSortIndicators();
@@ -478,7 +486,6 @@
                     const valB = b[sortKeyProperty];
                     let primaryComparison = 0;
 
-                    // --- MODIFICATION START: Sort 'amount' column with mixed types ---
                     if (sortKeyProperty === 'amount') {
                         const typeA = typeof valA;
                         const typeB = typeof valB;
@@ -492,13 +499,11 @@
                         } else { // Both are strings
                             primaryComparison = valA.localeCompare(valB);
                         }
-                    // --- MODIFICATION END ---
                     } else if (typeof valA === 'string' && typeof valB === 'string') {
                         primaryComparison = valA.localeCompare(valB, undefined, { numeric: sortKeyProperty === 'date' });
                     } else if (typeof valA === 'number' && typeof valB === 'number') {
                         primaryComparison = valA - valB;
                     } else {
-                        // General fallback for potentially mixed types in other columns (though less likely with current parsing)
                         const strA = String(valA);
                         const strB = String(valB);
                         if (strA < strB) primaryComparison = -1;
