@@ -5,7 +5,7 @@ authors: GGrush
 # tags: 
 # draft: true
 ---
-
+<!-- $env:GIT_USER="ggrush-doudizhu"; npm run deploy -->
 欢迎来到我的精神花园。
 
 这是我建站后的第一篇随笔，简单说明了我建站并开始写随笔的三个主要原因。
