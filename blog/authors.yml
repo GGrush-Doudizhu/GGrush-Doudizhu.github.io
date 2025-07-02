@@ -1,8 +1,9 @@
 GGrush:
   name: GGrush
-  title: somebody
+  title: Game Producer/Developer, StarCraft Master and Physics Enthusiast
   url: https://ggrush.top
-  image_url: https://github.com/GGrush-Doudizhu/ggrush-doudizhu.github.io/blob/main/static/img/profile.jpg
+  # image_url: https://github.com/GGrush-Doudizhu/ggrush-doudizhu.github.io/blob/main/static/img/profile.jpg
+  image_url: /img/profile.jpg
 
 yangshun:
   name: Yangshun Tay

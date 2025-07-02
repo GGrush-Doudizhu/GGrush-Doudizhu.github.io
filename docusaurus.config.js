@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "GGrush的个人网站",  // 网站主标题，显示在浏览器标签页和首页上
-  tagline: '欢迎来到GGrush的精神之屋',  // 网站副标题或标语，显示在首页主标题下方
+  tagline: '欢迎来到GGrush的精神花园',  // 网站副标题或标语，显示在首页主标题下方
   favicon: 'img/profile.jpg',  // 网站小图标，显示在浏览器标签页上
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -65,8 +65,8 @@ const config = {
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/GGrush-Doudizhu/ggrush-doudizhu.github.io/tree/main/',
+          // editUrl:
+          //   'https://github.com/GGrush-Doudizhu/ggrush-doudizhu.github.io/tree/main/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -85,7 +85,7 @@ const config = {
       // Replace with your project's social card
       image: 'img/profile.jpg',
       navbar: {
-        title: 'GGrush',
+        title: '导航栏',
         logo: {
           alt: 'My Site Logo',
           src: 'img/profile.jpg',
@@ -111,10 +111,10 @@ const config = {
           {
             title: 'Docs',
             items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/intro',
-              },
+              // {
+              //   label: 'Tutorial',
+              //   to: '/docs/intro',
+              // },
               {
                 label: 'Blog',
                 to: '/blog',
@@ -122,19 +122,13 @@ const config = {
             ],
           },
           {
-            title: 'Community',
+            title: 'Contact',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                html: 'qq邮箱: 472614156@qq.com',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                html: '微信号: chen472614156',
               },
             ],
           },
@@ -148,7 +142,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} <a href="https://github.com/GGrush-Doudizhu">GGrush</a>. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} <a href="https://github.com/GGrush-Doudizhu">GGrush</a>.`,
       },
       prism: {
         theme: prismThemes.github,
