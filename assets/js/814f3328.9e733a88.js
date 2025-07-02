@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkggrush_doudizhu_github_io=self.webpackChunkggrush_doudizhu_github_io||[]).push([[472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"\u5f00\u7bc7\uff1a\u6211\u4e3a\u4f55\u8981\u642d\u5efa\u8fd9\u4e2a\u7f51\u7ad9","permalink":"/blog/2025/07/02/first-blog","unlisted":false,"date":"2025-07-02T00:00:00.000Z"}]}')}}]);

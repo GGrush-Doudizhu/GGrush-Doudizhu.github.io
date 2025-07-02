@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkggrush_doudizhu_github_io=self.webpackChunkggrush_doudizhu_github_io||[]).push([[1903],{1912:u=>{u.exports=JSON.parse('{"blogBasePath":"/blog","blogTitle":"Blog","authorsListPath":"/blog/authors"}')}}]);
