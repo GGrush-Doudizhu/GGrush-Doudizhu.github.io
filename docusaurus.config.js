@@ -10,9 +10,9 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "GGrush's website",
-  tagline: '标语待定...',
-  favicon: 'img/favicon.ico',
+  title: "GGrush的个人网站",  // 网站主标题，显示在浏览器标签页和首页上
+  tagline: '欢迎来到GGrush的精神之屋',  // 网站副标题或标语，显示在首页主标题下方
+  favicon: 'img/profile.jpg',  // 网站小图标，显示在浏览器标签页上
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
@@ -20,19 +20,19 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'https://ggrush.top',  // 网站最终的访问地址
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/',  // 网站的根路径
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ggrush-doudizhu', // Usually your GitHub org/user name.
   projectName: 'ggrush-doudizhu.github.io', // Usually your repo name.
 
-  deploymentBranch: 'gh-pages',
+  deploymentBranch: 'gh-pages',  // 部署到github的分支
 
-  trailingSlash: false,
+  trailingSlash: false,  // URL末尾是否添加斜杠
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -41,8 +41,8 @@ const config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'zh-Hans',
+    locales: ['zh-Hans'],
   },
 
   presets: [
@@ -55,7 +55,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/GGrush-Doudizhu/ggrush-doudizhu.github.io/tree/main/',
         },
         blog: {
           showReadingTime: true,
@@ -66,7 +66,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/GGrush-Doudizhu/ggrush-doudizhu.github.io/tree/main/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -83,12 +83,12 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/profile.jpg',
       navbar: {
-        title: 'My Site',
+        title: 'GGrush',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/profile.jpg',
         },
         items: [
           {
@@ -115,6 +115,10 @@ const config = {
                 label: 'Tutorial',
                 to: '/docs/intro',
               },
+              {
+                label: 'Blog',
+                to: '/blog',
+              },
             ],
           },
           {
@@ -138,17 +142,13 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/GGrush-Doudizhu',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} <a href="https://github.com/GGrush-Doudizhu">GGrush</a>. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
